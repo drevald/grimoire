@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ivysettings>
+
+	<settings defaultResolver="spring.compass.ibiblio" />
+
+	<resolvers>
+
+		<filesystem name="main">
+			<artifact pattern="${user.home}/.ivy2/[organisation]/[artifact]-[revision].[ext]" />
+        	<ivy pattern="${user.home}/.ivy2/[organisation]/[artifact]/[module]-[revision].xml" />
+        </filesystem>
+
+		<chain name="spring.compass.ibiblio">
+		
+			<ibiblio name="ibiblio" m2compatible="true" />
+
+			<url name="java" m2compatible="true">
+				<ivy pattern="http://download.java.net/maven/2/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<artifact pattern="http://download.java.net/maven/2/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+			</url>
+			<url name="amazonaws">
+				<ivy pattern="http://maven.springframework.org.s3.amazonaws.com/milestone/org/springframework/security/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<artifact pattern="http://maven.springframework.org.s3.amazonaws.com/milestone/org/springframework/security/[module]/[revision]/[artifact]-[revision].[ext]" />
+			</url>		
+			<url name="nexus">
+				<ivy pattern="http://www.opensprout.org/nexus/content/repositories/public/org/springframework/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<artifact pattern="http://www.opensprout.org/nexus/content/repositories/public/org/springframework/[module]/[revision]/[artifact]-[revision].[ext]" />
+			</url>
+			<url name="repo1">
+				<ivy pattern="http://repo1.maven.org/maven2/[module]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<artifact pattern="http://repo1.maven.org/maven2/[module]/[module]/[revision]/[artifact]-[revision].[ext]" />
+			</url>
+			<url name="jboss">
+				<ivy pattern="http://repository.jboss.org/maven2/[module]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<artifact pattern="http://repo1.maven.org/maven2/[module]/[module]/[revision]/[artifact]-[revision].[ext]" />
+			</url>		
+
+        </chain>
+		
+	</resolvers>
+</ivysettings>
