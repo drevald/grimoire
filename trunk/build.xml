@@ -1,0 +1,105 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="spring3" default="expand">
+
+	<property file="build.properties"/>
+	<property name="src.dir" value="${basedir}/src"/>
+	<property name="build.dir" value="${basedir}/build"/>
+	<property name="classes.dir" value="${build.dir}/classes"/>
+	<property name="lib.dir" value="${basedir}/lib"/>
+	<property name="lib.src.dir" value="${basedir}/lib-src"/>
+	<property name="res.dir" value="${basedir}/res"/>
+	<property name="parsed.res.dir" value="${build.dir}/res"/>
+	<property name="view.dir" value="${basedir}/view"/>
+	<property name="deploy.dir" value="/opt/software/tomcat/webapps"/>
+	<property name="war.file" value="${basedir}/${ant.project.name}.war"/>
+	
+	<path id="cp">
+	  <fileset dir="${lib.dir}"/>
+	</path>
+
+	<target name="init-ivy">
+		<delete dir="${lib.dir}"/>
+		<mkdir dir="${lib.dir}"/>
+		<mkdir dir="${lib.src.dir}"/>
+		<property name="ivy.install.version" value="2.2.0" />
+		<property name="ivy.jar.dir" value="${basedir}/ivy" />
+		<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+		<mkdir dir="${ivy.jar.dir}"/>
+		<echo message="installing ivy..."/>
+	    <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+	    		 dest="${ivy.jar.file}" usetimestamp="true"/>
+	    <path id="ivy.lib.path">
+	        <pathelement location="${ivy.jar.file}"/>
+	    </path>
+	    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+		<ivy:settings file="ivy-settings.xml"/>
+		<ivy:retrieve type="jar" pattern="${lib.dir}/[artifact]-[revision].[ext]"/>
+		<ivy:retrieve type="source" pattern="${lib.src.dir}/[artifact]-[revision]-src.[ext]"/>
+	</target>		
+	
+	<target name="init">
+		<delete dir="${classes.dir}"/>
+		<delete dir="${parsed.res.dir}"/>
+		<mkdir dir="${parsed.res.dir}"/>
+		<mkdir dir="${classes.dir}"/>
+	</target>		
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="false" debug="true">
+			<classpath refid="cp"/>
+		</javac>
+	</target>
+		
+	<target name="war" depends="compile">
+        <copy todir="${parsed.res.dir}">
+            <filterchain>
+                <replacetokens>
+                    <token key="JDBC_DATABASEURL" value="${jdbc.databaseurl}"/>
+                    <token key="JDBC_USERNAME" value="${jdbc.username}"/>
+                    <token key="JDBC_PASSWORD" value="${jdbc.password}"/>
+                    <token key="JDBC_DIALECT" value="${jdbc.dialect}"/>
+                    <token key="JDBC_DRIVER_CLASS_NAME" value="${jdbc.driverClassName}"/>
+                </replacetokens>
+                <escapeunicode/>
+            </filterchain>
+            <fileset dir="${res.dir}"/>
+        </copy>
+		<war warfile="${war.file}" webxml="${parsed.res.dir}/web.xml">
+			<lib dir="${lib.dir}">
+				<exclude name="servlet-api-*.jar"/>
+				<exclude name="jsp-api-*.jar"/>
+			</lib>	
+			<classes dir="${classes.dir}"/>
+			<classes dir="${parsed.res.dir}">
+				<include name="hibernate.cfg.xml"/>
+				<include name="messages*.properties"/>
+			</classes>
+			<fileset dir="${view.dir}"/>
+			<webinf dir="${parsed.res.dir}">
+				<exclude name="web.xml"/>
+			</webinf>
+		</war>
+	</target>
+	
+	<target name="deploy" depends="war">
+		<delete dir="${deploy.dir}/${ant.project.name}"/>
+		<copy file="${war.file}" todir="${deploy.dir}"/>
+	</target>	
+
+	<target name="expand" depends="war">
+		<delete dir="${deploy.dir}/${ant.project.name}"/>
+		<unwar src="${war.file}" dest="${deploy.dir}/${ant.project.name}"/>
+	</target>	
+
+	<target name="all" depends="init-ivy, deploy"/>
+
+	<target name="sql">
+	  <sql
+	      driver="${jdbc.driverClassName}"
+	      url="${jdbc.databaseurl}"
+	      userid="${jdbc.username}"
+	      password="${jdbc.password}"
+	      src="${basedir}/docs/booksla.sql"
+	      classpathref="cp"/>
+	</target>
+	
+</project>
