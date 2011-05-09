@@ -3,6 +3,7 @@ package org.helico.bean;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -28,11 +29,11 @@ public class TextFileLoaderImpl implements TextFileLoader {
 			dict.setStatus(Status.UPLOADING);
 			dictService.saveDict(dict);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			IOUtils.copyLarge(is, baos);
+			IOUtils.copy(is, baos);
 			baos.flush();
 			dict = dictService.findDict(id);
 			dict.setOrigDoc(baos.toByteArray());
-			dict.setUtfText(baos.toByteArray());
+			//dict.setUtfText(baos.toByteArray());
 			dict.setStatus(Status.UPLOADED);
 			dictService.saveDict(dict);
 			baos.close();

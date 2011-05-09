@@ -82,6 +82,7 @@ public class DictController {
 			    dict = dictService.loadPreviewFile(user.getId(), 
 								    file.getInputStream(), 
 								    file.getOriginalFilename());
+			    dict.setEncoding("utf-8");
 			    map.put("dict", dict);
 			    map.put("preview", new String(dict.getPreview()));
 			    return "redirect:/dict/edit/" + dict.getId();
@@ -135,6 +136,7 @@ public class DictController {
 		charsetList.add("KOI8-R");
 		charsetList.add("UTF-8");
 		charsetList.add("ISO-8859-1");
+
 		map.put("charsetList", charsetList);
 		return "saveDict";
 	}	

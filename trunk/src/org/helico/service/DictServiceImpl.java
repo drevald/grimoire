@@ -19,20 +19,26 @@ import org.helico.bean.TextFileLoader;
 import org.helico.dao.DictDAO;
 import org.helico.domain.Dict;
 import org.helico.domain.Dict.Status;
+import org.helico.sm.StateMachine;
+import org.helico.sm.StateMachine.Event;
 
 @Service
 public class DictServiceImpl implements DictService {
 	
-	private static final Logger LOG = Logger.getLogger(DictServiceImpl.class);
+    private static final Logger LOG = Logger.getLogger(DictServiceImpl.class);
 	
-	private static final int PREVIEW_SIZE = 1000;
-	
-	@Autowired
+    private static final int PREVIEW_SIZE = 1000;
+    
+    @Autowired
 	private DictDAO dictDao;
 	
-	@Autowired
+    @Autowired
 	private TextFileLoader textFileLoader;
-	
+
+    @Autowired
+	private StateMachine stateMachine;
+
+
 	@Transactional
 	public void saveDict(Dict dict) {
 	    LOG.info(">>>saveDict start");	    
@@ -86,7 +92,8 @@ public class DictServiceImpl implements DictService {
 	    dict.setPreview(data);
 	    dict.setName(name);
 	    dictDao.saveDict(dict);
-	    textFileLoader.load(dict.getId(), is);
+	    stateMachine.sendEvent(StateMachine.Event.LOAD, pis);
+	    //textFileLoader.load(dict.getId(), is);
 	    LOG.info(">>>loadPreview ends");
 	    return dict;
 	}
