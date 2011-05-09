@@ -92,7 +92,7 @@ public class DictServiceImpl implements DictService {
 	    dict.setPreview(data);
 	    dict.setName(name);
 	    dictDao.saveDict(dict);
-	    stateMachine.sendEvent(StateMachine.Event.LOAD, pis);
+	    stateMachine.sendEvent(StateMachine.Event.LOAD, pis, dict.getId());
 	    //textFileLoader.load(dict.getId(), is);
 	    LOG.info(">>>loadPreview ends");
 	    return dict;
@@ -104,6 +104,8 @@ public class DictServiceImpl implements DictService {
 		Dict dict = new Dict();
 		dict.setUserId(userId);
 		dict.setName(name);
+		LOG.debug("Status persisted = " + Status.PERSISTED);
+		dict.setStatus("PERSISTED");
 		dictDao.saveDict(dict);
 	        LOG.info("<<<createDict ends");
 		return dict;

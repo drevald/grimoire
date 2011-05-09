@@ -1,4 +1,3 @@
-
 package org.helico.domain;
 
 import org.apache.log4j.Logger;
@@ -15,7 +14,8 @@ public class Dict {
 
 	private static final Logger LOG = Logger.getLogger(Dict.class);
 	
-	public enum Status {		
+	public enum Status {
+	    PERSISTED,
 		UPLOADING,
 		UPLOADED,
 		UPLOAD_FAILED,
@@ -122,7 +122,7 @@ public class Dict {
 	}
 	
 	public String toString() {
-		return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", data:" + origDoc ;
+		return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", data:" + origDoc + ", status:" + status;
 	}
 	
 }

@@ -1,3 +1,17 @@
+DROP TABLE IF EXISTS transition;
+CREATE TABLE transition (
+       id BIGINT NOT NULL AUTO_INCREMENT,
+       event VARCHAR(32),
+       src_status VARCHAR(32),
+       dest_status VARCHAR(32),
+       handler_name VARCHAR(32),
+       PRIMARY KEY(id)
+);
+
+INSERT INTO transition VALUES (NULL, 'LOAD', 'PERSISTED', 'LOADING', 'uploadHandler');
+INSERT INTO transition VALUES (NULL, 'OK', 'LOADING', 'LOADED', 'dummyHandler');
+
+
 DROP TABLE IF EXISTS dict;
 CREATE TABLE dict (
   id BIGINT NOT NULL AUTO_INCREMENT,
