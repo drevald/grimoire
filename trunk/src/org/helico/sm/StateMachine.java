@@ -10,6 +10,6 @@ public interface StateMachine {
 	    TRANSLATE
     };
 
-    public void sendEvent(Event event, Object data);
+    public void sendEvent(Event event, Object data, Long dictId);
 
 }

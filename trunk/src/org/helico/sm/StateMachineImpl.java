@@ -3,8 +3,14 @@ package org.helico.sm;
 import org.springframework.stereotype.Component;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.helico.sm.handler.UploadHandler;
 import org.helico.sm.Handler;
+import org.helico.domain.Dict;
+import org.helico.service.DictService;
+import org.helico.service.TransitionService;
+
 import org.apache.log4j.Logger;
 
 @Component
@@ -14,12 +20,25 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
 
     private ApplicationContext appContext;
 
-    public void sendEvent(Event event, Object data) {
+    @Autowired
+    private TransitionService transitionService;
+
+    @Autowired
+    private DictService dictService;
+
+    public void sendEvent(Event event, Object data, Long dictId) {
 	LOG.debug("processing event..");
-	Handler handler = (Handler)appContext.getBean("uploadHandler");
-	LOG.debug("handler found: " + handler);
-	handler.process(data);
-	LOG.debug("handler called");
+	Dict dict = dictService.findDict(dictId);
+	String handlerName = transitionService.getHandlerName(event.toString(), dict.getStatus());
+	LOG.debug("handler found: " +  handlerName);
+	if (handlerName != null) {
+	    Handler handler = (Handler)appContext.getBean(handlerName);
+	    LOG.debug("handler found: " + handlerName);
+	    handler.process(data, dictId);
+	    LOG.debug("handler called");
+	} else {
+	    LOG.warn("handler for event = " + event + " and status = " + dict.getStatus() + " is not found");
+	}
     }
 
     public void setApplicationContext(ApplicationContext appContext) {

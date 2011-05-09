@@ -1,0 +1,23 @@
+package org.helico.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.log4j.Logger;
+
+import org.helico.dao.TransitionDAO;
+
+@Service
+public class TransitionServiceImpl implements TransitionService {
+
+    private static final Logger LOG = Logger.getLogger(TransitionServiceImpl.class);
+
+    @Autowired
+    TransitionDAO transitionDao;
+
+    @Transactional
+    public String getHandlerName(String event, String status) {
+	return transitionDao.getHandlerName(event, status);
+    }
+
+}
