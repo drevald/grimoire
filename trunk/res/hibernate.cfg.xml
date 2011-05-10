@@ -8,5 +8,6 @@
 		<mapping class="org.helico.domain.User" />
 		<mapping class="org.helico.domain.Dict" />
 		<mapping class="org.helico.domain.Transition"/>
+		<mapping class="org.helico.domain.Job"/>
 	</session-factory>
 </hibernate-configuration>

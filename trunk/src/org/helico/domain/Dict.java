@@ -3,6 +3,8 @@ package org.helico.domain;
 import org.apache.log4j.Logger;
 
 import javax.persistence.Column;
+import javax.persistence.Basic;
+import javax.persistence.FetchType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,7 +23,7 @@ public class Dict {
 		UPLOAD_FAILED,
         STORING,
 		STORED,
-		READING,
+		PARSING,
 		PARSED,
 		TRANSLATING,
 		TRANSLATED
@@ -89,6 +91,7 @@ public class Dict {
 	this.id = id;
     }
 
+    @Basic(fetch = FetchType.LAZY)
     public byte[] getUtfText() {
 	return utfText;
     }
@@ -109,22 +112,23 @@ public class Dict {
 	this.name = name;
     }
 
+    @Basic(fetch = FetchType.LAZY)
+    public byte[] getOrigDoc() {
+	return origDoc;
+    }
 
-	public byte[] getOrigDoc() {
-		return origDoc;
-	}
+    public void setOrigDoc(byte[] origDoc) {
+	this.origDoc = origDoc;
+    }
 
-	public void setOrigDoc(byte[] origDoc) {
-		this.origDoc = origDoc;
-	}
-
-	public void setUtfText(byte[] utfText) {
-		this.utfText = utfText;
-	}
+    public void setUtfText(byte[] utfText) {
+	this.utfText = utfText;
+    }
 	
-	public String toString() {
-		return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", data:" + origDoc + ", status:" + status;
-	}
+    public String toString() {
+	return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", data:" + origDoc + ", status:" + status;
+    }
+	
 	
 }
 

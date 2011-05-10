@@ -13,6 +13,22 @@ INSERT INTO transition VALUES (NULL, 'OK', 'LOADING', 'LOADED', 'dummyHandler');
 INSERT INTO transition VALUES (NULL, 'STORE', 'LOADED', 'STORING', 'storeHandler');
 INSERT INTO transition VALUES (NULL, 'STORE', 'STORED', 'STORING', 'storeHandler');
 INSERT INTO transition VALUES (NULL, 'OK', 'STORING', 'STORED', 'dummyHandler');
+INSERT INTO transition VALUES (NULL, 'PARSE', 'STORED', 'PARSING', 'parseHandler');
+INSERT INTO transition VALUES (NULL, 'PARSE', 'PARSED', 'PARSING', 'parseHandler');
+INSERT INTO transition VALUES (NULL, 'OK', 'PARSING', 'PARSED', 'dummyHandler');
+INSERT INTO transition VALUES (NULL, 'TRANSLATE', 'PARSED', 'TRANSLATING', 'translateHandler');
+INSERT INTO transition VALUES (NULL, 'TRANSLATE', 'TRANSLATED', 'TRANSLATING', 'translateHandler');
+INSERT INTO transition VALUES (NULL, 'OK', 'TRANSLATING', 'TRANSLATED', 'dummyHandler');
+
+DROP TABLE IF EXISTS job;
+CREATE TABLE job (
+       id BIGINT NOT NULL AUTO_INCREMENT,
+       trans_id BIGINT NOT NULL,
+       dict_id BIGINT NOT NULL,
+       progress INT NOT NULL DEFAULT 0,
+       active BOOL NOT NULL DEFAULT FALSE,
+       PRIMARY KEY(id)
+);
 
 DROP TABLE IF EXISTS dict;
 CREATE TABLE dict (
