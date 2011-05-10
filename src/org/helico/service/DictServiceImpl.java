@@ -91,6 +91,7 @@ public class DictServiceImpl implements DictService {
 	    dict.setUserId(userId);
 	    dict.setPreview(data);
 	    dict.setName(name);
+	    dict.setStatus(Status.PERSISTED);
 	    dictDao.saveDict(dict);
 	    stateMachine.sendEvent(StateMachine.Event.LOAD, pis, dict.getId());
 	    //textFileLoader.load(dict.getId(), is);
