@@ -31,8 +31,8 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
         LOG.debug("processing event..");
         Dict dict = dictService.findDict(dictId);
         Transition transition = transitionService.find(event.toString(), dict.getStatus());
-        LOG.debug("handler found: " +  transition.getHandlerName());
-        if (transition.getHandlerName() != null) {
+        if (transition != null) {
+            LOG.debug("handler found: " +  transition.getHandlerName());
             Handler handler = (Handler)appContext.getBean(transition.getHandlerName());
             dict.setStatus(transition.getDestStatus());
             dictService.saveDict(dict);
@@ -45,8 +45,8 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
     }
 
     public void setApplicationContext(ApplicationContext appContext) {
-	LOG.debug("setting application context: " + appContext);
-	this.appContext = appContext;
+        LOG.debug("setting application context: " + appContext);
+        this.appContext = appContext;
     }
 
 }

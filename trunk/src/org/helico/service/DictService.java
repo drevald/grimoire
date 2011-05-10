@@ -23,5 +23,9 @@ public interface DictService {
     public void setStatus(Long id, Dict.Status status);
 
     public void setPreview(Long id, byte[] data);
+
+    public void storeDict(Dict dict);
+
+    public void parseText(Long dictId);
     
 }
