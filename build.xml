@@ -1,4 +1,4 @@
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="grimoire" default="expand">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="grimoire" default="war">
 
 	<property file="build.properties"/>
 	<property name="src.dir" value="${basedir}/src"/>
@@ -10,7 +10,7 @@
 	<property name="parsed.res.dir" value="${build.dir}/res"/>
 	<property name="view.dir" value="${basedir}/view"/>
 	<property name="deploy.dir" value="/opt/software/tomcat/webapps"/>
-	<property name="war.file" value="${basedir}/${ant.project.name}.war"/>
+	<property name="war.file" value="${build.dir}/${ant.project.name}.war"/>
 	
 	<path id="cp">
 	  <fileset dir="${lib.dir}"/>
