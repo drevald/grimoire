@@ -38,7 +38,6 @@ public class DictServiceImpl implements DictService {
     @Autowired
 	private StateMachine stateMachine;
 
-
 	@Transactional
 	public void saveDict(Dict dict) {
 	    LOG.info(">>>saveDict start");	    

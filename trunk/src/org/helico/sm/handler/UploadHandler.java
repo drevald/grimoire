@@ -12,6 +12,7 @@ import org.helico.domain.Dict.Status;
 import org.helico.service.DictService;
 import org.helico.sm.Handler;
 
+import org.helico.sm.StateMachine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -25,13 +26,15 @@ public class UploadHandler implements Handler {
     @Autowired
 	DictService dictService;
 
+    @Autowired
+	private StateMachine stateMachine;
+
     @Async
 	public void process(Object object, Long id) {
 	LOG.info("processing...");
 	try {
 	    InputStream is = (InputStream)object;
 	    Dict dict = dictService.findDict(id);
-	    dict.setStatus(Status.UPLOADING);
 	    dictService.saveDict(dict);
 	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    IOUtils.copy(is, baos);
@@ -39,10 +42,10 @@ public class UploadHandler implements Handler {
 	    dict = dictService.findDict(id);
 	    dict.setOrigDoc(baos.toByteArray());
 	    //dict.setUtfText(baos.toByteArray());
-	    dict.setStatus(Status.UPLOADED);
 	    dictService.saveDict(dict);
 	    baos.close();
 	    is.close();
+        stateMachine.sendEvent(StateMachine.Event.OK, null, id);
 	} catch (Exception e) {
 	    LOG.error(e, e);
 	    dictService.setStatus(id, Status.UPLOAD_FAILED);

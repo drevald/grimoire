@@ -1,5 +1,6 @@
 package org.helico.sm;
 
+import org.helico.domain.Transition;
 import org.springframework.stereotype.Component;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationContext;
@@ -27,18 +28,20 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
     private DictService dictService;
 
     public void sendEvent(Event event, Object data, Long dictId) {
-	LOG.debug("processing event..");
-	Dict dict = dictService.findDict(dictId);
-	String handlerName = transitionService.getHandlerName(event.toString(), dict.getStatus());
-	LOG.debug("handler found: " +  handlerName);
-	if (handlerName != null) {
-	    Handler handler = (Handler)appContext.getBean(handlerName);
-	    LOG.debug("handler found: " + handlerName);
-	    handler.process(data, dictId);
-	    LOG.debug("handler called");
-	} else {
-	    LOG.warn("handler for event = " + event + " and status = " + dict.getStatus() + " is not found");
-	}
+        LOG.debug("processing event..");
+        Dict dict = dictService.findDict(dictId);
+        Transition transition = transitionService.find(event.toString(), dict.getStatus());
+        LOG.debug("handler found: " +  transition.getHandlerName());
+        if (transition.getHandlerName() != null) {
+            Handler handler = (Handler)appContext.getBean(transition.getHandlerName());
+            dict.setStatus(transition.getDestStatus());
+            dictService.saveDict(dict);
+            LOG.debug("handler found: " + transition.getHandlerName());
+            handler.process(data, dictId);
+            LOG.debug("handler called");
+        } else {
+            LOG.warn("handler for event = " + event + " and status = " + dict.getStatus() + " is not found");
+        }
     }
 
     public void setApplicationContext(ApplicationContext appContext) {

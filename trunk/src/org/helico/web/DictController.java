@@ -82,7 +82,7 @@ public class DictController {
 			    dict = dictService.loadPreviewFile(user.getId(), 
 								    file.getInputStream(), 
 								    file.getOriginalFilename());
-			    dict.setEncoding("utf-8");
+			    dict.setEncoding("UTF-8");
 			    map.put("dict", dict);
 			    map.put("preview", new String(dict.getPreview()));
 			    return "redirect:/dict/edit/" + dict.getId();
@@ -115,7 +115,7 @@ public class DictController {
 		return "redirect:/dict";
 	}	
 
-	@RequestMapping("/dict/edit/{dictId}")
+	@RequestMapping(value="/dict/edit/{dictId}")
 	public String editDict(@PathVariable("dictId") Long dictId, 
 			       Map<String, Object> map,
 			       HttpServletRequest request) {
@@ -145,7 +145,11 @@ public class DictController {
 	public String viewDict(@PathVariable("dictId") Long dictId, Map<String, Object> map) {
 		Dict dict = dictService.findDict(dictId);
 		map.put("dict", dict);
-		map.put("preview", new String(dict.getPreview()));
+        try {
+		    map.put("preview", new String(dict.getPreview(), dict.getEncoding()));
+        } catch (Exception e) {
+            LOG.error(e, e);
+        }
 		return "viewDict";
 	}
 	
