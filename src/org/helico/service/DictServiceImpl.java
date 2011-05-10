@@ -42,10 +42,16 @@ public class DictServiceImpl implements DictService {
 	public void saveDict(Dict dict) {
 	    LOG.info(">>>saveDict start");	    
 	    dictDao.saveDict(dict);
-	    LOG.info("<<<loadPreview end");
+	    LOG.info("<<<saveDict end");
 	}
 
-	@Transactional
+    public void storeDict(Dict dict) {
+        LOG.info(">>>storeDict start");
+        stateMachine.sendEvent(StateMachine.Event.STORE, null, dict.getId());
+        LOG.info("<<<storeDict end");
+    }
+
+    @Transactional
 	public List<Dict> listDicts() {
 	    List<Dict> result = dictDao.listDicts();
 	    LOG.info("Number of results is " + result.size());
@@ -121,10 +127,13 @@ public class DictServiceImpl implements DictService {
 
     @Transactional
 	public void setPreview(Long id, byte[] data) {
-	Dict dict = findDict(id);
-	dict.setPreview(data);
-    LOG.info("setPreview(" + dict + ")");
-	dictDao.saveDict(dict);
+        Dict dict = findDict(id);
+        dict.setPreview(data);
+        LOG.info("setPreview(" + dict + ")");
+        dictDao.saveDict(dict);
     }
-    
+
+    public void parseText(Long dictId) {
+        stateMachine.sendEvent(StateMachine.Event.PARSE, null, dictId);
+    }
 }

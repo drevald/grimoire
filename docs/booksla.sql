@@ -10,7 +10,9 @@ CREATE TABLE transition (
 
 INSERT INTO transition VALUES (NULL, 'LOAD', 'PERSISTED', 'LOADING', 'uploadHandler');
 INSERT INTO transition VALUES (NULL, 'OK', 'LOADING', 'LOADED', 'dummyHandler');
-
+INSERT INTO transition VALUES (NULL, 'STORE', 'LOADED', 'STORING', 'storeHandler');
+INSERT INTO transition VALUES (NULL, 'STORE', 'STORED', 'STORING', 'storeHandler');
+INSERT INTO transition VALUES (NULL, 'OK', 'STORING', 'STORED', 'dummyHandler');
 
 DROP TABLE IF EXISTS dict;
 CREATE TABLE dict (

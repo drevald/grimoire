@@ -86,7 +86,7 @@
 	</target>	
 
 	<target name="expand" depends="war">
-		<delete dir="${deploy.dir}/${ant.project.name}"/>
+		<!--<delete dir="${deploy.dir}/${ant.project.name}"/>-->
 		<unwar src="${war.file}" dest="${deploy.dir}/${ant.project.name}"/>
 	</target>	
 

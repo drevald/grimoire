@@ -45,6 +45,8 @@
 			<td>&nbsp;</td>
 			<td>
 				<input type="submit" value="<spring:message code='apply'/>"/>
+                <input type="button" value="<spring:message code='save'/>"
+                       onclick="javascript:document.forms[0].action='store';document.forms[0].submit();"/>
 			</td>
 		</tr>
 		<tr><td colspan="2">&nbsp;</td></tr>

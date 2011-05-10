@@ -25,4 +25,5 @@ public class TransitionServiceImpl implements TransitionService {
     public Transition find(String event, String status) {
         return transitionDao.find(event, status);
     }
+
 }
