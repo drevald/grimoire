@@ -17,6 +17,7 @@ import org.helico.domain.Dict;
 import org.helico.domain.User;
 import org.helico.service.DictService;
 import org.helico.service.UserService;
+import org.helico.service.LangService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
