@@ -60,9 +60,51 @@ CREATE TABLE lang (
   id BIGINT NOT NULL AUTO_INCREMENT,
   title VARCHAR(16) NULL,
   code VARCHAR(2) NULL,
+  encodings VARCHAR(255),
   PRIMARY KEY(id),
   UNIQUE INDEX langs_Unique(code)
 );
+
+INSERT INTO lang VALUES (NULL, 'Albanian', 'sq', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Arabic', 'ar', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Belarusian', 'be', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Bulgarian', 'bg', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Catalan', 'ca', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Chinese', 'zh', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Croatian', 'hr', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Czech', 'cs', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Danish', 'da', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Dutch', 'nl', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'English', 'en', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Estonian', 'et', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Finnish', 'fi', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'French', 'fr', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'German', 'de', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Greek', 'el', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Hebrew', 'iw', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Hindi', 'hi', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Hungarian', 'hu', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Icelandic', 'is', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Italian', 'it', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Japanese', 'ja', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Korean', 'ko', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Latvian', 'lv', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Lithuanian', 'lt', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Macedonian', 'mk', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Norwegian', 'no', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Polish', 'pl', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Portuguese', 'pt', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Romanian', 'ro', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Russian', 'ru', 'WIndows-1241,KOI8-R,Cp866,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Serbian', 'sr', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Slovak', 'sk', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Slovenian', 'sl', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Spanish', 'es', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Swedish', 'sv', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Thai', 'th', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Turkish', 'tr', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Ukrainian', 'uk', 'UTF-8');
+INSERT INTO lang VALUES (NULL, 'Vietnamese', 'vi', 'UTF-8');
 
 DROP TABLE IF EXISTS service;
 CREATE TABLE service (
