@@ -100,12 +100,10 @@ public class DictController {
 	@RequestMapping(value = "/dict/edit/save", method = RequestMethod.POST)
 	public String addDict(
 			@RequestParam("id") Long id,
-			@RequestParam("name") String name,
-			@RequestParam("encoding") String encoding) 
+			@RequestParam("encoding") String encoding)
 	{
 		Dict dict = dictService.findDict(id);
 		dict.setEncoding(encoding);
-		dict.setName(name);
 		dictService.saveDict(dict);
 	    return "redirect:/dict/edit/"+dict.getId();
 	}

@@ -2,12 +2,29 @@
 
     <h3><spring:message code="dict.upload"/></h3>
 
-	<form method="post" action="dict/upload" enctype="multipart/form-data">
-    	<input type="file" name="file"/>
-	    <input type="hidden" name="user" value="${currUser}"/>	       
-	    <input type="hidden" name="name" value="name"/>
-	    <input type="submit" value="<spring:message code='upload'/>"/>
+    <table>
+    <form method="post" action="dict/upload" enctype="multipart/form-data">
+    <input type="hidden" name="user" value="${currUser}"/>
+    <input type="hidden" name="name" value="name"/>
+        <tr>
+            <td><spring:message code='dict.text.file'/></td>
+            <td><input type="file" name="file"/></td>
+        </tr>
+        <tr>
+            <td><spring:message code='dict.text.language'/></td>
+            <td>
+                <select>
+                    <option>Language 1</option>
+                    <option>Language 2</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="submit" value="<spring:message code='upload'/>"/></td>
+        </tr>
     </form>
+    </table>
 
     <h3><spring:message code="dict.list" /></h3>
 

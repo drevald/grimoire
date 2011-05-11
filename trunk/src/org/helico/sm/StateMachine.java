@@ -4,6 +4,7 @@ public interface StateMachine {
 
     public static enum Event {
         FAIL,
+        WAIT,
 	    OK,
 	    LOAD,
 	    STORE,

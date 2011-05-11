@@ -32,11 +32,10 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
         Dict dict = dictService.findDict(dictId);
         Transition transition = transitionService.find(event.toString(), dict.getStatus());
         if (transition != null) {
-            LOG.debug("handler found: " +  transition.getHandlerName());
+            LOG.debug("handler found: " +  transition);
             Handler handler = (Handler)appContext.getBean(transition.getHandlerName());
             dict.setStatus(transition.getDestStatus());
             dictService.saveDict(dict);
-            LOG.debug("handler found: " + transition.getHandlerName());
             handler.process(data, dictId);
             LOG.debug("handler called");
         } else {
