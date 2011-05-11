@@ -3,7 +3,8 @@ package org.helico.sm;
 public interface StateMachine {
 
     public static enum Event {
-	OK,
+        FAIL,
+	    OK,
 	    LOAD,
 	    STORE,
 	    PARSE,
