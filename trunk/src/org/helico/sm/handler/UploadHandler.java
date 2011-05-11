@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.helico.domain.Dict;
 import org.helico.domain.Dict.Status;
 import org.helico.service.DictService;
+import org.helico.service.JobService;
 import org.helico.sm.Handler;
 
 import org.helico.sm.StateMachine;
@@ -29,6 +30,9 @@ public class UploadHandler implements Handler {
     @Autowired
 	private StateMachine stateMachine;
 
+    @Autowired
+    JobService jobService;
+
     @Async
 	public void process(Object object, Long id) {
 	LOG.info("processing...");
@@ -41,14 +45,13 @@ public class UploadHandler implements Handler {
 	    baos.flush();
 	    dict = dictService.findDict(id);
 	    dict.setOrigDoc(baos.toByteArray());
-	    //dict.setUtfText(baos.toByteArray());
 	    dictService.saveDict(dict);
 	    baos.close();
 	    is.close();
         stateMachine.sendEvent(StateMachine.Event.OK, null, id);
 	} catch (Exception e) {
 	    LOG.error(e, e);
-	    dictService.setStatus(id, Status.UPLOAD_FAILED);
+        stateMachine.sendEvent(StateMachine.Event.FAIL, null, id);
 	}
 
     }

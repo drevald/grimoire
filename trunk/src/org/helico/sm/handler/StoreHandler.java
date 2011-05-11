@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.helico.domain.Dict;
 import org.helico.service.DictService;
+import org.helico.service.JobService;
 import org.helico.sm.Handler;
 import org.helico.sm.StateMachine;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class StoreHandler implements Handler {
 
     @Autowired
     StateMachine stateMachine;
+
+    @Autowired
+    JobService jobService;
 
     @Async
     public void process(Object data, Long id) {
