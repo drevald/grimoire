@@ -98,7 +98,7 @@
 	      url="${jdbc.databaseurl}"
 	      userid="${jdbc.username}"
 	      password="${jdbc.password}"
-	      src="/docs/grimoire.sql"
+	      src="docs/grimoire.sql"
 	      classpathref="cp"/>
 	</target>
 	
