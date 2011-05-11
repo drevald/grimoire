@@ -50,6 +50,9 @@ public class DictController {
     private DictService dictService;
 
     @Autowired
+	private LangService langService;
+
+    @Autowired
     private UserService userService;	
 	
     private String getCurrentUser() {
@@ -66,6 +69,7 @@ public class DictController {
 	public String listDicts(Map<String, Object> map) {
     	map.put("currUser", getCurrentUser());
     	map.put("dictList", dictService.listDicts());
+	map.put("langs", langService.list());
     	return "dictList";
     }
 	
