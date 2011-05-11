@@ -35,7 +35,7 @@ public class UploadHandler implements Handler {
 
     @Async
 	public void process(Object object, Long id) {
-	LOG.info("processing...");
+    LOG.info(">>> start dict#" + id );
 	try {
 	    InputStream is = (InputStream)object;
 	    Dict dict = dictService.findDict(id);
@@ -48,10 +48,12 @@ public class UploadHandler implements Handler {
 	    dictService.saveDict(dict);
 	    baos.close();
 	    is.close();
+        LOG.info("<<< done dict#" + id );
         stateMachine.sendEvent(StateMachine.Event.OK, null, id);
 	} catch (Exception e) {
 	    LOG.error(e, e);
-        stateMachine.sendEvent(StateMachine.Event.FAIL, null, id);
+        stateMachine.sendEvent(StateMachine.Event.FAIL, e.getMessage(), id);
+        LOG.info("<<< failed dict#" + id + " with error " +  e.getMessage());
 	}
 
     }

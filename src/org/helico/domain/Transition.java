@@ -57,4 +57,8 @@ public class Transition {
 	this.handlerName = handlerName;
     }
 
+    public String toString() {
+        return "Transition #" + id + " for :" + event + " " + sourceStatus + "->" + destStatus + " by: " + handlerName;
+    }
+
 }

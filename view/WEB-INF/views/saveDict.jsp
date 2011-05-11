@@ -4,26 +4,8 @@
 
 	<table>
 	<form method="post" action="save">
-	<input type="hidden" name="id" value="${dict.id}"/>
+    <input type="hidden" name="id" value="${dict.id}"/>
 	<input type="hidden" name="userId" value="${dict.userId}"/>
-		<tr>						
-			<td><nobr><spring:message code="dict.name"/></nobr></td>
-			<td>
-				<input type="text" name="name" value="${dict.name}"/>
-			</td>
-		</tr>
-		<tr>
-			<td><spring:message code="dict.status"/></td>
-			<td>${dict.status}</td>
-		</tr>
-		<tr>
-			<td><spring:message code="dict.your.language"/></td>
-			<td><input type="text"/></td>
-		</tr>
-		<tr>
-			<td><spring:message code="dict.text.language"/></td>
-			<td><input type="text"/></td>
-		</tr>
 		<tr>
 			<td>
 				<spring:message code='encoding'/>
@@ -44,9 +26,9 @@
 		<tr>
 			<td>&nbsp;</td>
 			<td>
-			<input type="submit" value="<spring:message code='apply'/>"/>
-			<input type="button" value="<spring:message code='save'/>"
-                       onclick="javascript:document.forms[0].action='store';document.forms[0].submit();"/>
+				<input type="submit" value="<spring:message code='apply'/>"/>
+                <input type="button" value="<spring:message code='save'/>"
+                       onclick="javascript:document.forms[0]document.forms[0].submit();"/>
 			</td>
 		</tr>
 		<tr><td colspan="2">&nbsp;</td></tr>

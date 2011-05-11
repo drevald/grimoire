@@ -32,7 +32,12 @@ public class StoreHandler implements Handler {
 
     @Async
     public void process(Object data, Long id) {
+        LOG.info(">>> dict#" + id + " with data " +  data);
         Dict dict = dictService.findDict(id);
+        if (dict.getEncoding() == null) {
+            stateMachine.sendEvent(StateMachine.Event.WAIT, null, id);
+            return;
+        }
         try {
             InputStreamReader reader = new InputStreamReader(
                 new ByteArrayInputStream(dict.getOrigDoc()), dict.getEncoding());
@@ -42,9 +47,11 @@ public class StoreHandler implements Handler {
             IOUtils.closeQuietly(writer);
             dict.setUtfText(writer.toString().getBytes("UTF-8"));
             dictService.saveDict(dict);
+            LOG.info("<<< dict#" + id + " with data " +  data);
             stateMachine.sendEvent(StateMachine.Event.OK, null, id);
         } catch (Exception e) {
-            LOG.error(e, e);
+            stateMachine.sendEvent(StateMachine.Event.OK, e.getMessage(), id);
+            LOG.info("<<< failed dict#" + id + " with error " +  e.getMessage());
         }
     }
 
