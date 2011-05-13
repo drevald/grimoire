@@ -13,14 +13,18 @@
 			</td>
 			<td>
                 <c:forEach items="${encodings}" var="c">
-                    <c:if test="${c eq dict.encoding}">
-                        <input type="radio" name="encoding" value="${c}" checked >${c}&nbsp;
+                    <c:if test="${c eq encoding}">
+                        <input type="radio" name="encoding" value="${c}" checked>${c}&nbsp;
                     </c:if>
-                    <c:if test="${c ne dict.encoding}">
+                    <c:if test="${c ne encoding}">
                         <input type="radio" name="encoding" value="${c}"
                                onchange="javascript:document.forms[0].submit();">${c}&nbsp;
                     </c:if>
                 </c:forEach>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
                 <spring:message code="dict.enc.confirm"/>
                 <input  type="button"
                         value="<spring:message code='save'/>"
