@@ -4,14 +4,14 @@
 
     <form method="post" action="dict/upload" enctype="multipart/form-data">
         <input type="hidden" name="user" value="${currUser}"/>
-	<input type="hidden" name="name" value="name"/>
         <input type="file" name="file"/>
-	<spring:message code='dict.text.language'/>
-	<select>
-		<option>Language 1</option>
-		<option>Language 2</option>
-    	</select>
-	<input type="submit" value="<spring:message code='upload'/>"/>
+	    <spring:message code='dict.text.language'/>
+        <select name="lang" onchange="javascript:document.forms[0].submit();">
+            <c:forEach items="${langs}" var="lang">
+                    <option value="${lang.code}">${lang.name}</option>
+            </c:forEach>
+        </select>
+	    <input type="submit" value="<spring:message code='upload'/>"/>
     </form>
 
     <h3><spring:message code="dict.list" /></h3>

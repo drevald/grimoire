@@ -70,16 +70,16 @@ public class DictController {
 	public String listDicts(Map<String, Object> map) {
     	map.put("currUser", getCurrentUser());
     	map.put("dictList", dictService.listDicts());
-	map.put("langs", langService.list());
+	    map.put("langs", langService.list());
     	return "dictList";
     }
 	
     @RequestMapping(value="/dict/upload", method = RequestMethod.POST)
-	public String handleFormUpload(@RequestParam("name") String name, 
-				       @RequestParam("file") MultipartFile file,
-				       Map<String, Object> map,
-				       @ModelAttribute("dict") Dict dict,
-				       Errors errors) 
+	public String handleFormUpload(@RequestParam("file") MultipartFile file,
+                        @RequestParam("lang") String lang,
+				        Map<String, Object> map,
+				        @ModelAttribute("dict") Dict dict,
+				        Errors errors)
 	{
 	    User user = userService.findUser(getCurrentUser());
 	    if (!file.isEmpty()) {
@@ -90,7 +90,7 @@ public class DictController {
 			    dict.setEncoding("UTF-8");
 			    map.put("dict", dict);
 			    map.put("preview", new String(dict.getPreview()));
-			    return "redirect:/dict/edit/" + dict.getId();
+			    return "redirect:/dict/edit/" + dict.getId() + "?lang=" + lang;
 			} catch (IOException e) {
 			    LOG.error(e, e);
 		    	errors.reject("error.reading.file");
@@ -105,12 +105,13 @@ public class DictController {
 	@RequestMapping(value = "/dict/edit/save", method = RequestMethod.POST)
 	public String addDict(
 			@RequestParam("id") Long id,
+            @RequestParam("lang") String lang,
 			@RequestParam("encoding") String encoding)
 	{
 		Dict dict = dictService.findDict(id);
 		dict.setEncoding(encoding);
 		dictService.saveDict(dict);
-	    return "redirect:/dict/edit/"+dict.getId();
+	    return "redirect:/dict/edit/"+dict.getId() + "?lang=" + lang;
 	}
 
 	@RequestMapping(value = "/dict/edit/store", method = RequestMethod.POST)
@@ -133,28 +134,19 @@ public class DictController {
 	}	
 
 	@RequestMapping(value="/dict/edit/{dictId}")
-	public String editDict(@PathVariable("dictId") Long dictId, 
-			       Map<String, Object> map,
-			       HttpServletRequest request) {
+	public String editDict(@PathVariable("dictId") Long dictId,
+                           @RequestParam("lang") String lang,
+			       Map<String, Object> map) {
 		Dict dict = dictService.findDict(dictId);
-		Locale locale = RequestContextUtils.getLocale(request);
 		map.put("dict", dict);
+        map.put("lang", lang);
+        map.put("encodings", langService.getEncodings(lang));
+
 		try {
 		    map.put("preview", new String(dict.getPreview(), dict.getEncoding()));
 		} catch (Exception e) {
 		    map.put("preview", new String(dict.getPreview()));
 		}
-		ArrayList<String> charsetList = new ArrayList<String>();
-//		for (Charset c : Charset.availableCharsets().values()) {
-//		    charsetList.add(c.name());
-//		}
-		charsetList.add("windows-1251");
-		charsetList.add("cp866");
-		charsetList.add("KOI8-R");
-		charsetList.add("UTF-8");
-		charsetList.add("ISO-8859-1");
-
-		map.put("charsetList", charsetList);
 		return "saveDict";
 	}	
 	
