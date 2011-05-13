@@ -21,4 +21,41 @@ public class Lang {
     @Column(name = "name")
 	private String name;
 
+    @Column(name = "code")
+	private String code;
+
+    @Column(name = "encodings")
+	private String encodings;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getEncodings() {
+        return encodings;
+    }
+
+    public void setEncodings(String encodings) {
+        this.encodings = encodings;
+    }
 }

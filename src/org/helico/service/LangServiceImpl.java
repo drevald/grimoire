@@ -10,12 +10,26 @@ import java.util.List;
 @Service
 public class LangServiceImpl implements LangService {
 
+    private static final String ENC_SEPARATOR = ",";
+
     @Autowired
     LangDAO langDao;
 
     @Transactional
 	public List<Lang> list() {
-	return langDao.list();
+	    return langDao.list();
+    }
+
+    @Transactional
+    public String[] getEncodings(String code) {
+        Lang lang = langDao.find(code);
+        String str = lang.getEncodings();
+        if (str == null) {
+            return null;
+        } else {
+            return str.split(ENC_SEPARATOR);
+        }
+
     }
 
 }
