@@ -4,9 +4,9 @@
 
     <form method="post" action="dict/upload" enctype="multipart/form-data">
         <input type="hidden" name="user" value="${currUser}"/>
-        <input type="file" name="file"/>
+        <input type="file" name="file"/>&nbsp;
 	    <spring:message code='dict.text.language'/>
-        <select name="lang" onchange="javascript:document.forms[0].submit();">
+        <select name="lang">
             <c:forEach items="${langs}" var="lang">
                     <option value="${lang.code}">${lang.name}</option>
             </c:forEach>
@@ -28,7 +28,6 @@
 				<td>${dict.name}</td>
 				<td>${dict.status}</td>		
 				<td><a href="dict/delete/${dict.id}"><spring:message code="delete" /></a></td>
-				<td><a href="dict/edit/${dict.id}"><spring:message code="edit" /></a></td>
 				<td><a href="dict/view/${dict.id}"><spring:message code="dict.preview" /></a></td>
 		</tr>
 </c:forEach>

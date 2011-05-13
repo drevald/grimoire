@@ -117,12 +117,10 @@ public class DictController {
 	@RequestMapping(value = "/dict/edit/store", method = RequestMethod.POST)
 	public String storeDict(
 			@RequestParam("id") Long id,
-			@RequestParam("name") String name,
 			@RequestParam("encoding") String encoding)
 	{
 		Dict dict = dictService.findDict(id);
 		dict.setEncoding(encoding);
-		dict.setName(name);
 		dictService.saveDict(dict);
         dictService.storeDict(dict);
 	    return "redirect:/dict";
@@ -143,7 +141,9 @@ public class DictController {
         map.put("encodings", langService.getEncodings(lang));
 
 		try {
-		    map.put("preview", new String(dict.getPreview(), dict.getEncoding()));
+            String enc = dict.getEncoding() == null ? langService.getEncodings(lang)[0] : dict.getEncoding();
+		    map.put("preview", new String(dict.getPreview(), enc));
+            map.put("encoding", enc);
 		} catch (Exception e) {
 		    map.put("preview", new String(dict.getPreview()));
 		}
