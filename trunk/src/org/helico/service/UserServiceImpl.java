@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.log4j.Logger;
-import org.helico.bean.Counter;
 import org.helico.dao.UserDAO;
 import org.helico.domain.User;
 
@@ -19,19 +18,10 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserDAO userDao;
-	
-	@Autowired
-	private Counter counter;
-	
-	@Transactional
-	public void addFile(InputStream is) {
-		counter.load(is);
-	}	
 
 	@Transactional
 	public void addUser(User user) {
 		LOG.info("Starting counter from thread #" +  Thread.currentThread().toString());
-		counter.count();
 		LOG.info("Count finished from thread #" +  Thread.currentThread().toString());
 		userDao.addUser(user);
 		LOG.info("Business method done in thread #" +  Thread.currentThread().toString());

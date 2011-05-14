@@ -13,6 +13,11 @@ public class JobServiceImpl implements JobService {
     JobDAO jobDao;
 
     @Transactional
+    public void save(Job job) {
+        jobDao.saveOrUpdate(job);
+    }
+
+    @Transactional
     public void setProgress(Long id, Integer progress) {
         Job job = jobDao.find(id);
         job.setProgress(progress);
@@ -21,7 +26,16 @@ public class JobServiceImpl implements JobService {
 
     @Transactional
     public void setActive(Long id, Boolean active) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        Job job = jobDao.find(id);
+        job.setActive(active);
+        jobDao.saveOrUpdate(job);
     }
+
+    public Job find(Long id) {
+        return jobDao.find(id);
+    }
+
+
+
 
 }

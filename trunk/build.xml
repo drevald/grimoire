@@ -101,5 +101,11 @@
 	      src="docs/grimoire.sql"
 	      classpathref="cp"/>
 	</target>
+
+    <target name="scp">
+        <scp    todir="helico:pilory@192.168.0.135:/opt/software/tomcat/webapps"
+                trust="yes"
+                localFile="${war.file}"/>
+    </target>
 	
 </project>

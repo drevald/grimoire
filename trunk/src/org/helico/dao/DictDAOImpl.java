@@ -37,7 +37,6 @@ public class DictDAOImpl implements DictDAO {
 	}
 
     public synchronized Dict findDict(Long id) {
-
     	Dict dict = (Dict)sessionFactory.getCurrentSession().createQuery("from Dict where id=?")
 	    .setLong(0,id).uniqueResult();
 		LOG.info("get sess#"+sessionFactory.getCurrentSession().hashCode()+" =  " + dict.toString());

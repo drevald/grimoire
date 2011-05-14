@@ -61,4 +61,11 @@ public class Transition {
         return "Transition #" + id + " for :" + event + " " + sourceStatus + "->" + destStatus + " by: " + handlerName;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
