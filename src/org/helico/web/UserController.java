@@ -34,7 +34,6 @@ public class UserController {
 	LOG.info("!! handleFormUpload");
         if (!file.isEmpty()) {
 	    try {
-		userService.addFile(file.getInputStream());
 		// store the bytes somewhere
 	    } catch (Exception e) {
 	    	e.printStackTrace();

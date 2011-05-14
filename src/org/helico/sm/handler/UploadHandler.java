@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.helico.domain.Dict;
+import org.helico.domain.Job;
 import org.helico.domain.Dict.Status;
 import org.helico.service.DictService;
 import org.helico.service.JobService;
@@ -35,26 +36,29 @@ public class UploadHandler implements Handler {
 
     @Async
 	public void process(Object object, Long id) {
-    LOG.info(">>> start dict#" + id );
-	try {
-	    InputStream is = (InputStream)object;
-	    Dict dict = dictService.findDict(id);
-	    dictService.saveDict(dict);
-	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    IOUtils.copy(is, baos);
-	    baos.flush();
-	    dict = dictService.findDict(id);
-	    dict.setOrigDoc(baos.toByteArray());
-	    dictService.saveDict(dict);
-	    baos.close();
-	    is.close();
-        LOG.info("<<< done dict#" + id );
-        stateMachine.sendEvent(StateMachine.Event.OK, null, id);
-	} catch (Exception e) {
-	    LOG.error(e, e);
-        stateMachine.sendEvent(StateMachine.Event.FAIL, e.getMessage(), id);
-        LOG.info("<<< failed dict#" + id + " with error " +  e.getMessage());
-	}
+        LOG.info(">>> start dict#" + id );
+        Job job = jobService.find(id);
+        try {
+            jobService.setActive(job.getId(), true);
+            InputStream is = (InputStream)object;
+            jobService.setActive(job.getId(), true);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            IOUtils.copy(is, baos);
+            baos.flush();
+            Dict dict = dictService.findDict(id);
+            dict.setOrigDoc(baos.toByteArray());
+            dictService.saveDict(dict);
+            baos.close();
+            is.close();
+            LOG.info("<<< done dict#" + id );
+            stateMachine.sendEvent(StateMachine.Event.OK, null, id);
+        } catch (Exception e) {
+            LOG.error(e, e);
+            stateMachine.sendEvent(StateMachine.Event.FAIL, e.getMessage(), id);
+            LOG.info("<<< failed dict#" + id + " with error " +  e.getMessage());
+        } finally {
+            jobService.setActive(job.getId(), false);
+        }
 
     }
 

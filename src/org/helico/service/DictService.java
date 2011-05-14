@@ -8,8 +8,6 @@ public interface DictService {
 	
     public Dict findDict(Long id);
 
-    public void loadFile(Long id, InputStream is);
-	
     public Dict loadPreviewFile(Long id, InputStream is, String name);
 
     public void saveDict(Dict dict);

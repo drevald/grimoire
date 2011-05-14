@@ -42,5 +42,28 @@ public class Job {
 	this.progress = progress;
     }
 
+    public Long getTransId() {
+        return transId;
+    }
+
+    public void setTransId(Long transId) {
+        this.transId = transId;
+    }
+
+    public Long getDictId() {
+        return dictId;
+    }
+
+    public void setDictId(Long dictId) {
+        this.dictId = dictId;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
 }

@@ -3,6 +3,7 @@ package org.helico.sm.handler;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.helico.domain.Dict;
+import org.helico.domain.Job;
 import org.helico.service.DictService;
 import org.helico.service.JobService;
 import org.helico.sm.Handler;
@@ -33,9 +34,12 @@ public class StoreHandler implements Handler {
     @Async
     public void process(Object data, Long id) {
         LOG.info(">>> dict#" + id + " with data " +  data);
-        Dict dict = dictService.findDict(id);
+        Job job = jobService.find(id);
+        jobService.setActive(job.getId(), true);
+        Dict dict = dictService.findDict(job.getDictId());
         if (dict.getEncoding() == null) {
             stateMachine.sendEvent(StateMachine.Event.WAIT, null, id);
+            jobService.setActive(job.getId(), false);
             return;
         }
         try {
@@ -52,6 +56,8 @@ public class StoreHandler implements Handler {
         } catch (Exception e) {
             stateMachine.sendEvent(StateMachine.Event.OK, e.getMessage(), id);
             LOG.info("<<< failed dict#" + id + " with error " +  e.getMessage());
+        } finally {
+            jobService.setActive(job.getId(), false);
         }
     }
 

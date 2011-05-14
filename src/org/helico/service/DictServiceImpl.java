@@ -15,7 +15,6 @@ import java.io.PushbackInputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.helico.bean.TextFileLoader;
 import org.helico.dao.DictDAO;
 import org.helico.domain.Dict;
 import org.helico.domain.Dict.Status;
@@ -31,9 +30,6 @@ public class DictServiceImpl implements DictService {
     
     @Autowired
 	private DictDAO dictDao;
-	
-    @Autowired
-	private TextFileLoader textFileLoader;
 
     @Autowired
 	private StateMachine stateMachine;
@@ -74,11 +70,6 @@ public class DictServiceImpl implements DictService {
 	@Transactional
 	public void loadFile() {
 		
-	}
-
-	@Transactional
-	public void loadFile(Long dictId, InputStream is) {
-		textFileLoader.load(dictId, is);
 	}
 
 	@Transactional
