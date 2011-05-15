@@ -17,14 +17,16 @@ public class JobDAOImpl implements JobDAO {
     SessionFactory sessionFactory;
 
     public Job find(Long id) {
-    	Job job = (Job)sessionFactory.getCurrentSession().createQuery("from Dict where id=?")
-                .setLong(0, id).uniqueResult();
+	LOG.info(">>>>find job#" + id);
+    	Job job = (Job)sessionFactory.getCurrentSession().get(Job.class, id);
+	LOG.info("<<<<found job#" + id);
         return job;
     }
 
     public void saveOrUpdate(Job job) {
-	    LOG.info("save sess#"+sessionFactory.getCurrentSession().hashCode()+" " + job.toString());
+	    LOG.info(">>>>save job sess#"+sessionFactory.getCurrentSession().hashCode()+" " + job.toString());
 		sessionFactory.getCurrentSession().saveOrUpdate(job);
+	    LOG.info("<<<<saved job sess#"+sessionFactory.getCurrentSession().hashCode()+" " + job.toString());
     }
 
 }

@@ -155,11 +155,11 @@ public class DictController {
 		Dict dict = dictService.findDict(dictId);
 		map.put("dict", dict);
         try {
-		    map.put("preview", new String(dict.getPreview(), dict.getEncoding()));
+	    map.put("preview", new String(dict.getPreview(), dict.getEncoding()));
         } catch (Exception e) {
             LOG.error(e, e);
         }
-		return "viewDict";
+	return "viewDict";
 	}
 	
 	@RequestMapping("/dict/delete/{dictId}")

@@ -13,7 +13,7 @@ INSERT INTO transition VALUES (NULL, 'OK', 'LOADING', 'STORING', 'storeHandler')
 INSERT INTO transition VALUES (NULL, 'WAIT', 'STORING', 'LOADED', 'storeHandler');
 INSERT INTO transition VALUES (NULL, 'STORE', 'LOADED', 'STORING', 'storeHandler');
 INSERT INTO transition VALUES (NULL, 'STORE', 'STORED', 'STORING', 'storeHandler');
-INSERT INTO transition VALUES (NULL, 'OK', 'STORING', 'STORED', 'dummyHandler');
+INSERT INTO transition VALUES (NULL, 'OK', 'STORING', 'PARSING', 'parseHandler');
 INSERT INTO transition VALUES (NULL, 'PARSE', 'STORED', 'PARSING', 'parseHandler');
 INSERT INTO transition VALUES (NULL, 'PARSE', 'PARSED', 'PARSING', 'parseHandler');
 INSERT INTO transition VALUES (NULL, 'OK', 'PARSING', 'PARSED', 'dummyHandler');
@@ -114,14 +114,17 @@ CREATE TABLE translator (
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
   id BIGINT NOT NULL AUTO_INCREMENT,
-  username VARCHAR(32) NULL,
-  password VARCHAR(32) NULL,
+  username VARCHAR(32) NOT NULL,
+  password VARCHAR(32) NOT NULL,
+  role VARCHAR(8) NOT NULL,
   enabled BOOL NOT NULL DEFAULT TRUE,
   PRIMARY KEY(id)
 );
 
-INSERT INTO user VALUES (NULL, 'user', 'pass', 1);
-INSERT INTO user VALUES (NULL, 'helicobacter', 'pilory', 1);
+INSERT INTO user VALUES (NULL, 'guest', '', 'GUEST', 1);
+INSERT INTO user VALUES (NULL, 'user', 'pass', 'USER', 1);
+INSERT INTO user VALUES (NULL, 'helicobacter', 'pilory', 'USER', 1);
+INSERT INTO user VALUES (NULL, 'admin', 'admin', 'ADMIN', 1);
 
 DROP TABLE IF EXISTS word;
 CREATE TABLE word (

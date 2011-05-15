@@ -9,6 +9,8 @@ import org.helico.domain.Job;
 
 public interface JobService {
 
+    public Job createJob(Long tranId, Long dictId);
+
     public Job find(Long id);
 
     public void save(Job job);

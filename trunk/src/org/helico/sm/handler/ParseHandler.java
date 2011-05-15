@@ -7,6 +7,8 @@ import org.helico.sm.StateMachine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import org.helico.domain.Job;
+
 /**
  * Reads UTF-8 encoded text and detects words. By words it understands continuous
  * sets of characters separated by white space. Allowed symbols within word can be dash or new line symbol.
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component("parseHandler")
-public class ParseHandler implements Handler {
+public class ParseHandler extends AbstractHandler {
 
     private static final Logger LOG = Logger.getLogger(ParseHandler.class);
 
@@ -24,8 +26,8 @@ public class ParseHandler implements Handler {
     @Autowired
     JobService jobService;
 
-    public void process(Object data, Long id) {
-        LOG.info("processing dict# " + id);
+    public void process(Object data, Job job) {
+        LOG.info("processing job# " + job);
     }
 
 }

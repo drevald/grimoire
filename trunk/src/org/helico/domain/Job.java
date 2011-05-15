@@ -25,10 +25,10 @@ public class Job {
 	private Long dictId;
 
     @Column(name = "progress")
-	private Integer progress;
+	private Integer progress = 0;
 
     @Column(name = "active")
-	private Boolean active;
+	private Boolean active = false;
 
     public Long getId() {
 	return id;
@@ -64,6 +64,10 @@ public class Job {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String toString() {
+	return "job#" + id + "#"+  this.hashCode() + ", progr:" + progress + ", active:" + active + ", dict:" + dictId;
     }
 
 }
