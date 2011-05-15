@@ -50,6 +50,9 @@
 	</target>
 		
 	<target name="war" depends="compile">
+	  <tstamp>
+	    <format property="build.time" pattern="dd-MMM-yyyy HH:mm z" unit="hour" />
+	  </tstamp>
         <copy todir="${parsed.res.dir}">
             <filterchain>
                 <replacetokens>
@@ -58,6 +61,7 @@
                     <token key="JDBC_PASSWORD" value="${jdbc.password}"/>
                     <token key="JDBC_DIALECT" value="${jdbc.dialect}"/>
                     <token key="JDBC_DRIVER_CLASS_NAME" value="${jdbc.driverClassName}"/>
+		    <token key="BUILDTIME" value="${build.time}"/>
                 </replacetokens>
                 <escapeunicode/>
             </filterchain>
