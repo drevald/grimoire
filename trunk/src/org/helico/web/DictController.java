@@ -122,9 +122,11 @@ public class DictController {
 		Dict dict = dictService.findDict(id);
 		dict.setEncoding(encoding);
 		dictService.saveDict(dict);
+		LOG.info("Dict#"+id+" encoding="+encoding+" dict.getEncoding="+dict.getEncoding());
         dictService.storeDict(dict);
 	    return "redirect:/dict";
 	}
+
 
 	@RequestMapping("/")
 	public String home() {

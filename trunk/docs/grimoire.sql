@@ -65,7 +65,7 @@ CREATE TABLE lang (
   UNIQUE INDEX langs_Unique(code)
 );
 
-INSERT INTO lang VALUES (NULL, 'Russian', 'ru', 'WIndows-1251,KOI8-R,Cp866,UTF-8');
+INSERT INTO lang VALUES (NULL, 'Russian', 'ru', 'Windows-1251,KOI8-R,Cp866,UTF-8');
 INSERT INTO lang VALUES (NULL, 'Chinese', 'zh', 'UTF-8');
 INSERT INTO lang VALUES (NULL, 'English', 'en', 'ISO-8859-1,UTF-8');
 INSERT INTO lang VALUES (NULL, 'Finnish', 'fi', 'ISO-8859-1,UTF-8');
