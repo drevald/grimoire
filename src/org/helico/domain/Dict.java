@@ -126,7 +126,7 @@ public class Dict {
     }
 	
     public String toString() {
-	return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", data:" + origDoc + ", status:" + status;
+	return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", data:" + origDoc + ", status:" + status +", enc:"+encoding;
     }
 	
 	
