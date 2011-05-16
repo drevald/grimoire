@@ -41,15 +41,18 @@ public class Dict {
 	private String name;
 
     @Column(name = "orig_doc", columnDefinition="LONGBLOB")
+    @Basic(fetch = FetchType.LAZY)
 	private byte[] origDoc;
 
     @Column(name = "utf8_text", columnDefinition="LONGTEXT")
+    @Basic(fetch = FetchType.LAZY)
 	private byte[] utfText;
     
     @Column(name = "status")
     private String status;
     
     @Column(name = "preview", columnDefinition="BLOB")
+    @Basic(fetch = FetchType.LAZY)
     private byte[] preview;
 
     @Column(name = "encoding")

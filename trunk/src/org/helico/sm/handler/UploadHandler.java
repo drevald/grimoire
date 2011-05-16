@@ -1,9 +1,7 @@
 package org.helico.sm.handler;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;

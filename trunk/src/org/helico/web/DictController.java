@@ -1,17 +1,7 @@
 package org.helico.web;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PushbackInputStream;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.helico.domain.Dict;
 import org.helico.domain.User;
@@ -21,8 +11,6 @@ import org.helico.service.LangService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,13 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.RequestContext;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 
@@ -122,7 +107,7 @@ public class DictController {
 		Dict dict = dictService.findDict(id);
 		dict.setEncoding(encoding);
 		dictService.saveDict(dict);
-		LOG.info("Dict#"+id+" encoding="+encoding+" dict.getEncoding="+dict.getEncoding());
+		LOG.info("Dict#" + id + " encoding=" + encoding + " dict.getEncoding=" + dict.getEncoding());
         dictService.storeDict(dict);
 	    return "redirect:/dict";
 	}

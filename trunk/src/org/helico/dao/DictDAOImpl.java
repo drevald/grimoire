@@ -3,7 +3,6 @@ package org.helico.dao;
 import java.util.List;
 import org.apache.log4j.Logger;
 
-import org.helico.dao.DictDAO;
 import org.helico.domain.Dict;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;

@@ -1,5 +1,6 @@
 package org.helico.sm;
 
+import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.domain.Transition;
 import org.helico.service.JobService;
@@ -8,9 +9,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.helico.sm.handler.UploadHandler;
-import org.helico.sm.Handler;
-import org.helico.domain.Dict;
 import org.helico.service.DictService;
 import org.helico.service.TransitionService;
 
