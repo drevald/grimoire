@@ -40,7 +40,8 @@ org.springframework.jdbc-3.1.0.M1.jar
     	<dependency org="org.springframework" name="spring-security-taglibs" rev="3.1.0.RC1"/>
     	<dependency org="org.springframework" name="spring-security-web" rev="3.1.0.RC1"/>
     	
-    	<dependency org="mysql" name="mysql-connector-java" rev="5.1.16"/>
+        <dependency org="org.hibernate" name="hibernate-cglib-repack" rev="2.1_3"/>
+        <dependency org="mysql" name="mysql-connector-java" rev="5.1.16"/>
 
     	<dependency org="org.slf4j" name="slf4j-api" rev="1.5.8"/>
     	<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.8"/>

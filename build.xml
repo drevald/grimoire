@@ -47,6 +47,14 @@
 		<javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="false" debug="true">
 			<classpath refid="cp"/>
 		</javac>
+        <taskdef name="instrument" classname="org.hibernate.tool.instrument.cglib.InstrumentTask">
+            <classpath refid="cp"/>
+        </taskdef>
+        <instrument>
+            <fileset dir="${classes.dir}">
+                <include name="**/Dict.class"/>
+            </fileset>
+        </instrument>
 	</target>
 		
 	<target name="war" depends="compile">
