@@ -1,8 +1,8 @@
 package org.helico.sm.handler;
 
 import org.apache.log4j.Logger;
-import org.helico.domain.Job;
 import org.helico.domain.Dict;
+import org.helico.domain.Job;
 import org.helico.service.JobService;
 import org.helico.service.DictService;
 import org.helico.sm.Handler;

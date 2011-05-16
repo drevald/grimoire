@@ -1,7 +1,8 @@
 package org.helico.dao;
 
-import java.util.List;
 import org.helico.domain.Dict;
+
+import java.util.List;
 
 public interface DictDAO {
 	

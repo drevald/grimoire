@@ -1,8 +1,9 @@
 package org.helico.service;
 
+import org.helico.domain.Dict;
+
 import java.io.InputStream;
 import java.util.List;
-import org.helico.domain.Dict;
 
 public interface DictService {
 	

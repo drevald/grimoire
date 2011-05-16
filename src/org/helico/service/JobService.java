@@ -1,6 +1,5 @@
 package org.helico.service;
 
-import org.helico.domain.Dict;
 import org.helico.domain.Job;
 
 /**

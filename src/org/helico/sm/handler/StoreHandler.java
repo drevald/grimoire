@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
 
 @Component("storeHandler")
 public class StoreHandler implements Handler {
