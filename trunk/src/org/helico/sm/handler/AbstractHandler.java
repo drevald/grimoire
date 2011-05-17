@@ -45,6 +45,6 @@ public abstract class AbstractHandler implements Handler {
         }
     }
 
-    protected abstract void process(Object object, Job job); 
+    protected abstract void process(Object object, Job job) throws Exception;
 
 }
