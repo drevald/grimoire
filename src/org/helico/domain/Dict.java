@@ -129,7 +129,7 @@ public class Dict {
     }
 	
     public String toString() {
-	return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", data:" + origDoc + ", status:" + status +", enc:"+encoding;
+	return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", utf:" + utfText + ", data:" + origDoc + ", status:" + status +", enc:"+encoding;
     }
 	
 	
