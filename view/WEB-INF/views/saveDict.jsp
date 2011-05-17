@@ -6,7 +6,7 @@
 	<form method="post" action="save">
     <input type="hidden" name="id" value="${dict.id}"/>
 	<input type="hidden" name="userId" value="${dict.userId}"/>
-    <input type="hidden" name="lang" value="${lang}"/>
+    <input type="hidden" name="langId" value="${langId}"/>
 		<tr>
 			<td>
 				<spring:message code='encoding'/>

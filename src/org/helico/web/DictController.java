@@ -61,7 +61,7 @@ public class DictController {
 	
     @RequestMapping(value="/dict/upload", method = RequestMethod.POST)
 	public String handleFormUpload(@RequestParam("file") MultipartFile file,
-                        @RequestParam("lang") String lang,
+                        @RequestParam("langId") String langId,
 				        Map<String, Object> map,
 				        @ModelAttribute("dict") Dict dict,
 				        Errors errors)
@@ -73,9 +73,10 @@ public class DictController {
 								    file.getInputStream(), 
 								    file.getOriginalFilename());
 			    dict.setEncoding("UTF-8");
+                dict.setLangId(langId);
 			    map.put("dict", dict);
 			    map.put("preview", new String(dict.getPreview()));
-			    return "redirect:/dict/edit/" + dict.getId() + "?lang=" + lang;
+			    return "redirect:/dict/edit/" + dict.getId() + "?langId=" + langId;
 			} catch (IOException e) {
 			    LOG.error(e, e);
 		    	errors.reject("error.reading.file");
@@ -90,13 +91,13 @@ public class DictController {
 	@RequestMapping(value = "/dict/edit/save", method = RequestMethod.POST)
 	public String addDict(
 			@RequestParam("id") Long id,
-            @RequestParam("lang") String lang,
+            @RequestParam("langId") Long langId,
 			@RequestParam("encoding") String encoding)
 	{
 		Dict dict = dictService.findDict(id);
 		dict.setEncoding(encoding);
 		dictService.saveDict(dict);
-	    return "redirect:/dict/edit/"+dict.getId() + "?lang=" + lang;
+	    return "redirect:/dict/edit/"+dict.getId() + "?langId=" + langId;
 	}
 
 	@RequestMapping(value = "/dict/edit/store", method = RequestMethod.POST)
@@ -120,15 +121,15 @@ public class DictController {
 
 	@RequestMapping(value="/dict/edit/{dictId}")
 	public String editDict(@PathVariable("dictId") Long dictId,
-                           @RequestParam("lang") String lang,
+                           @RequestParam("langId") String langId,
 			       Map<String, Object> map) {
 		Dict dict = dictService.findDict(dictId);
 		map.put("dict", dict);
-        map.put("lang", lang);
-        map.put("encodings", langService.getEncodings(lang));
+        map.put("langId", langId);
+        map.put("encodings", langService.getEncodings(langId));
 
 		try {
-            String enc = dict.getEncoding() == null ? langService.getEncodings(lang)[0] : dict.getEncoding();
+            String enc = dict.getEncoding() == null ? langService.getEncodings(langId)[0] : dict.getEncoding();
 		    map.put("preview", new String(dict.getPreview(), enc));
             map.put("encoding", enc);
 		} catch (Exception e) {

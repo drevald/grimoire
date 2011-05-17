@@ -35,6 +35,7 @@ DROP TABLE IF EXISTS dict;
 CREATE TABLE dict (
   id BIGINT NOT NULL AUTO_INCREMENT,
   user_id BIGINT NOT NULL,
+  lang_id BIGINT,
   name VARCHAR(128),
   orig_doc LONGBLOB,
   utf8_text LONGTEXT,
