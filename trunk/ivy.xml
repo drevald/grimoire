@@ -52,11 +52,9 @@ org.springframework.jdbc-3.1.0.M1.jar
     	<dependency org="org.apache" name="commons-io" rev="2.0.1"/>
 
     	<dependency org="javassist" name="javassist" rev="3.7.1.GA" />
-	<dependency org="javax.servlet" name="servlet-api" rev="2.5"/>
-<!-- 	   	<dependency org="taglibs" name="jstl" rev="1.1.0-D13"/> -->
-<!-- 	   	<dependency org="org.apache" name="standard" rev="1.1.0-D13"/> -->
-	<dependency org="taglibs" name="jstl" rev="1.1.2"/>
-	<dependency org="taglibs" name="standard" rev="1.1.2"/>
+        <dependency org="javax.servlet" name="servlet-api" rev="2.5"/>
+        <dependency org="taglibs" name="jstl" rev="1.1.2"/>
+        <dependency org="taglibs" name="standard" rev="1.1.2"/>
     	    	
     </dependencies>
     

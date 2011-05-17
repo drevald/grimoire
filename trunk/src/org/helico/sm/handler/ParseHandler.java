@@ -38,7 +38,6 @@ public class ParseHandler extends AbstractHandler {
         byte[] rawUtfBytes = dict.getUtfText();
         CountingInputStream is = new CountingInputStream(new ByteArrayInputStream(rawUtfBytes));
         InputStreamReader reader = new InputStreamReader(is, "UTF-8");
-
         StringBuilder sb = new StringBuilder();
 
         boolean readingWord = false;

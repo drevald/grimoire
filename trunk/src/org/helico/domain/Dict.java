@@ -58,6 +58,17 @@ public class Dict {
     @Column(name = "encoding")
     private String encoding;
 
+    @Column(name = "lang_id")
+    private String langId;
+
+    public String getLangId() {
+        return langId;
+    }
+
+    public void setLangId(String langId) {
+        this.langId = langId;
+    }
+
     public String getEncoding() {
 	return encoding;
     }

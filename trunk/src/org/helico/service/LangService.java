@@ -9,4 +9,6 @@ public interface LangService {
 
     public String[] getEncodings(String code);
 
+    public String[] getEncodings(Long id);
+
 }
