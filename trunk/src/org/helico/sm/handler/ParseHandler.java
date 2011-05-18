@@ -62,14 +62,17 @@ public class ParseHandler extends AbstractHandler {
             }
 
 	    if (counter++ % 1000 == 0) {
+		LOG.debug("is.getByteCount()="+is.getByteCount()+" total="+rawUtfBytes.length);
+		LOG.debug("!!! percentage = "+(int)((is.getByteCount() * 100)/rawUtfBytes.length));
 		jobService.setProgress(job.getId(), (int)((is.getByteCount() * 100)/rawUtfBytes.length));
 	    }
+
+
+	    //	    LOG.debug("is.getCount()="+is.getCount());
 
         }
 
         LOG.debug("rawUtfBytes.size="+rawUtfBytes.length);
-        LOG.debug("is.getByteCount()="+is.getByteCount());
-        LOG.debug("is.getCount()="+is.getCount());
 
         reader.close();
 
