@@ -4,24 +4,29 @@ import org.helico.domain.Transition;
 import org.helico.domain.Word;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 
-/**
- * Created by Wiley Europe, Training & Educational Systems Russia,
- * Created by Wiley Europe, Training & Educational Systems Russia,
- *
- * @author <a href="mailto:dedreval@wiley.com">ddreval</a>
- * @version 17.05.11
- */
+@Repository
 public class WordDaoImpl implements WordDao {
+
+    private static final Logger LOG = Logger.getLogger(WordDaoImpl.class);
 
     @Autowired
     SessionFactory sessionFactory;
 
-    public void store(String word) {
+    public void store(String value, Long langId) {
+	LOG.debug(">>>>saving value:"+value+" lang:"+langId);
         List check = sessionFactory.getCurrentSession()
-                .createQuery("from Word where value=?").setString(0, word).list();
+	    .createQuery("from Word where value=? and langId=?").setString(0, value).setLong(1, langId).list();
+	if (check==null || check.size()==0) {
+	    Word word = new Word();
+	    word.setValue(value);
+	    word.setLangId(langId);
+	    sessionFactory.getCurrentSession().saveOrUpdate(word);
+	}
         //todo implement
 
     }

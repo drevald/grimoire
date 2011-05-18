@@ -9,6 +9,6 @@ package org.helico.dao;
  */
 public interface WordDao {
 
-    public void store(String word);
+    public void store(String word, Long langId);
 
 }

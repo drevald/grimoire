@@ -32,6 +32,9 @@ public class ParseHandler extends AbstractHandler {
     @Autowired
     WordService wordService;
 
+    @Autowired
+    JobService jobService;
+
     public void process(Object data, Job job) throws Exception {
         Dict dict = dictService.findDict(job.getDictId());
         LOG.debug("dict="+dict);
@@ -39,13 +42,13 @@ public class ParseHandler extends AbstractHandler {
         CountingInputStream is = new CountingInputStream(new ByteArrayInputStream(rawUtfBytes));
         InputStreamReader reader = new InputStreamReader(is, "UTF-8");
         StringBuilder sb = new StringBuilder();
-
+	long counter = 0L;
         boolean readingWord = false;
         while(reader.ready()) {
             int ch = reader.read();
 
             if (!Character.isLetter(ch) && readingWord) {
-                wordService.store(sb.toString());
+                wordService.store(sb.toString(), dict.getLangId());
                 LOG.debug("WORD:"+sb.toString());
                 sb.delete(0, sb.length());
                 readingWord = false;
@@ -58,6 +61,9 @@ public class ParseHandler extends AbstractHandler {
                 readingWord = true;
             }
 
+	    if (counter++ % 1000 == 0) {
+		jobService.setProgress(job.getId(), (int)((is.getByteCount() * 100)/rawUtfBytes.length));
+	    }
 
         }
 

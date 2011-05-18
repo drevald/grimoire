@@ -2,12 +2,17 @@ package org.helico.web;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.helico.domain.Dict;
 import org.helico.domain.User;
+import org.helico.domain.Job;
 import org.helico.service.DictService;
 import org.helico.service.UserService;
 import org.helico.service.LangService;
+import org.helico.service.JobService;
+import org.helico.web.DictHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,7 +44,11 @@ public class DictController {
 	private LangService langService;
 
     @Autowired
-    private UserService userService;	
+    private UserService userService;
+
+    @Autowired
+	private JobService jobService;
+	
 	
     private String getCurrentUser() {
 	Object principal = SecurityContextHolder.getContext()
@@ -54,17 +63,26 @@ public class DictController {
     @RequestMapping("/dict")
 	public String listDicts(Map<String, Object> map) {
     	map.put("currUser", getCurrentUser());
-    	map.put("dictList", dictService.listDicts());
-	    map.put("langs", langService.list());
+    	List<DictHelper> helperList = new ArrayList<DictHelper>();
+	List<Dict> dicts = dictService.listDicts();
+	for (Dict dict : dicts) {
+	    DictHelper dictHelper = new DictHelper();
+	    dictHelper.setDict(dict);
+	    List<Job> jobs = jobService.getActiveJobs(dict.getId());
+	    dictHelper.setJobs(jobs);
+	    helperList.add(dictHelper);
+	}
+	map.put("helperList", helperList);
+	map.put("langs", langService.list());
     	return "dictList";
     }
 	
     @RequestMapping(value="/dict/upload", method = RequestMethod.POST)
 	public String handleFormUpload(@RequestParam("file") MultipartFile file,
-                        @RequestParam("langId") String langId,
-				        Map<String, Object> map,
-				        @ModelAttribute("dict") Dict dict,
-				        Errors errors)
+                        @RequestParam("langId") Long langId,
+			Map<String, Object> map,
+			@ModelAttribute("dict") Dict dict,
+			Errors errors)
 	{
 	    User user = userService.findUser(getCurrentUser());
 	    if (!file.isEmpty()) {
@@ -73,7 +91,7 @@ public class DictController {
 								    file.getInputStream(), 
 								    file.getOriginalFilename());
 			    dict.setEncoding("UTF-8");
-                dict.setLangId(langId);
+			    dict.setLangId(langId);
 			    map.put("dict", dict);
 			    map.put("preview", new String(dict.getPreview()));
 			    return "redirect:/dict/edit/" + dict.getId() + "?langId=" + langId;
@@ -103,13 +121,15 @@ public class DictController {
 	@RequestMapping(value = "/dict/edit/store", method = RequestMethod.POST)
 	public String storeDict(
 			@RequestParam("id") Long id,
-			@RequestParam("encoding") String encoding)
+			@RequestParam("encoding") String encoding,
+			@RequestParam("langId") Long langId)
 	{
 		Dict dict = dictService.findDict(id);
 		dict.setEncoding(encoding);
+		dict.setLangId(langId);
 		dictService.saveDict(dict);
 		LOG.info("Dict#" + id + " encoding=" + encoding + " dict.getEncoding=" + dict.getEncoding());
-        dictService.storeDict(dict);
+		dictService.storeDict(dict);
 	    return "redirect:/dict";
 	}
 
@@ -121,13 +141,12 @@ public class DictController {
 
 	@RequestMapping(value="/dict/edit/{dictId}")
 	public String editDict(@PathVariable("dictId") Long dictId,
-                           @RequestParam("langId") String langId,
+                           @RequestParam("langId") Long langId,
 			       Map<String, Object> map) {
 		Dict dict = dictService.findDict(dictId);
 		map.put("dict", dict);
         map.put("langId", langId);
         map.put("encodings", langService.getEncodings(langId));
-
 		try {
             String enc = dict.getEncoding() == null ? langService.getEncodings(langId)[0] : dict.getEncoding();
 		    map.put("preview", new String(dict.getPreview(), enc));

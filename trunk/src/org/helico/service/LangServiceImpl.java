@@ -21,17 +21,6 @@ public class LangServiceImpl implements LangService {
     }
 
     @Transactional
-    public String[] getEncodings(String code) {
-        Lang lang = langDao.findByCode(code);
-        String str = lang.getEncodings();
-        if (str == null) {
-            return null;
-        } else {
-            return str.split(ENC_SEPARATOR);
-        }
-
-    }
-
     public String[] getEncodings(Long id) {
         Lang lang = langDao.find(id);
         String str = lang.getEncodings();

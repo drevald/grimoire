@@ -12,8 +12,8 @@ public class WordServiceImpl implements WordService {
     WordDao wordDao;
 
     @Transactional
-    public void store(String word) {
-        wordDao.store(word);
+	public void store(String word, Long langId) {
+        wordDao.store(word, langId);
     }
 
 }
