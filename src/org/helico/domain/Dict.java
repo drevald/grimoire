@@ -59,13 +59,13 @@ public class Dict {
     private String encoding;
 
     @Column(name = "lang_id")
-    private String langId;
+    private Long langId;
 
-    public String getLangId() {
+    public Long getLangId() {
         return langId;
     }
 
-    public void setLangId(String langId) {
+    public void setLangId(Long langId) {
         this.langId = langId;
     }
 
@@ -140,7 +140,7 @@ public class Dict {
     }
 	
     public String toString() {
-	return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", utf:" + utfText + ", data:" + origDoc + ", status:" + status +", enc:"+encoding;
+	return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", utf:" + utfText + ", data:" + origDoc + ", status:" + status +", enc:"+encoding+", lang:"+langId;
     }
 	
 	

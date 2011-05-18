@@ -1,5 +1,6 @@
 package org.helico.service;
 
+import java.util.List;
 import org.helico.domain.Job;
 
 /**
@@ -17,5 +18,7 @@ public interface JobService {
     public void setProgress(Long id, Integer progress);
 
     public void setActive(Long id, Boolean active);
+
+    public List<Job> getActiveJobs(Long dictId);
 
 }

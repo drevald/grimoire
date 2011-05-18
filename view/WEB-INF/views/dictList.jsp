@@ -16,21 +16,22 @@
 
     <h3><spring:message code="dict.list" /></h3>
 
-    <c:if test="${empty dictList}">
+    <c:if test="${empty helperList}">
     	  <spring:message code="dict.list.empty"/>
     </c:if>
 
-    <c:if test="${!empty dictList}">
+    <c:if test="${!empty helperList}">
     <table>
-    <c:forEach items="${dictList}" var="dict">
+    <c:forEach items="${helperList}" var="helper">
     	       <tr>
-				<td>${dict.id}</td>
-				<td>${dict.name}</td>
-				<td>${dict.status}</td>		
-				<td><a href="dict/delete/${dict.id}"><spring:message code="delete" /></a></td>
-				<td><a href="dict/view/${dict.id}"><spring:message code="dict.preview" /></a></td>
+		<td>${helper.dict.id}</td>
+		<td>${helper.dict.name}</td>
+		<td>${helper.dict.status}</td>		
+		<td>${helper.jobs}</td>	
+		<td><a href="dict/delete/${helper.dict.id}"><spring:message code="delete" /></a></td>
+		<td><a href="dict/view/${helper.dict.id}"><spring:message code="dict.preview" /></a></td>
 		</tr>
-</c:forEach>
+		</c:forEach>
 	</table>
 	</c:if>
 

@@ -1,5 +1,6 @@
 package org.helico.service;
 
+import java.util.List;
 import org.helico.dao.JobDAO;
 import org.helico.domain.Job;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,10 @@ public class JobServiceImpl implements JobService {
         return jobDao.find(id);
     }
 
-
-
+    @Transactional
+    public List<Job> getActiveJobs(Long dictId) {
+	return jobDao.findActive(dictId);
+    }
+    
 
 }

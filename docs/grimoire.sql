@@ -134,7 +134,7 @@ CREATE TABLE word (
   value VARCHAR(32) NOT NULL,
   PRIMARY KEY(id),
   INDEX words_FKIndex1(lang_id),
-  UNIQUE INDEX words_Unique(value)
+  UNIQUE INDEX words_Unique(value, lang_id)
 );
 
 

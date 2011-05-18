@@ -9,6 +9,7 @@
 		<mapping class="org.helico.domain.Dict" />
 		<mapping class="org.helico.domain.Transition"/>
 		<mapping class="org.helico.domain.Job"/>
-        <mapping class="org.helico.domain.Lang"/>
+		<mapping class="org.helico.domain.Lang"/>
+		<mapping class="org.helico.domain.Word"/>
 	</session-factory>
 </hibernate-configuration>
