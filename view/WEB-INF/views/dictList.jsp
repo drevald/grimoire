@@ -23,14 +23,20 @@
     <c:if test="${!empty helperList}">
     <table>
     <c:forEach items="${helperList}" var="helper">
-    	       <tr>
-		<td>${helper.dict.id}</td>
+   	       <tr>
+	       	<td>${helper.dict.id}</td>
 		<td>${helper.dict.name}</td>
-		<td>${helper.dict.status}</td>		
-		<td>${helper.jobs}</td>	
+		<td>${helper.dict.status}</td>	
+		<td>	
+		<c:if test="${!empty helper.jobs}">	
+		      <c:forEach items="${helper.jobs}" var="job">
+		      		 ${job.progress}%
+		      </c:forEach>
+		</c:if>
+		</td>	
 		<td><a href="dict/delete/${helper.dict.id}"><spring:message code="delete" /></a></td>
 		<td><a href="dict/view/${helper.dict.id}"><spring:message code="dict.preview" /></a></td>
-		</tr>
+	       </tr>
 		</c:forEach>
 	</table>
 	</c:if>
