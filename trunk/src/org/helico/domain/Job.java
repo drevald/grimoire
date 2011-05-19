@@ -38,7 +38,7 @@ public class Job {
 	return progress;
     }
 
-    public void setProgress(Integer progess) {
+    public void setProgress(Integer progress) {
 	this.progress = progress;
     }
 
