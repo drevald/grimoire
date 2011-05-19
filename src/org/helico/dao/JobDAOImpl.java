@@ -38,7 +38,17 @@ public class JobDAOImpl implements JobDAO {
 	    .setLong(0,dictId).list();
 		LOG.info("<<<<get active jobs:" + jobs);
 		return jobs;
+    }
 
+    public Job findLastOrActive(Long dictId) {
+	Session session = sessionFactory.getCurrentSession();
+    	List<Job> jobs = (List<Job>)session
+	    .createQuery("from Job where dictId=? order by active desc, id desc")
+	    .setLong(0,dictId).list();
+	LOG.debug("<<<<get last jobs:" + jobs);
+	Job job = (jobs==null)?null:jobs.get(0); 
+	LOG.debug("<<<<last job:" + job);
+	return job;
     }
 
 }

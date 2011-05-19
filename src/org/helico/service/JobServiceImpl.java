@@ -37,7 +37,9 @@ public class JobServiceImpl implements JobService {
     @Transactional
     public synchronized void setProgress(Long id, Integer progress) {
         Job job = jobDao.find(id);
+	LOG.debug(">>>setting progress for job"+job+":"+progress);
         job.setProgress(progress);
+	LOG.debug(">>>setting progress for job"+job+":"+progress);
         jobDao.saveOrUpdate(job);
     }
 
@@ -45,6 +47,13 @@ public class JobServiceImpl implements JobService {
     public void setActive(Long id, Boolean active) {
         Job job = jobDao.find(id);
         job.setActive(active);
+        jobDao.saveOrUpdate(job);
+    }
+
+    @Transactional
+    public void setDetails(Long id, String details) {
+        Job job = jobDao.find(id);
+        job.setDetails(details);
         jobDao.saveOrUpdate(job);
     }
 
@@ -58,5 +67,9 @@ public class JobServiceImpl implements JobService {
 	return jobDao.findActive(dictId);
     }
     
+    @Transactional
+    public Job getLastOrActive(Long dictId) {
+	return jobDao.findLastOrActive(dictId);
+    }
 
 }

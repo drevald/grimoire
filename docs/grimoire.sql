@@ -27,6 +27,7 @@ CREATE TABLE job (
        trans_id BIGINT NOT NULL,
        dict_id BIGINT NOT NULL,
        progress INT NOT NULL DEFAULT 0,
+       details VARCHAR(255),
        active BOOL NOT NULL DEFAULT FALSE,
        PRIMARY KEY(id)
 );

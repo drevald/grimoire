@@ -68,8 +68,11 @@ public class DictController {
 	for (Dict dict : dicts) {
 	    DictHelper dictHelper = new DictHelper();
 	    dictHelper.setDict(dict);
-	    List<Job> jobs = jobService.getActiveJobs(dict.getId());
-	    dictHelper.setJobs(jobs);
+	    //List<Job> jobs = jobService.getActiveJobs(dict.getId());
+	    Job job = jobService.getLastOrActive(dict.getId());
+	    List<Job> jobs = new ArrayList<Job>();
+	    jobs.add(job);
+ 	    dictHelper.setJobs(jobs);
 	    helperList.add(dictHelper);
 	}
 	map.put("helperList", helperList);

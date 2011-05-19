@@ -14,4 +14,6 @@ public interface JobDAO {
 
     public List<Job> findActive(Long id);
 
+    public Job findLastOrActive(Long id);
+
 }

@@ -19,6 +19,11 @@ public interface JobService {
 
     public void setActive(Long id, Boolean active);
 
+    public void setDetails(Long id, String details);
+
     public List<Job> getActiveJobs(Long dictId);
+
+    public Job getLastOrActive(Long dictId);
+
 
 }

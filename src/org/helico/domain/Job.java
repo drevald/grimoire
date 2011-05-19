@@ -30,6 +30,10 @@ public class Job {
     @Column(name = "active")
 	private Boolean active = false;
 
+    @Column(name = "details")
+	private String details;
+
+
     public Long getId() {
 	return id;
     }
@@ -64,6 +68,14 @@ public class Job {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getDetails() {
+	return details;
+    }
+
+    public void setDetails (String details) {
+	this.details = details;
     }
 
     public String toString() {
