@@ -1,4 +1,4 @@
-<%@include file="/WEB-INF/header.jsp"%>
+<%@include file="/WEB-INF/loginHeader.jsp"%>
 
 <c:if test="${not empty param.error}">
 	<font color="red"> <spring:message code="loginerror" />

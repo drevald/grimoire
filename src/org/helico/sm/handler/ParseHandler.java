@@ -29,6 +29,8 @@ public class ParseHandler extends AbstractHandler {
 
     private static final Logger LOG = Logger.getLogger(ParseHandler.class);
 
+    private static final Long PROGRESS_GRANULARITY = 100L;
+
     @Autowired
     WordService wordService;
 
@@ -42,9 +44,11 @@ public class ParseHandler extends AbstractHandler {
         CountingInputStream is = new CountingInputStream(new ByteArrayInputStream(rawUtfBytes));
         InputStreamReader reader = new InputStreamReader(is, "UTF-8");
         StringBuilder sb = new StringBuilder();
-	long counter = 0L;
+	    long counter = 0L;
         boolean readingWord = false;
+
         while(reader.ready()) {
+
             int ch = reader.read();
 
             if (!Character.isLetter(ch) && readingWord) {
@@ -61,14 +65,11 @@ public class ParseHandler extends AbstractHandler {
                 readingWord = true;
             }
 
-	    if (counter++ % 1000 == 0) {
-		LOG.debug("is.getByteCount()="+is.getByteCount()+" total="+rawUtfBytes.length);
-		LOG.debug("!!! percentage = "+(int)((is.getByteCount() * 100)/rawUtfBytes.length));
-		jobService.setProgress(job.getId(), (int)((is.getByteCount() * 100)/rawUtfBytes.length));
-	    }
-
-
-	    //	    LOG.debug("is.getCount()="+is.getCount());
+            if (counter++ % PROGRESS_GRANULARITY == 0) {
+                LOG.debug("is.getByteCount()="+is.getByteCount()+" total="+rawUtfBytes.length);
+                LOG.debug("!!! percentage = "+(int)((is.getByteCount() * 100)/rawUtfBytes.length));
+                jobService.setProgress(job.getId(), (int)((is.getByteCount() * 100)/rawUtfBytes.length));
+            }
 
         }
 
