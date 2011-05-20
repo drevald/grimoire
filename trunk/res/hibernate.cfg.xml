@@ -11,5 +11,6 @@
 		<mapping class="org.helico.domain.Job"/>
 		<mapping class="org.helico.domain.Lang"/>
 		<mapping class="org.helico.domain.Word"/>
+        <mapping class="org.helico.domain.DictWord"/>
 	</session-factory>
 </hibernate-configuration>
