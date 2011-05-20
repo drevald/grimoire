@@ -1,5 +1,7 @@
 package org.helico.dao;
 
+import org.helico.domain.Word;
+
 /**
  * Created by Wiley Europe, Training & Educational Systems Russia,
  * Created by Wiley Europe, Training & Educational Systems Russia,
@@ -9,6 +11,6 @@ package org.helico.dao;
  */
 public interface WordDAO {
 
-    public Long store(String word, Long langId);
+    public Word store(String word, Long langId);
 
 }

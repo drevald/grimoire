@@ -2,6 +2,7 @@ package org.helico.dao;
 
 import java.util.List;
 import org.helico.domain.DictWord;
+import org.helico.domain.Word;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +14,17 @@ public class DictWordDAOImpl implements DictWordDAO {
     @Autowired
     SessionFactory sessionFactory;
 
-    public void addWord(Long wordId, Long dictId) {
+    public void addWord(Word word, Long dictId) {
 
         Session session = sessionFactory.getCurrentSession();
 
         DictWord dictWord = (DictWord)session.createQuery("from DictWord where dictId=? and wordId=?")
-                .setLong(0, dictId).setLong(1, wordId).uniqueResult();
+                .setLong(0, dictId).setLong(1, word.getId()).uniqueResult();
 
         if (dictWord == null) {
             dictWord = new DictWord();
             dictWord.setDictId(dictId);
-            dictWord.setWordId(wordId);
+            dictWord.setWord(word);
         }
 
         dictWord.setCounter(dictWord.getCounter() + 1);
