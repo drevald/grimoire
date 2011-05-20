@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import org.helico.domain.Dict;
 import org.helico.domain.User;
 import org.helico.domain.Job;
+import org.helico.domain.DictWord;
 import org.helico.service.DictService;
 import org.helico.service.UserService;
 import org.helico.service.LangService;
 import org.helico.service.JobService;
+import org.helico.service.DictWordService;
 import org.helico.web.DictHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,9 @@ public class DictController {
 
     @Autowired
 	private JobService jobService;
+
+    @Autowired
+	private DictWordService dictWordService;
 	
 	
     private String getCurrentUser() {
@@ -182,6 +187,15 @@ public class DictController {
 	public String parseDict(@RequestParam("dictId") Long id) {
 		dictService.parseText(id);
 		return "redirect:/dict/view/" +  id;
+	}
+
+	@RequestMapping("/dict/words/{dictId}")
+	public String viewWords(
+				@PathVariable("dictId") Long dictId, 
+				Map<String, Object> map) {
+	    List<DictWord> words = dictWordService.getWords(dictId);
+	    map.put("words", words);
+	    return "viewWords";
 	}
 
 	

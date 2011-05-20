@@ -40,7 +40,8 @@
 		</c:if>
 		</td>	
 		<td><a href="dict/delete/${helper.dict.id}"><spring:message code="delete" /></a></td>
-		<td><a href="dict/view/${helper.dict.id}"><spring:message code="dict.preview" /></a></td>
+		<td><a href="dict/words/${helper.dict.id}"><spring:message code="dict.preview" /></a></td>
+		<td><a href="dict/view/${helper.dict.id}"><spring:message code="words" /></a></td>
 	       </tr>
 		</c:forEach>
 	</table>
