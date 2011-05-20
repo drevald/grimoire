@@ -1,6 +1,7 @@
 package org.helico.domain;
 
 import javax.persistence.*;
+import org.helico.domain.Word;
 
 @Entity
 @Table(name = "dict_word")
@@ -20,6 +21,8 @@ public class DictWord {
     @Column(name = "counter")
 	private Long counter = 0L;
 
+    private Word word;
+
     public Long getId() {
         return id;
     }
@@ -35,6 +38,13 @@ public class DictWord {
     public void setDictId(Long dictId) {
         this.dictId = dictId;
     }
+
+    @ManyToOne
+    @JoinColumn(name="word_id", nullable=false)
+    public Word getWord() {
+	return word;
+    }
+    
 
     public Long getWordId() {
         return wordId;
