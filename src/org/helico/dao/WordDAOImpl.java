@@ -17,7 +17,7 @@ public class WordDAOImpl implements WordDAO {
     @Autowired
     SessionFactory sessionFactory;
 
-    public synchronized Long store(String value, Long langId) {
+    public synchronized Word store(String value, Long langId) {
 
         Session session = sessionFactory.getCurrentSession();
 
@@ -31,14 +31,14 @@ public class WordDAOImpl implements WordDAO {
             word.setLangId(langId);
             try {
                 session.saveOrUpdate(word);
-                return word.getId();
+                return word;
             } catch (Exception e) {
                 session.clear();
                 LOG.warn(e, e);
                 return null;
             }
         } else {
-            return result.getId();
+            return result;
         }
 
     }

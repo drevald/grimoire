@@ -2,6 +2,7 @@ package org.helico.dao;
 
 import java.util.List;
 import org.helico.domain.DictWord;
+import org.helico.domain.Word;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,7 +13,7 @@ import org.helico.domain.DictWord;
  */
 public interface DictWordDAO {
 
-    public void addWord(Long wordId, Long dictId);
+    public void addWord(Word word, Long dictId);
 
     public List<DictWord> getWords(Long dictId);
 
