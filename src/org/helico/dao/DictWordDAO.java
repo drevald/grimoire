@@ -1,5 +1,8 @@
 package org.helico.dao;
 
+import java.util.List;
+import org.helico.domain.DictWord;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Administrator
@@ -10,5 +13,7 @@ package org.helico.dao;
 public interface DictWordDAO {
 
     public void addWord(Long wordId, Long dictId);
+
+    public List<DictWord> getWords(Long dictId);
 
 }

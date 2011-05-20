@@ -1,5 +1,6 @@
 package org.helico.dao;
 
+import java.util.List;
 import org.helico.domain.DictWord;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -29,6 +30,19 @@ public class DictWordDAOImpl implements DictWordDAO {
 
         session.saveOrUpdate(dictWord);
 
+    }
+
+    public List<DictWord> getWords(Long dictId) {
+
+	Session session = sessionFactory.getCurrentSession();
+        List<DictWord> words = (List<DictWord>)session
+	    .createQuery("from DictWord where dictId=?")
+            .setLong(0, dictId)
+	    .setMaxResults(10)
+	    .list();
+
+	return words;
+	
     }
 
 }
