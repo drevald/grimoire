@@ -52,6 +52,7 @@ CREATE TABLE dict_word (
   id BIGINT NOT NULL AUTO_INCREMENT,
   dict_id BIGINT NOT NULL,
   word_id BIGINT NOT NULL,
+  counter BIGINT NOT NULL,
   PRIMARY KEY(id, dict_id, word_id),
   INDEX dict_word_FKIndex1(dict_id),
   INDEX dict_word_FKIndex2(word_id)

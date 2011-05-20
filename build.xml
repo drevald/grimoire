@@ -37,8 +37,7 @@
 	</target>		
 	
 	<target name="init">
-		<delete dir="${classes.dir}"/>
-		<delete dir="${parsed.res.dir}"/>
+		<delete dir="${build.dir}"/>
 		<mkdir dir="${parsed.res.dir}"/>
 		<mkdir dir="${classes.dir}"/>
 	</target>		
@@ -61,7 +60,7 @@
 	  <tstamp>
 	    <format property="build.time" pattern="dd-MMM-yyyy HH:mm z" unit="hour" />
 	  </tstamp>
-        <copy todir="${parsed.res.dir}">
+        <copy todir="${parsed.res.dir}" overwrite="true">
             <filterchain>
                 <replacetokens>
                     <token key="JDBC_DATABASEURL" value="${jdbc.databaseurl}"/>

@@ -52,7 +52,7 @@ public class ParseHandler extends AbstractHandler {
             int ch = reader.read();
 
             if (!Character.isLetter(ch) && readingWord) {
-                wordService.store(sb.toString(), dict.getLangId());
+                wordService.store(sb.toString().toLowerCase(), dict.getLangId(), dict.getId());
                 LOG.trace("WORD:"+sb.toString());
                 sb.delete(0, sb.length());
                 readingWord = false;
