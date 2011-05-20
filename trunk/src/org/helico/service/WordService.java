@@ -9,6 +9,6 @@ package org.helico.service;
  */
 public interface WordService {
 
-    public void store(String word, Long langId);
+    public void store(String word, Long langId, Long dictId);
 
 }

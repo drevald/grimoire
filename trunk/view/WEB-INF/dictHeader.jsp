@@ -1,12 +1,10 @@
 <%@ include file = "/WEB-INF/header.jsp"%>
 
-    <div style="float:left">
+    <div style="float:left;margin-right:20px">
         <a href="<c:url value="/dict" />">
             <spring:message code="home" />
         </a>
 	</div>
-
-    &nbsp;
 
     <div style="float:left">
         <a href="<c:url value="/dict" />">
