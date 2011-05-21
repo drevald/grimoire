@@ -31,6 +31,8 @@ public class ParseHandler extends AbstractHandler {
 
     private static final Long PROGRESS_GRANULARITY = 100L;
 
+    private static final Long WAIT_FOR_TEXT_PARSED = 1000L;
+
     @Autowired
     WordService wordService;
 
@@ -41,6 +43,14 @@ public class ParseHandler extends AbstractHandler {
         Dict dict = dictService.findDict(job.getDictId());
         LOG.debug("dict="+dict);
         byte[] rawUtfBytes = dict.getUtfText();
+        do {
+            rawUtfBytes = dict.getUtfText();
+            try {
+                Thread.currentThread().sleep(WAIT_FOR_TEXT_PARSED);
+            } catch (InterruptedException ie) {
+                LOG.warn(ie, ie);
+            }
+        } while (rawUtfBytes == null);
         CountingInputStream is = new CountingInputStream(new ByteArrayInputStream(rawUtfBytes));
         InputStreamReader reader = new InputStreamReader(is, "UTF-8");
         StringBuilder sb = new StringBuilder();

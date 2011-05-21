@@ -1,6 +1,6 @@
 <%@ include file = "/WEB-INF/dictHeader.jsp"%>
 
-	<h3><spring:message code="text" /></h3>
+	<h3>${dict.name}</h3>
 
 	${preview}
 
