@@ -37,7 +37,7 @@ public class DictWordDAOImpl implements DictWordDAO {
 
 	Session session = sessionFactory.getCurrentSession();
         List<DictWord> words = (List<DictWord>)session
-	    .createQuery("from DictWord where dictId=?")
+	    .createQuery("from DictWord where dictId=? order by counter desc")
             .setLong(0, dictId)
 	    .setMaxResults(10)
 	    .list();
