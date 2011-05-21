@@ -14,12 +14,11 @@ public class DictWord {
     @Column(name = "dict_id")
 	private Long dictId;
 
-//    @Column(name = "word_id")
-//	private Long wordId;
-
     @Column(name = "counter")
 	private Long counter = 0L;
 
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="word_id")
     private Word word;
 
     public Long getId() {
@@ -38,11 +37,6 @@ public class DictWord {
         this.dictId = dictId;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="word_id", nullable=false)
-    @JoinTable(name="work",
-       joinColumns = {@JoinColumn(name="id") },
-       inverseJoinColumns = {@JoinColumn(name="word_id") })
 
     public Word getWord() {
 	    return word;
@@ -51,14 +45,6 @@ public class DictWord {
     public void setWord(Word word) {
         this.word = word;
     }
-
-    //    public Long getWordId() {
-//        return wordId;
-//    }
-//
-//    public void setWordId(Long wordId) {
-//        this.wordId = wordId;
-//    }
 
     public Long getCounter() {
         return counter;
