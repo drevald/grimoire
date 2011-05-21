@@ -194,6 +194,7 @@ public class DictController {
 				@PathVariable("dictId") Long dictId, 
 				Map<String, Object> map) {
 	    List<DictWord> words = dictWordService.getWords(dictId);
+        map.put("dict", dictService.findDict(dictId));
 	    map.put("words", words);
 	    return "viewWords";
 	}
