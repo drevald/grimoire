@@ -17,4 +17,8 @@ public interface DictWordDAO {
 
     public List<DictWord> getWords(Long dictId);
 
+    public List<DictWord> getWords(Long dictId, Integer offset, Integer num);
+
+    public Long countWords(Long dictId);
+
 }
