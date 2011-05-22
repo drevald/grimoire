@@ -193,8 +193,10 @@ public class DictController {
 	public String viewWords(
 				@PathVariable("dictId") Long dictId, 
 				Map<String, Object> map) {
-	    List<DictWord> words = dictWordService.getWords(dictId);
-        map.put("dict", dictService.findDict(dictId));
+	    List<DictWord> words = dictWordService.getWords(dictId, 0, 10);
+	    Long wordsNum = dictWordService.countWords(dictId);
+	    map.put("dict", dictService.findDict(dictId));
+	    map.put("wordsNum", wordsNum);
 	    map.put("words", words);
 	    return "viewWords";
 	}

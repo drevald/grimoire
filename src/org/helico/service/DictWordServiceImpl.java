@@ -19,9 +19,17 @@ public class DictWordServiceImpl implements DictWordService {
 
     @Transactional
     public List<DictWord> getWords(Long dictId) {
-
 	return dictWordDao.getWords(dictId);
+    }
 
+    @Transactional
+	public List<DictWord> getWords(Long dictId, Integer offset, Integer num) {
+	return dictWordDao.getWords(dictId, offset, num);
+    }
+
+    @Transactional
+    public Long countWords(Long dictId) {
+	return dictWordDao.countWords(dictId);
     }
 
 }

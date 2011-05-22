@@ -7,13 +7,15 @@
 			<td>&nbsp;</td>
 			<td><b><spring:message code="word.occurrence"/></b></td>
 		</tr>
-	<c:forEach items="${words}" var="word">
+		<c:forEach items="${words}" var="word">
 		   <tr>
 			<td>${word.word.value}</td>
 			<td>&nbsp;</td>
 			<td>${word.counter}</td>
 		   </tr>
-        </c:forEach>
+        	</c:forEach>
 	</table>
+
+	${wordsNum}
 
 <%@ include file = "/WEB-INF/footer.jsp"%>
