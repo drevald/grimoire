@@ -191,13 +191,21 @@ public class DictController {
 
 	@RequestMapping("/dict/words/{dictId}")
 	public String viewWords(
-				@PathVariable("dictId") Long dictId, 
+				@PathVariable("dictId") Long dictId,
+				@RequestParam("offset") Integer offset, 
 				Map<String, Object> map) {
-	    List<DictWord> words = dictWordService.getWords(dictId, 0, 10);
+	    Integer size = 12;
+	    offset = (offset == null) ? size : offset;
+	    List<DictWord> words = dictWordService.getWords(dictId, offset, size);
 	    Long wordsNum = dictWordService.countWords(dictId);
 	    map.put("dict", dictService.findDict(dictId));
 	    map.put("wordsNum", wordsNum);
 	    map.put("words", words);
+	    map.put("offset", offset);
+	    map.put("maxOffset", wordsNum-(wordsNum%size));
+	    map.put("size", size);
+	    map.put("currPage", 1+(int)(offset/size));
+	    map.put("totalPage", 1+(int)(wordsNum/size));
 	    return "viewWords";
 	}
 

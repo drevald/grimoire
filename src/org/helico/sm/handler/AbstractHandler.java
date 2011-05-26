@@ -35,8 +35,7 @@ public abstract class AbstractHandler implements Handler {
             jobService.setActive(job.getId(), true);
 	    process(object, job);
             LOG.info("<<< done dict#" + dict.getId());
-            stateMachine.sendEvent(StateMachine.Event.OK, null, dict.getId());
-	    jobService.setDetails(job.getId(), this.getClass()+" Done");
+            stateMachine.sendEvent(StateMachine.Event.OK, this.getClass()+" Done", dict.getId());
         } catch (Exception e) {
             LOG.error(e, e);
             stateMachine.sendEvent(StateMachine.Event.FAIL, e.getMessage(), dict.getId());
