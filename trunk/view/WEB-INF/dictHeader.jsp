@@ -13,7 +13,7 @@
 	</div>
 
     <div style="float:left">
-        <a href="<c:url value="/dict/words/${dict.id}" />">
+        <a href="<c:url value="/dict/words/${dict.id}?offset=0" />">
             <spring:message code="dict" />
         </a>
 	</div>

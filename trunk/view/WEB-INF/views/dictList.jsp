@@ -5,7 +5,7 @@
     <form method="post" action="dict/upload" enctype="multipart/form-data">
         <input type="hidden" name="user" value="${currUser}"/>
         <input type="file" name="file"/>&nbsp;
-	    <spring:message code='dict.text.language'/>
+        <spring:message code='dict.text.language'/>
         <select name="langId">
             <c:forEach items="${langs}" var="lang">
                     <option value="${lang.id}">${lang.name}</option>
@@ -30,9 +30,10 @@
             <td>
             <c:if test="${!empty helper.jobs}">
                   <c:forEach items="${helper.jobs}" var="job">
-                        ${job.progress}%
-                    ${job.details}:
-                    ${job.active}
+		  <c:if test="${job.active}">
+                    ${job.progress}%
+		  </c:if>
+                    ${job.details}
                   </c:forEach>
             </c:if>
             <c:if test="${empty helper.jobs}">
@@ -40,7 +41,7 @@
             </c:if>
             </td>
             <td><a href="dict/delete/${helper.dict.id}"><spring:message code="delete" /></a></td>
-            <td><a href="dict/words/${helper.dict.id}"><spring:message code="words" /></a></td>
+            <td><a href="dict/words/${helper.dict.id}?offset=0"><spring:message code="words" /></a></td>
             <td><a href="dict/view/${helper.dict.id}"><spring:message code="dict.preview" /></a></td>
 	    </tr>
 		</c:forEach>

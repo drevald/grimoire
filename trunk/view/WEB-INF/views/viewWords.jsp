@@ -15,7 +15,14 @@
 		   </tr>
         	</c:forEach>
 	</table>
-
-	${wordsNum}
+	<a href="?offset=0"><spring:message code="pager.first"/></a>&nbsp;
+	<c:if test="${offset>size}">
+		<a href="?offset=${offset-size}"><spring:message code="pager.previous"/></a>&nbsp;
+	</c:if>
+	&nbsp;Current page ${currPage} of ${totalPage}&nbsp;
+	<c:if test="${maxOffset>offset+size}">
+		<a href="?offset=${offset+size}"><spring:message code="pager.next"/></a>&nbsp;	      
+	</c:if>
+	<a href="?offset=${maxOffset}"><spring:message code="pager.last"/></a>&nbsp;
 
 <%@ include file = "/WEB-INF/footer.jsp"%>
