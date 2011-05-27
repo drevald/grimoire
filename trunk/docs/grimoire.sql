@@ -10,16 +10,20 @@ CREATE TABLE transition (
 
 INSERT INTO transition VALUES (NULL, 'LOAD', 'PERSISTED', 'LOADING', 'uploadHandler');
 INSERT INTO transition VALUES (NULL, 'OK', 'LOADING', 'STORING', 'storeHandler');
-INSERT INTO transition VALUES (NULL, 'WAIT', 'STORING', 'LOADED', 'storeHandler');
+INSERT INTO transition VALUES (NULL, 'FAIL', 'LOADING', 'PERSISTED', 'dummyHandler');
 INSERT INTO transition VALUES (NULL, 'STORE', 'LOADED', 'STORING', 'storeHandler');
 INSERT INTO transition VALUES (NULL, 'STORE', 'STORED', 'STORING', 'storeHandler');
+INSERT INTO transition VALUES (NULL, 'FAIL', 'STORING', 'LOADED', 'dummyHandler');
+INSERT INTO transition VALUES (NULL, 'WAIT', 'STORING', 'LOADED', 'storeHandler');
 INSERT INTO transition VALUES (NULL, 'OK', 'STORING', 'PARSING', 'parseHandler');
 INSERT INTO transition VALUES (NULL, 'PARSE', 'STORED', 'PARSING', 'parseHandler');
 INSERT INTO transition VALUES (NULL, 'PARSE', 'PARSED', 'PARSING', 'parseHandler');
 INSERT INTO transition VALUES (NULL, 'OK', 'PARSING', 'PARSED', 'dummyHandler');
+INSERT INTO transition VALUES (NULL, 'FAIL', 'PARSING', 'STORED', 'dummyHandler');
 INSERT INTO transition VALUES (NULL, 'TRANSLATE', 'PARSED', 'TRANSLATING', 'translateHandler');
 INSERT INTO transition VALUES (NULL, 'TRANSLATE', 'TRANSLATED', 'TRANSLATING', 'translateHandler');
 INSERT INTO transition VALUES (NULL, 'OK', 'TRANSLATING', 'TRANSLATED', 'dummyHandler');
+INSERT INTO transition VALUES (NULL, 'FAIL', 'TRANSLATING', 'PARSED', 'dummyHandler');
 
 DROP TABLE IF EXISTS job;
 CREATE TABLE job (

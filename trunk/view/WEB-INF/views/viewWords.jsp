@@ -15,6 +15,7 @@
 		   </tr>
         	</c:forEach>
 	</table>
+    <br>
 	<a href="?offset=0"><spring:message code="pager.first"/></a>&nbsp;
 	<c:if test="${offset>size}">
 		<a href="?offset=${offset-size}"><spring:message code="pager.previous"/></a>&nbsp;
@@ -24,5 +25,5 @@
 		<a href="?offset=${offset+size}"><spring:message code="pager.next"/></a>&nbsp;	      
 	</c:if>
 	<a href="?offset=${maxOffset}"><spring:message code="pager.last"/></a>&nbsp;
-
+    <br>
 <%@ include file = "/WEB-INF/footer.jsp"%>
