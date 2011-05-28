@@ -31,6 +31,11 @@ public class DictDAOImpl implements DictDAO {
 		return sessionFactory.getCurrentSession().createQuery("from Dict").list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Dict> listDicts(Long userId) {
+	    return sessionFactory.getCurrentSession().createQuery("from Dict where userId=?").setLong(0, userId).list();
+	}
+
 	public void removeDict(Long id) {
 	    Dict dict = (Dict) sessionFactory.getCurrentSession().load(Dict.class, id, LockMode.READ);
 	    if (null != dict) {

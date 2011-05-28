@@ -9,6 +9,8 @@ public interface DictDAO {
     public long saveDict(Dict user);
 	
     public List<Dict> listDicts();
+
+    public List<Dict> listDicts(Long userId);
 	
     public void removeDict(Long id);
 

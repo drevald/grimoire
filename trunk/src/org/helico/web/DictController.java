@@ -67,9 +67,10 @@ public class DictController {
 
     @RequestMapping("/dict")
 	public String listDicts(Map<String, Object> map) {
-    	map.put("currUser", getCurrentUser());
+	User currUser = userService.findUser(getCurrentUser());
+	map.put("currUser", currUser);
     	List<DictHelper> helperList = new ArrayList<DictHelper>();
-	List<Dict> dicts = dictService.listDicts();
+	List<Dict> dicts = dictService.listDicts(currUser.getId());
 	for (Dict dict : dicts) {
 	    DictHelper dictHelper = new DictHelper();
 	    dictHelper.setDict(dict);

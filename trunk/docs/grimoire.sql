@@ -89,10 +89,14 @@ DROP TABLE IF EXISTS service;
 CREATE TABLE service (
   id BIGINT NOT NULL AUTO_INCREMENT,
   title VARCHAR(32) NULL,
+  host VARCHAR(64),
   req_pattern VARCHAR(255) NULL,
   res_pattern VARCHAR(255) NULL,
   PRIMARY KEY(id)
 );
+
+INSERT INTO service VALUES (NULL,'Google','translate.google.com','/translate_t?hl=is&ie=UTF-8&text="+str+"&sl=en&tl=is#',
+       '<span id=result_box class=\"short_text\"><span[\\s\\w+=\"w+|.+#+\"]+>(\\w+)');
 
 DROP TABLE IF EXISTS translation;
 CREATE TABLE translation (
@@ -117,6 +121,8 @@ CREATE TABLE translator (
   INDEX lang_translator_FKIndex2(dest_lang_id),
   INDEX lang_translators_FKIndex3(service_id)
 );
+
+INSERT INTO translator VALUES (1, 1, 1, 3);
 
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (

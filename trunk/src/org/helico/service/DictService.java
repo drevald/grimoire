@@ -16,6 +16,8 @@ public interface DictService {
     public Dict createDict(Long id, String name);
 
     public List<Dict> listDicts();
+
+    public List<Dict> listDicts(Long userId);
 	
     public void removeDict(Long id);
     
