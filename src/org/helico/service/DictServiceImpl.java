@@ -48,6 +48,14 @@ public class DictServiceImpl implements DictService {
 	    return result;
 	}
 
+    @Transactional
+	public List<Dict> listDicts(Long userId) {
+	    List<Dict> result = dictDao.listDicts(userId);
+	    LOG.info("Number of results is " + result.size());
+	    return result;
+	}
+
+
 	@Transactional
 	public void removeDict(Long id) {
 	    dictDao.removeDict(id);
@@ -80,7 +88,7 @@ public class DictServiceImpl implements DictService {
 	    Dict dict = new Dict();
 	    dict.setUserId(userId);
 	    dict.setPreview(data);
-	    dict.setName(name);
+	    dict.setName(name.substring(0, name.indexOf(".")).toUpperCase());
 	    dict.setStatus(Status.PERSISTED);
 	    dictDao.saveDict(dict);
 	    stateMachine.sendEvent(StateMachine.Event.LOAD, pis, dict.getId());

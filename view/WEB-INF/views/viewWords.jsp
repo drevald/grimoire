@@ -1,6 +1,8 @@
 <%@ include file = "/WEB-INF/dictHeader.jsp"%>
 
 	<h3>${dict.name}</h3>
+	<div style="float:left;width:100%">
+	<div style="float:left;margin-right:20px">
 	<table>
 		<tr>
 			<td><b><spring:message code="word.original"/></b></td>
@@ -26,4 +28,23 @@
 	</c:if>
 	<a href="?offset=${maxOffset}"><spring:message code="pager.last"/></a>&nbsp;
     <br>
+    </div>
+    <div style="float:right;width:50%">
+	Dictionary is not translated yet. 
+	<br>
+	To translate choose your language: 
+	<br><br>
+	<select>
+		<option>English</option>
+	</select>
+	<br><br>
+	And translation service:
+	<br><br>
+	<select>
+		<option>Google</option>
+	</select>
+	<br><br>
+	<input type="button" value="Translate"/>
+    </div>
+</div>
 <%@ include file = "/WEB-INF/footer.jsp"%>
