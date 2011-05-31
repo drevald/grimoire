@@ -11,6 +11,6 @@ import org.helico.domain.Word;
  */
 public interface WordDAO {
 
-    public Word store(String word, Long langId);
+    public Word store(String word, String langId);
 
 }

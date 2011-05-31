@@ -40,7 +40,7 @@ DROP TABLE IF EXISTS dict;
 CREATE TABLE dict (
   id BIGINT NOT NULL AUTO_INCREMENT,
   user_id BIGINT NOT NULL,
-  lang_id BIGINT,
+  lang_id VARCHAR(2),
   name VARCHAR(128),
   orig_doc LONGBLOB,
   utf8_text LONGTEXT,
@@ -64,26 +64,24 @@ CREATE TABLE dict_word (
 
 DROP TABLE IF EXISTS lang;
 CREATE TABLE lang (
-  id BIGINT NOT NULL AUTO_INCREMENT,
+  id VARCHAR(2) NULL,
   name VARCHAR(16) NULL,
-  code VARCHAR(2) NULL,
   encodings VARCHAR(255),
-  PRIMARY KEY(id),
-  UNIQUE INDEX langs_Unique(code)
+  PRIMARY KEY(id)
 );
 
-INSERT INTO lang VALUES (NULL, 'Russian', 'ru', 'Windows-1251,KOI8-R,Cp866,UTF-8');
-INSERT INTO lang VALUES (NULL, 'Chinese', 'zh', 'UTF-8');
-INSERT INTO lang VALUES (NULL, 'English', 'en', 'ISO-8859-1,UTF-8');
-INSERT INTO lang VALUES (NULL, 'Finnish', 'fi', 'ISO-8859-1,UTF-8');
-INSERT INTO lang VALUES (NULL, 'French', 'fr', 'ISO-8859-1,UTF-8');
-INSERT INTO lang VALUES (NULL, 'German', 'de', 'ISO-8859-1,UTF-8');
-INSERT INTO lang VALUES (NULL, 'Greek', 'el', 'UTF-8');
-INSERT INTO lang VALUES (NULL, 'Icelandic', 'is', 'ISO-8859-1,UTF-8');
-INSERT INTO lang VALUES (NULL, 'Japanese', 'ja', 'UTF-8');
-INSERT INTO lang VALUES (NULL, 'Spanish', 'es', 'ISO-8859-1,UTF-8');
-INSERT INTO lang VALUES (NULL, 'Swedish', 'sv', 'ISO-8859-1,UTF-8');
-INSERT INTO lang VALUES (NULL, 'Arabic', 'ar', 'UTF-8');
+INSERT INTO lang VALUES ('ru', 'Russian', 'Windows-1251,KOI8-R,Cp866,UTF-8');
+INSERT INTO lang VALUES ('zh', 'Chinese', 'UTF-8');
+INSERT INTO lang VALUES ('en', 'English', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES ('fi', 'Finnish', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES ('fr', 'French', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES ('de', 'German', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES ('el', 'Greek', 'UTF-8');
+INSERT INTO lang VALUES ('is', 'Icelandic', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES ('ja', 'Japanese', 'UTF-8');
+INSERT INTO lang VALUES ('es', 'Spanish', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES ('sv', 'Swedish', 'ISO-8859-1,UTF-8');
+INSERT INTO lang VALUES ('ar', 'Arabic', 'UTF-8');
 
 DROP TABLE IF EXISTS service;
 CREATE TABLE service (
@@ -114,8 +112,8 @@ DROP TABLE IF EXISTS translator;
 CREATE TABLE translator (
   id BIGINT NOT NULL AUTO_INCREMENT,
   service_id BIGINT NOT NULL,
-  dest_lang_id BIGINT NOT NULL,
-  src_lang_id BIGINT NOT NULL,
+  dest_lang_id VARCHAR(2) NOT NULL,
+  src_lang_id VARCHAR(2) NOT NULL,
   PRIMARY KEY(id, service_id),
   INDEX lang_translator_FKIndex1(src_lang_id),
   INDEX lang_translator_FKIndex2(dest_lang_id),
@@ -142,7 +140,7 @@ INSERT INTO user VALUES (NULL, 'admin', 'admin', 'ADMIN', 1);
 DROP TABLE IF EXISTS word;
 CREATE TABLE word (
   id BIGINT NOT NULL AUTO_INCREMENT,
-  lang_id BIGINT NOT NULL,
+  lang_id VARCHAR(2) NOT NULL,
   value VARCHAR(32) NOT NULL,
   PRIMARY KEY(id),
   INDEX words_FKIndex1(lang_id),

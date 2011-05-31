@@ -17,13 +17,13 @@ public class WordDAOImpl implements WordDAO {
     @Autowired
     SessionFactory sessionFactory;
 
-    public synchronized Word store(String value, Long langId) {
+    public synchronized Word store(String value, String langId) {
 
         Session session = sessionFactory.getCurrentSession();
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
             Word result = (Word)session.createQuery("from Word where value=? and langId=?")
-                    .setString(0, value).setLong(1, langId).uniqueResult();
+                    .setString(0, value).setString(1, langId).uniqueResult();
 
         if (result==null) {
             Word word = new Word();

@@ -7,8 +7,6 @@ public interface LangDAO {
 
     public List<Lang> list();
 
-    public Lang findByCode(String code);
-
-    public Lang find(Long id);
+    public Lang find(String id);
 
 }

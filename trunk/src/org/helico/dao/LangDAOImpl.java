@@ -21,12 +21,7 @@ public class LangDAOImpl implements LangDAO {
         return sessionFactory.getCurrentSession().createQuery("from Lang").list();
     }
 
-    public Lang findByCode(String code) {
-        return (Lang)sessionFactory.getCurrentSession().createQuery("from Lang where code=?")
-                .setString(0, code).uniqueResult();
-    }
-
-    public Lang find(Long id) {
+    public Lang find(String id) {
         return (Lang)sessionFactory.getCurrentSession().load(Lang.class, id);
     }
 

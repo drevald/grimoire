@@ -88,7 +88,7 @@ public class DictController {
 	
     @RequestMapping(value="/dict/upload", method = RequestMethod.POST)
 	public String handleFormUpload(@RequestParam("file") MultipartFile file,
-                        @RequestParam("langId") Long langId,
+                        @RequestParam("langId") String langId,
 			Map<String, Object> map,
 			@ModelAttribute("dict") Dict dict,
 			Errors errors)
@@ -118,7 +118,7 @@ public class DictController {
 	@RequestMapping(value = "/dict/edit/save", method = RequestMethod.POST)
 	public String addDict(
 			@RequestParam("id") Long id,
-            @RequestParam("langId") Long langId,
+            @RequestParam("langId") String langId,
 			@RequestParam("encoding") String encoding)
 	{
 		Dict dict = dictService.findDict(id);
@@ -131,7 +131,7 @@ public class DictController {
 	public String storeDict(
 			@RequestParam("id") Long id,
 			@RequestParam("encoding") String encoding,
-			@RequestParam("langId") Long langId)
+			@RequestParam("langId") String langId)
 	{
 		Dict dict = dictService.findDict(id);
 		dict.setEncoding(encoding);
@@ -150,7 +150,7 @@ public class DictController {
 
 	@RequestMapping(value="/dict/edit/{dictId}")
 	public String editDict(@PathVariable("dictId") Long dictId,
-                           @RequestParam("langId") Long langId,
+                           @RequestParam("langId") String langId,
 			       Map<String, Object> map) {
 		Dict dict = dictService.findDict(dictId);
 		map.put("dict", dict);
