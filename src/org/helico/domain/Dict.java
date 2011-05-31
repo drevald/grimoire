@@ -59,13 +59,13 @@ public class Dict {
     private String encoding;
 
     @Column(name = "lang_id")
-    private Long langId;
+    private String langId;
 
-    public Long getLangId() {
+    public String getLangId() {
         return langId;
     }
 
-    public void setLangId(Long langId) {
+    public void setLangId(String langId) {
         this.langId = langId;
     }
 

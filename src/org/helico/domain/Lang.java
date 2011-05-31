@@ -15,23 +15,19 @@ public class Lang {
 	
     @Id
 	@Column(name = "id")
-	@GeneratedValue
-	private Long id;
+	private String id;
     
     @Column(name = "name")
 	private String name;
 
-    @Column(name = "code")
-	private String code;
-
     @Column(name = "encodings")
 	private String encodings;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -41,14 +37,6 @@ public class Lang {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getEncodings() {

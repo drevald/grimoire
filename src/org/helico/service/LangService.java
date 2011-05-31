@@ -7,6 +7,6 @@ public interface LangService {
 
     public List<Lang> list();
 
-    public String[] getEncodings(Long id);
+    public String[] getEncodings(String id);
 
 }

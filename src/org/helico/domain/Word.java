@@ -13,7 +13,7 @@ public class Word {
 	private Long id;
 
     @Column(name = "lang_id")
-	private Long langId;
+	private String langId;
 
     @Column(name = "value")
 	private String value;
@@ -26,11 +26,11 @@ public class Word {
         this.id = id;
     }
 
-    public Long getLangId() {
+    public String getLangId() {
         return langId;
     }
 
-    public void setLangId(Long langId) {
+    public void setLangId(String langId) {
         this.langId = langId;
     }
 
