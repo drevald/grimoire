@@ -200,10 +200,10 @@ public class DictController {
 	    return "viewWords";
 	}
 
-    @RequestMapping("/dict/view/translate")
+    @RequestMapping(value = "/dict/words/translate", method = RequestMethod.POST)
 	public String translateDict(@RequestParam("dictId") Long id) {
 		translationService.translateText(id);
-		return "redirect:/dict/view/" +  id;
+		return "redirect:/dict";
 	}
-	
+
 }
