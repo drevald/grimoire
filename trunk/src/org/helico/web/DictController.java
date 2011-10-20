@@ -1,35 +1,23 @@
 package org.helico.web;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-
+import org.apache.log4j.Logger;
 import org.helico.domain.Dict;
-import org.helico.domain.User;
-import org.helico.domain.Job;
 import org.helico.domain.DictWord;
-import org.helico.service.DictService;
-import org.helico.service.UserService;
-import org.helico.service.LangService;
-import org.helico.service.JobService;
-import org.helico.service.DictWordService;
-import org.helico.web.DictHelper;
-
+import org.helico.domain.Job;
+import org.helico.domain.User;
+import org.helico.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import org.apache.log4j.Logger;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -53,7 +41,9 @@ public class DictController {
 
     @Autowired
 	private DictWordService dictWordService;
-	
+
+    @Autowired
+	private TranslationService translationService;
 	
     private String getCurrentUser() {
 	Object principal = SecurityContextHolder.getContext()
@@ -210,5 +200,10 @@ public class DictController {
 	    return "viewWords";
 	}
 
+    @RequestMapping("/dict/view/translate")
+	public String translateDict(@RequestParam("dictId") Long id) {
+		translationService.translateText(id);
+		return "redirect:/dict/view/" +  id;
+	}
 	
 }
