@@ -7,6 +7,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Entity which encapsulates specific transition being applied to given dictionary
+ */
+
 @Entity
 @Table(name = "job")
 public class Job {

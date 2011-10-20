@@ -1,12 +1,13 @@
 package org.helico.dao;
 
-import java.util.List;
 import org.helico.domain.DictWord;
 import org.helico.domain.Word;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class DictWordDAOImpl implements DictWordDAO {
@@ -34,7 +35,7 @@ public class DictWordDAOImpl implements DictWordDAO {
     }
 
     public List<DictWord> getWords(Long dictId) {
-	return getWords(dictId, 0, 32);
+	    return getWords(dictId, 0, 32);
     }
 
     public List<DictWord> getWords(Long dictId, Integer offset, Integer num) {
