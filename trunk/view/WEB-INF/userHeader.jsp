@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ include file = "/WEB-INF/header.jsp"%>
 
     <div style="float:left">
