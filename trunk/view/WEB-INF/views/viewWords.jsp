@@ -29,10 +29,9 @@
 	<a href="?offset=${maxOffset}"><spring:message code="pager.last"/></a>&nbsp;
     <br>
     </div>
-    <form action="translate">
+    <form action="translate" method="post">
         <input type="hidden" name="dictId" value="${dict.id}"/>
-        <input type="hidden" name="userId" value="${dict.userId}"/>
-        <input type="hidden" name="langId" value="${langId}"/>
+        <!--
         <div style="float:right;width:50%">Dictionary is not translated yet.<br>
 	    To translate choose your language:<br><br>
 	    <select>
@@ -43,7 +42,8 @@
 		    <option>Google</option>
 	    </select>
 	    <br><br>
-	    <input type="button" value="Translate"/>
+	    -->
+	    <input type="submit" value="Translate"/>
     </div>
     </form>
 </div>
