@@ -1,3 +1,5 @@
+-- todo add cascade deletion for dependent entities
+
 DROP TABLE IF EXISTS transition;
 CREATE TABLE transition (
        id BIGINT NOT NULL AUTO_INCREMENT,
