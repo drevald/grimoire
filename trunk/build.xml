@@ -58,7 +58,7 @@
 		
 	<target name="war" depends="compile">
 	  <tstamp>
-	    <format property="build.time" pattern="dd-MMM-yyyy HH:mm z" unit="hour" />
+	    <format property="build.time" pattern="dd-MM-yyyy HH:mm z" unit="hour" />
 	  </tstamp>
         <copy todir="${parsed.res.dir}" overwrite="true">
             <filterchain>
