@@ -14,6 +14,8 @@
 			<td>${word.word.value}</td>
 			<td>&nbsp;</td>
 			<td>${word.counter}</td>
+			<td>&nbsp;</td>
+			<td>${word.word.translation}</td>
 		   </tr>
         	</c:forEach>
 	</table>

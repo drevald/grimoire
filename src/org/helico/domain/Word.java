@@ -1,11 +1,14 @@
 package org.helico.domain;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "word")
 public class Word {
+
+    private static final String NOT_TRANSLATED = "Not translated yet";
 
     @Id
 	@Column(name = "id")
@@ -17,6 +20,37 @@ public class Word {
 
     @Column(name = "value")
 	private String value;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "word")
+    private Set<Translation> translations;
+
+    @Transient
+    private String translation;
+
+    public Word() {
+        translations = new HashSet<Translation>();
+        translation = NOT_TRANSLATED;
+    }
+
+//    @OneToMany(cascade=ALL, mappedBy="translation")
+//    public Set<Translation> getTranslations() {
+//        return orders;
+//    }
+
+    public String getTranslation() {
+        if (translations != null && translations.size() > 0) {
+            return translations.iterator().next().getValue();
+        }
+        return NOT_TRANSLATED;
+    }
+
+    public Set<Translation> getTranslations() {
+        return this.translations;
+    }
+
+    public void setTranslations(Set<Translation> translations) {
+        this.translations = translations;
+    }
 
     public Long getId() {
         return id;

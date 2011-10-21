@@ -17,6 +17,8 @@ public abstract class AbstractHandler implements Handler {
 
     private static final Logger LOG = Logger.getLogger(AbstractHandler.class);
 
+    private static final String JOB_DONE = "DONE";
+
     @Autowired
     private StateMachine stateMachine;
 
@@ -35,7 +37,7 @@ public abstract class AbstractHandler implements Handler {
             jobService.setActive(job.getId(), true);
 	    process(object, job);
             LOG.info("<<< done dict#" + dict.getId());
-            stateMachine.sendEvent(StateMachine.Event.OK, this.getClass()+" Done", dict.getId());
+            stateMachine.sendEvent(StateMachine.Event.OK, JOB_DONE, dict.getId());
         } catch (Exception e) {
             LOG.error(e, e);
             stateMachine.sendEvent(StateMachine.Event.FAIL, e.getMessage(), dict.getId());
