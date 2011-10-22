@@ -38,31 +38,19 @@ CREATE TABLE job (
        PRIMARY KEY(id)
 );
 
-DROP TABLE IF EXISTS dict;
-CREATE TABLE dict (
-  id BIGINT NOT NULL AUTO_INCREMENT,
-  user_id BIGINT NOT NULL,
-  lang_id VARCHAR(2),
-  name VARCHAR(128),
-  orig_doc LONGBLOB,
-  utf8_text LONGTEXT,
-  status VARCHAR(32),
-  encoding VARCHAR(32),
-  preview BLOB,
-  PRIMARY KEY(id),
-  INDEX dicts_FKIndex2(user_id)
-);
 
-DROP TABLE IF EXISTS dict_word;
-CREATE TABLE dict_word (
-  id BIGINT NOT NULL AUTO_INCREMENT,
-  dict_id BIGINT NOT NULL,
-  word_id BIGINT NOT NULL,
-  counter BIGINT NOT NULL,
-  PRIMARY KEY(id, dict_id, word_id),
-  INDEX dict_word_FKIndex1(dict_id),
-  INDEX dict_word_FKIndex2(word_id)
-);
+-- CREATE TABLE BespokeWaitConditionParameter (
+--   id BIGINT(20) NOT NULL AUTO_INCREMENT,
+--   bespokeWaitConditionId BIGINT(20) NULL,
+--   name VARCHAR(255) NULL,
+--   description VARCHAR(255) NULL,
+--   PRIMARY KEY(id),
+--   UNIQUE INDEX BespokeWaitConditionParameter_AK(bespokeWaitConditionId, name),
+--   FOREIGN KEY(bespokeWaitConditionId)
+--     REFERENCES BespokeWaitCondition(id)
+--       ON DELETE CASCADE
+--       ON UPDATE CASCADE
+-- )
 
 DROP TABLE IF EXISTS lang;
 CREATE TABLE lang (
@@ -139,6 +127,20 @@ INSERT INTO user VALUES (NULL, 'user', 'pass', 'USER', 1);
 INSERT INTO user VALUES (NULL, 'helicobacter', 'pilory', 'USER', 1);
 INSERT INTO user VALUES (NULL, 'admin', 'admin', 'ADMIN', 1);
 
+DROP TABLE IF EXISTS dict_word;
+CREATE TABLE dict_word (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  dict_id BIGINT NOT NULL,
+  word_id BIGINT NOT NULL,
+  counter BIGINT NOT NULL,
+  PRIMARY KEY(id),
+--  PRIMARY KEY(id, dict_id, word_id),
+  FOREIGN KEY (dict_id) REFERENCES dict(id) ON DELETE CASCADE
+--   FOREIGN KEY (word_id) REFERENCES word(id) ON DELETE CASCADE
+--   INDEX dict_word_FKIndex1(dict_id),
+--   INDEX dict_word_FKIndex2(word_id)
+);
+
 DROP TABLE IF EXISTS word;
 CREATE TABLE word (
   id BIGINT NOT NULL AUTO_INCREMENT,
@@ -149,4 +151,17 @@ CREATE TABLE word (
   UNIQUE INDEX words_Unique(value, lang_id)
 );
 
-
+DROP TABLE IF EXISTS dict;
+CREATE TABLE dict (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  user_id BIGINT NOT NULL,
+  lang_id VARCHAR(2),
+  name VARCHAR(128),
+  orig_doc LONGBLOB,
+  utf8_text LONGTEXT,
+  status VARCHAR(32),
+  encoding VARCHAR(32),
+  preview BLOB,
+  PRIMARY KEY(id),
+  INDEX dicts_FKIndex2(user_id)
+);
