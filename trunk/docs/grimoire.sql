@@ -9,12 +9,13 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 DROP TABLE IF EXISTS `transition` ;
 
 CREATE  TABLE IF NOT EXISTS `transition` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT ,
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
   `event` VARCHAR(32) NULL DEFAULT NULL ,
   `src_status` VARCHAR(32) NULL DEFAULT NULL ,
   `dest_status` VARCHAR(32) NULL DEFAULT NULL ,
   `handler_name` VARCHAR(32) NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) );
+  PRIMARY KEY (`id`) )
+AUTO_INCREMENT = 17;
 
 
 -- -----------------------------------------------------
