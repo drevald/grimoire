@@ -29,7 +29,6 @@ public class TranslationServiceImpl implements TranslationService {
         Translation translation = new Translation();
         translation.setTranslatorId(translatorId);
         translation.setValue(value);
-        translation.setTranslatorServiceId(0L); //todo - get real here
         translation.setWordId(wordId);
         translationDao.saveOrUpdate(translation);
     }

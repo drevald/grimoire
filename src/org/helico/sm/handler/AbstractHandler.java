@@ -32,10 +32,10 @@ public abstract class AbstractHandler implements Handler {
 	public void process(Object object, Long id) {
         LOG.info(">>> start dict#" + id );
         Job job = jobService.find(id);
-	Dict dict = dictService.findDict(job.getDictId());
+	    Dict dict = dictService.findDict(job.getDictId());
         try {
             jobService.setActive(job.getId(), true);
-	    process(object, job);
+	        process(object, job);
             LOG.info("<<< done dict#" + dict.getId());
             stateMachine.sendEvent(StateMachine.Event.OK, JOB_DONE, dict.getId());
         } catch (Exception e) {

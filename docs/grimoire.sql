@@ -68,13 +68,13 @@ CREATE  TABLE IF NOT EXISTS `dict` (
   CONSTRAINT `fk_dict_lang1`
     FOREIGN KEY (`lang_id` )
     REFERENCES `lang` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_dict_user1`
     FOREIGN KEY (`user_id` )
     REFERENCES `user` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -96,13 +96,13 @@ CREATE  TABLE IF NOT EXISTS `job` (
   CONSTRAINT `fk_job_transition1`
     FOREIGN KEY (`transition_id` )
     REFERENCES `transition` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_job_dict1`
     FOREIGN KEY (`dict_id` )
     REFERENCES `dict` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -152,18 +152,18 @@ CREATE  TABLE IF NOT EXISTS `translator` (
   CONSTRAINT `fk_translator_service1`
     FOREIGN KEY (`service_id` )
     REFERENCES `service` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_translator_src_lang1`
     FOREIGN KEY (`src_lang_id` )
     REFERENCES `lang` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_translator_dest_lang2`
     FOREIGN KEY (`dest_lang_id` )
     REFERENCES `lang` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -184,13 +184,13 @@ CREATE  TABLE IF NOT EXISTS `translation` (
   CONSTRAINT `fk_translation_word1`
     FOREIGN KEY (`word_id` )
     REFERENCES `word` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_translation_translator1`
     FOREIGN KEY (`translator_id` )
     REFERENCES `translator` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -211,12 +211,12 @@ CREATE  TABLE IF NOT EXISTS `dict_word` (
     FOREIGN KEY (`dict_id` )
     REFERENCES `dict` (`id` )
     ON DELETE CASCADE
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_dict_word_word1`
     FOREIGN KEY (`word_id` )
     REFERENCES `word` (`id` )
     ON DELETE CASCADE
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 DEFAULT CHARACTER SET = utf8;
 
 
