@@ -25,9 +25,6 @@ public class Translation {
     @Column(name = "word_id")
     private Long wordId;
 
-    @Column(name = "translators_service_id")
-    private Long translatorServiceId;
-
     @Column(name = "translator_id")
     private Long translatorId;
 
@@ -56,14 +53,6 @@ public class Translation {
 
     public void setWordId(Long wordId) {
         this.wordId = wordId;
-    }
-
-    public Long getTranslatorServiceId() {
-        return translatorServiceId;
-    }
-
-    public void setTranslatorServiceId(Long translatorServiceId) {
-        this.translatorServiceId = translatorServiceId;
     }
 
     public Long getTranslatorId() {

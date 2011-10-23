@@ -98,7 +98,7 @@
 
 	<target name="expand" depends="war">
 		<!--<delete dir="${deploy.dir}/${ant.project.name}"/>-->
-		<unwar src="${war.file}" dest="${deploy.dir}/${ant.project.name}"/>
+		<unwar src="${war.file}" dest="${deploy.dir}/${ant.project.name}" overwrite="yes"/>
 	</target>	
 
 	<target name="all" depends="init-ivy, deploy"/>
