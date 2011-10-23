@@ -22,7 +22,7 @@ public class Job {
 	@GeneratedValue
 	private Long id;
     
-    @Column(name = "trans_id")
+    @Column(name = "transition_id")
 	private Long transId;
 
     @Column(name = "dict_id")
