@@ -9,13 +9,14 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 DROP TABLE IF EXISTS `transition` ;
 
 CREATE  TABLE IF NOT EXISTS `transition` (
-  `id` BIGINT(20) NOT NULL AUTO_INCREMENT ,
+  `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `event` VARCHAR(32) NULL DEFAULT NULL ,
   `src_status` VARCHAR(32) NULL DEFAULT NULL ,
   `dest_status` VARCHAR(32) NULL DEFAULT NULL ,
   `handler_name` VARCHAR(32) NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) )
-AUTO_INCREMENT = 17;
+AUTO_INCREMENT = 17
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -27,7 +28,8 @@ CREATE  TABLE IF NOT EXISTS `lang` (
   `id` VARCHAR(2) NULL DEFAULT NULL ,
   `name` VARCHAR(16) NULL DEFAULT NULL ,
   `encodings` VARCHAR(255) NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) );
+  PRIMARY KEY (`id`) )
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -41,7 +43,8 @@ CREATE  TABLE IF NOT EXISTS `user` (
   `password` VARCHAR(32) NOT NULL ,
   `role` VARCHAR(8) NOT NULL ,
   `enabled` TINYINT(1)  NOT NULL DEFAULT TRUE ,
-  PRIMARY KEY (`id`) );
+  PRIMARY KEY (`id`) )
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -71,7 +74,8 @@ CREATE  TABLE IF NOT EXISTS `dict` (
     FOREIGN KEY (`user_id` )
     REFERENCES `user` (`id` )
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON UPDATE NO ACTION)
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -98,7 +102,8 @@ CREATE  TABLE IF NOT EXISTS `job` (
     FOREIGN KEY (`dict_id` )
     REFERENCES `dict` (`id` )
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON UPDATE NO ACTION)
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -112,7 +117,8 @@ CREATE  TABLE IF NOT EXISTS `service` (
   `host` VARCHAR(64) NULL DEFAULT NULL ,
   `req_pattern` VARCHAR(255) NULL DEFAULT NULL ,
   `res_pattern` VARCHAR(255) NULL DEFAULT NULL ,
-  PRIMARY KEY (`id`) );
+  PRIMARY KEY (`id`) )
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -125,7 +131,8 @@ CREATE  TABLE IF NOT EXISTS `word` (
   `lang_id` VARCHAR(2) NOT NULL ,
   `value` VARCHAR(32) NOT NULL ,
   PRIMARY KEY (`id`) ,
-  UNIQUE INDEX `words_Unique` (`value` ASC, `lang_id` ASC) );
+  UNIQUE INDEX `words_Unique` (`value` ASC, `lang_id` ASC) )
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -156,7 +163,8 @@ CREATE  TABLE IF NOT EXISTS `translator` (
     FOREIGN KEY (`dest_lang_id` )
     REFERENCES `lang` (`id` )
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON UPDATE NO ACTION)
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -182,7 +190,8 @@ CREATE  TABLE IF NOT EXISTS `translation` (
     FOREIGN KEY (`translator_id` )
     REFERENCES `translator` (`id` )
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON UPDATE NO ACTION)
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
@@ -207,7 +216,8 @@ CREATE  TABLE IF NOT EXISTS `dict_word` (
     FOREIGN KEY (`word_id` )
     REFERENCES `word` (`id` )
     ON DELETE CASCADE
-    ON UPDATE NO ACTION);
+    ON UPDATE NO ACTION)
+DEFAULT CHARACTER SET = utf8;
 
 
 
