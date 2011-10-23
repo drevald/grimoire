@@ -75,7 +75,7 @@ public class DictServiceImpl implements DictService {
 	}
 
 	@Transactional
-	    public Dict loadPreviewFile(Long userId, InputStream is, String name) {
+	    public Dict loadPreviewFile(Long userId, String langId, InputStream is, String name) {
 	    LOG.info(">>>loadPreview start");
 	    PushbackInputStream pis = new PushbackInputStream(is, PREVIEW_SIZE);
 	    byte[] data = new byte[PREVIEW_SIZE];
@@ -86,6 +86,7 @@ public class DictServiceImpl implements DictService {
 		LOG.error(e, e);
 	    }
 	    Dict dict = new Dict();
+        dict.setLangId(langId);
 	    dict.setUserId(userId);
 	    dict.setPreview(data);
 	    dict.setName(name.substring(0, name.indexOf(".")).toUpperCase());

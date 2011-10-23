@@ -86,7 +86,8 @@ public class DictController {
 	    User user = userService.findUser(getCurrentUser());
 	    if (!file.isEmpty()) {
 			try {
-			    dict = dictService.loadPreviewFile(user.getId(), 
+			    dict = dictService.loadPreviewFile(user.getId(),
+                                    langId,
 								    file.getInputStream(), 
 								    file.getOriginalFilename());
 			    dict.setEncoding("UTF-8");

@@ -104,12 +104,19 @@
 	<target name="all" depends="init-ivy, deploy"/>
 
 	<target name="sql">
-	  <sql
+        <sql
 	      driver="${jdbc.driverClassName}"
 	      url="${jdbc.databaseurl}"
 	      userid="${jdbc.username}"
 	      password="${jdbc.password}"
 	      src="docs/grimoire.sql"
+	      classpathref="cp"/>
+        <sql
+	      driver="${jdbc.driverClassName}"
+	      url="${jdbc.databaseurl}"
+	      userid="${jdbc.username}"
+	      password="${jdbc.password}"
+	      src="docs/dict.sql"
 	      classpathref="cp"/>
 	</target>
 

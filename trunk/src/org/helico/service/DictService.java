@@ -9,7 +9,7 @@ public interface DictService {
 	
     public Dict findDict(Long id);
 
-    public Dict loadPreviewFile(Long id, InputStream is, String name);
+    public Dict loadPreviewFile(Long id, String langId, InputStream is, String name);
 
     public void saveDict(Dict dict);
 
