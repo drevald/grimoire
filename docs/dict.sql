@@ -34,7 +34,7 @@ INSERT INTO user VALUES (NULL, 'user', 'pass', 'USER', 1);
 INSERT INTO user VALUES (NULL, 'helicobacter', 'pilory', 'USER', 1);
 INSERT INTO user VALUES (NULL, 'admin', 'admin', 'ADMIN', 1);
 
-INSERT INTO service VALUES (0, 'Bing', 'api.microsofttranslator.com', 'UNDEF', 'UNDEF');
+INSERT INTO translator_provider VALUES (0, 'Bing', 'api.microsofttranslator.com', 'UNDEF', 'UNDEF');
 
 INSERT INTO translator VALUES (0, 0, 'en', 'ru');
 --

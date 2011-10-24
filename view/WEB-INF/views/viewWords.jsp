@@ -1,52 +1,53 @@
-<%@ include file = "/WEB-INF/dictHeader.jsp"%>
+<%@ include file="/WEB-INF/dictHeader.jsp" %>
 
-	<h3>${dict.name}</h3>
-	<div style="float:left;width:100%">
-	<div style="float:left;margin-right:20px">
-	<table>
-		<tr>
-			<td><b><spring:message code="word.original"/></b></td>
-			<td>&nbsp;</td>
-			<td><b><spring:message code="word.occurrence"/></b></td>
-		</tr>
-		<c:forEach items="${words}" var="word">
-		   <tr>
-			<td>${word.word.value}</td>
-			<td>&nbsp;</td>
-			<td>${word.counter}</td>
-			<td>&nbsp;</td>
-			<td>${word.word.translation}</td>
-		   </tr>
-        	</c:forEach>
-	</table>
-    <br>
-	<a href="?offset=0"><spring:message code="pager.first"/></a>&nbsp;
-	<c:if test="${offset>size}">
-		<a href="?offset=${offset-size}"><spring:message code="pager.previous"/></a>&nbsp;
-	</c:if>
-	&nbsp;Current page ${currPage} of ${totalPage}&nbsp;
-	<c:if test="${maxOffset>offset+size}">
-		<a href="?offset=${offset+size}"><spring:message code="pager.next"/></a>&nbsp;	      
-	</c:if>
-	<a href="?offset=${maxOffset}"><spring:message code="pager.last"/></a>&nbsp;
-    <br>
+<h3>${dict.name}</h3>
+
+<div style="float:left;width:100%">
+    <div style="float:left;margin-right:20px">
+        <table>
+            <tr>
+                <td><b><spring:message code="word.original"/></b></td>
+                <td>&nbsp;</td>
+                <td><b><spring:message code="word.occurrence"/></b></td>
+                <td>&nbsp;</td>
+                <td><b><spring:message code="word.translation"/></b></td>
+            </tr>
+            <c:forEach items="${words}" var="word">
+                <tr>
+                    <td>${word.word.value}</td>
+                    <td>&nbsp;</td>
+                    <td>${word.counter}</td>
+                    <td>&nbsp;</td>
+                    <td>${word.word.translation}</td>
+                </tr>
+            </c:forEach>
+        </table>
+        <br>
+        <a href="?offset=0"><spring:message code="pager.first"/></a>&nbsp;
+        <c:if test="${offset>size}">
+            <a href="?offset=${offset-size}"><spring:message code="pager.previous"/></a>&nbsp;
+        </c:if>
+        &nbsp;Current page ${currPage} of ${totalPage}&nbsp;
+        <c:if test="${maxOffset>offset+size}">
+            <a href="?offset=${offset+size}"><spring:message code="pager.next"/></a>&nbsp;
+        </c:if>
+        <a href="?offset=${maxOffset}"><spring:message code="pager.last"/></a>&nbsp;
+        <br>
     </div>
-    <form action="translate" method="post">
-        <input type="hidden" name="dictId" value="${dict.id}"/>
-        <!--
-        <div style="float:right;width:50%">Dictionary is not translated yet.<br>
-	    To translate choose your language:<br><br>
-	    <select>
-		    <option>English</option>
-	    </select>
-	    <br><br>And translation service:<br><br>
-	    <select>
-		    <option>Google</option>
-	    </select>
-	    <br><br>
-	    -->
-	    <input type="submit" value="Translate"/>
-    </div>
-    </form>
 </div>
-<%@ include file = "/WEB-INF/footer.jsp"%>
+</div>
+<c:if test="${dict.status eq 'PARSED'}">
+<hr>
+<form action="translate" method="post">
+    <input type="hidden" name="dictId" value="${dict.id}"/>
+    <spring:message code="words.not.translated"/>
+    <input type="submit" value="Translate"/>
+    <spring:message code="using"/>
+    <select name="providerId">
+        <c:forEach items="${providers}" var="provider">
+                <option value="${provider.id}">${provider.title}</option>
+        </c:forEach>
+    </select>
+</form>
+</c:if>
+<%@ include file="/WEB-INF/footer.jsp" %>
