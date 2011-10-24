@@ -1,7 +1,6 @@
 package org.helico.sm.handler;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 import org.helico.domain.Dict;
@@ -23,7 +22,11 @@ public class TranslateHandler extends AbstractHandler {
 
     private static final Logger LOG = Logger.getLogger(TranslateHandler.class);
 
-    private static final MessageFormat BING_FORMAT = new MessageFormat ("<{0}>{1}</{2}>");
+    private static final MessageFormat BING_FORMAT = new MessageFormat ("<{1}>{0}</{2}>");
+
+    private static final MessageFormat BING_OUTPUT_FORMAT =
+            new MessageFormat("http://api.microsofttranslator.com/V2/Http.svc/Translate" +
+                    "?appId=CDCB8BFFDD9E4C3054316BC629E82D1E39CA585C&text={0}&from={1}&to={2}");
 
     private static final int WORDS_PORTION = 32;
 
@@ -66,17 +69,10 @@ public class TranslateHandler extends AbstractHandler {
             if (httpClient == null) {
                 httpClient = new HttpClient();
             }
-            GetMethod getMethod = new GetMethod("http://api.microsofttranslator.com/V2/Http.svc/Translate");
-            NameValuePair[] params = {
-                    new NameValuePair("appId", "CDCB8BFFDD9E4C3054316BC629E82D1E39CA585C"),
-                    new NameValuePair("text", text),
-                    new NameValuePair("from", srcLangId),
-                    new NameValuePair("to", destLangId),
-            };
-            getMethod.setQueryString(params);
+            GetMethod getMethod = new GetMethod(BING_OUTPUT_FORMAT.format(new String[] {text, srcLangId, destLangId}));
             httpClient.executeMethod(getMethod);
             String output = getMethod.getResponseBodyAsString();
-            result = (String)BING_FORMAT.parse(output)[1];
+            result = (String)BING_FORMAT.parse(output)[0];
         } catch (Exception e) {
             LOG.error("Can not get translation", e);
         }
