@@ -34,3 +34,20 @@ INSERT INTO user VALUES (NULL, 'user', 'pass', 'USER', 1);
 INSERT INTO user VALUES (NULL, 'helicobacter', 'pilory', 'USER', 1);
 INSERT INTO user VALUES (NULL, 'admin', 'admin', 'ADMIN', 1);
 
+INSERT INTO service VALUES (0, 'Bing', 'api.microsofttranslator.com', 'UNDEF', 'UNDEF');
+
+INSERT INTO translator VALUES (0, 0, 'en', 'ru');
+--
+-- CREATE  TABLE IF NOT EXISTS `service` (
+--   `id` BIGINT NOT NULL AUTO_INCREMENT ,
+--   `title` VARCHAR(32) NULL DEFAULT NULL ,
+--   `host` VARCHAR(64) NULL DEFAULT NULL ,
+--   `req_pattern` VARCHAR(255) NULL DEFAULT NULL ,
+--   `res_pattern` VARCHAR(255) NULL DEFAULT NULL ,
+--
+-- CREATE  TABLE IF NOT EXISTS `translator` (
+--   `id` BIGINT NOT NULL AUTO_INCREMENT ,
+--   `service_id` BIGINT NOT NULL ,
+--   `src_lang_id` VARCHAR(2) NOT NULL ,
+--   `dest_lang_id` VARCHAR(2) NOT NULL ,
+--

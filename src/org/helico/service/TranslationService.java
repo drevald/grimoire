@@ -6,6 +6,6 @@ public interface TranslationService {
 
     public boolean isTranslated(Long wordId, Long translationServiceId);
 
-    public void storeTranslation(Long wordId, Long translationServiceId, String values);
+    public void storeTranslation(Long wordId, Long translatorId, String values);
 
 }

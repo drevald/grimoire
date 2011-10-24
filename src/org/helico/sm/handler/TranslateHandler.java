@@ -48,11 +48,9 @@ public class TranslateHandler extends AbstractHandler {
             for (DictWord dictWord : dictWords) {
                 Word word = dictWord.getWord();
                 if (!transService.isTranslated(word.getId(), 0L)) {
-                    //String translation = word.getValue() + "_translated"; //todo get real translation here
                     String translation = fetchTranslation(word.getValue(), dict.getLangId(), "ru");
-                    //CDCB8BFFDD9E4C3054316BC629E82D1E39CA585C bing app id
                     if (translation != null) {
-                        transService.storeTranslation(word.getId(), 0L, translation);
+                        transService.storeTranslation(word.getId(), 0L, translation.toLowerCase());
                     }
                 }
             }

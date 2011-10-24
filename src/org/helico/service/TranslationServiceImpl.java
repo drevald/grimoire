@@ -21,7 +21,8 @@ public class TranslationServiceImpl implements TranslationService {
 
     @Transactional
     public boolean isTranslated(Long wordId, Long translationServiceId) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        boolean result = translationDao.isTranslated(wordId, translationServiceId);
+        return result;
     }
 
     @Transactional
