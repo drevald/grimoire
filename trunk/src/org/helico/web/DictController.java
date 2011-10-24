@@ -1,10 +1,7 @@
 package org.helico.web;
 
 import org.apache.log4j.Logger;
-import org.helico.domain.Dict;
-import org.helico.domain.DictWord;
-import org.helico.domain.Job;
-import org.helico.domain.User;
+import org.helico.domain.*;
 import org.helico.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -190,9 +187,11 @@ public class DictController {
 	    offset = (offset == null) ? size : offset;
 	    List<DictWord> words = dictWordService.getWords(dictId, offset, size);
 	    Long wordsNum = dictWordService.countWords(dictId);
+        List<TranslatorProvider> providers = translationService.listProviders();
 	    map.put("dict", dictService.findDict(dictId));
 	    map.put("wordsNum", wordsNum);
 	    map.put("words", words);
+        map.put("providers", providers);
 	    map.put("offset", offset);
 	    map.put("maxOffset", wordsNum-(wordsNum%size));
 	    map.put("size", size);

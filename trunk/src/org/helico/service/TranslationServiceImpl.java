@@ -2,11 +2,15 @@ package org.helico.service;
 
 import org.apache.log4j.Logger;
 import org.helico.dao.TranslationDAO;
+import org.helico.dao.TranslatorProviderDAO;
 import org.helico.domain.Translation;
+import org.helico.domain.TranslatorProvider;
 import org.helico.sm.StateMachine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class TranslationServiceImpl implements TranslationService {
@@ -18,6 +22,9 @@ public class TranslationServiceImpl implements TranslationService {
 
     @Autowired
     TranslationDAO translationDao;
+
+    @Autowired
+    TranslatorProviderDAO translatorProviderDAO;
 
     @Transactional
     public boolean isTranslated(Long wordId, Long translationServiceId) {
@@ -32,6 +39,11 @@ public class TranslationServiceImpl implements TranslationService {
         translation.setValue(value);
         translation.setWordId(wordId);
         translationDao.saveOrUpdate(translation);
+    }
+
+    @Transactional
+    public List<TranslatorProvider> listProviders() {
+        return translatorProviderDAO.listProviders();  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public void translateText(Long dictId) {

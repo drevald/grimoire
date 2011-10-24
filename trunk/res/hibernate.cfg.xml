@@ -14,5 +14,6 @@
         <mapping class="org.helico.domain.DictWord"/>
         <mapping class="org.helico.domain.Translation"/>
         <mapping class="org.helico.domain.Translator"/>
+        <mapping class="org.helico.domain.TranslatorProvider"/>
 	</session-factory>
 </hibernate-configuration>

@@ -107,11 +107,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `service`
+-- Table `translator_provider`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `service` ;
+DROP TABLE IF EXISTS `translator_provider` ;
 
-CREATE  TABLE IF NOT EXISTS `service` (
+CREATE  TABLE IF NOT EXISTS `translator_provider` (
   `id` BIGINT NOT NULL ,
   `title` VARCHAR(32) NULL DEFAULT NULL ,
   `host` VARCHAR(64) NULL DEFAULT NULL ,
@@ -151,7 +151,7 @@ CREATE  TABLE IF NOT EXISTS `translator` (
   INDEX `fk_translator_dest_lang2` (`dest_lang_id` ASC) ,
   CONSTRAINT `fk_translator_service1`
     FOREIGN KEY (`service_id` )
-    REFERENCES `service` (`id` )
+    REFERENCES `translator_provider` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_translator_src_lang1`
