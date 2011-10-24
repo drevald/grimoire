@@ -4,7 +4,7 @@ import org.helico.domain.TranslatorProvider;
 
 import java.util.List;
 
-public interface TranslationService {
+public interface  TranslationService {
 
     public void translateText(Long dictId);
 
