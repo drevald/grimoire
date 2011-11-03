@@ -1,15 +1,13 @@
 package org.helico.service;
 
-import java.io.InputStream;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import org.apache.log4j.Logger;
 import org.helico.dao.UserDAO;
 import org.helico.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -44,5 +42,12 @@ public class UserServiceImpl implements UserService {
 		User user = userDao.findUser(name);
 		return user;
 	}
+
+    @Transactional
+    public Long registerUser(String username, String password) {
+        User user = new User(username, password);
+        Long userId = userDao.addUser(user);
+        return userId;
+    }
 
 }

@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 
 import org.helico.dao.TransitionDAO;
 
+import java.util.List;
+
 @Service
 public class TransitionServiceImpl implements TransitionService {
 
@@ -24,6 +26,11 @@ public class TransitionServiceImpl implements TransitionService {
     @Transactional
     public Transition find(String event, String status) {
         return transitionDao.find(event, status);
+    }
+
+    @Transactional
+    public List<Transition> list() {
+        return transitionDao.list();
     }
 
 }

@@ -41,9 +41,10 @@ CREATE  TABLE IF NOT EXISTS `user` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `username` VARCHAR(32) NOT NULL ,
   `password` VARCHAR(32) NOT NULL ,
-  `role` VARCHAR(8) NOT NULL ,
+  `role` VARCHAR(8) NOT NULL DEFAULT 'USER' ,
   `enabled` TINYINT(1)  NOT NULL DEFAULT TRUE ,
-  PRIMARY KEY (`id`) )
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) )
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -204,6 +205,9 @@ CREATE  TABLE IF NOT EXISTS `dict_word` (
   `counter` BIGINT NOT NULL ,
   `dict_id` BIGINT NOT NULL ,
   `word_id` BIGINT NOT NULL ,
+  `translation` VARCHAR(64) NULL ,
+  `translator` VARCHAR(32) NULL ,
+  `occurances` TEXT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_dict_word_dict1` (`dict_id` ASC) ,
   INDEX `fk_dict_word_word1` (`word_id` ASC) ,

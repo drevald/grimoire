@@ -1,8 +1,8 @@
 package org.helico.service;
 
-import java.io.InputStream;
-import java.util.List;
 import org.helico.domain.User;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -14,4 +14,5 @@ public interface UserService {
 	
 	public User findUser(String name);
 
+    public Long registerUser(String username, String password);
 }
