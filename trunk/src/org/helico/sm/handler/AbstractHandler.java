@@ -38,10 +38,14 @@ public abstract class AbstractHandler implements Handler {
 	        process(object, job);
             LOG.info("<<< done dict#" + dict.getId());
             stateMachine.sendEvent(StateMachine.Event.OK, JOB_DONE, dict.getId());
-        } catch (Exception e) {
+        } catch (Error e) {
             LOG.error(e, e);
             stateMachine.sendEvent(StateMachine.Event.FAIL, e.getMessage(), dict.getId());
             LOG.info("<<< failed dict#" + dict.getId() + " with error " +  e.getMessage());
+        } catch (Exception e) {
+            LOG.error(e, e);
+            stateMachine.sendEvent(StateMachine.Event.FAIL, e.getMessage(), dict.getId());
+            LOG.info("<<< failed dict#" + dict.getId() + " with exception " +  e.getMessage());
         } finally {
             jobService.setActive(job.getId(), false);
         }

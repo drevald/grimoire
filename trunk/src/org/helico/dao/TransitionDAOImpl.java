@@ -5,6 +5,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class TransitionDAOImpl implements TransitionDAO {
 
@@ -22,6 +24,10 @@ public class TransitionDAOImpl implements TransitionDAO {
         Transition trans = (Transition)sessionFactory.getCurrentSession().createQuery("from Transition where event=? and sourceStatus=?")
 	    .setString(0, event).setString(1, status).uniqueResult();
 	    return trans;
+    }
+
+    public List<Transition> list() {
+        return sessionFactory.getCurrentSession().createQuery("from Transition").list();
     }
 
 }

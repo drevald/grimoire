@@ -1,21 +1,16 @@
 package org.helico.web;
 
-import java.util.Map;
-
+import org.apache.log4j.Logger;
 import org.helico.domain.User;
 import org.helico.service.UserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import org.apache.log4j.Logger;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -66,6 +61,27 @@ public class UserController {
 	public String deleteUser(@PathVariable("userId") Long userId) {
 		userService.removeUser(userId);
 		return "redirect:/index";
+	}
+
+	@RequestMapping("/registerUser")
+	public String registerUser(
+            @RequestParam("username") String username,
+			@RequestParam("password") String password,
+            @ModelAttribute("user") User dict,
+            Errors errors
+    ) {
+        try {
+		    userService.registerUser(username, password);
+		    return "redirect:/dict";
+        } catch (Exception e) {
+            errors.reject("error.reading.file");
+            return "register";
+        }
+	}
+
+    @RequestMapping("/register")
+	public String register() {
+		return "register";
 	}
 
 
