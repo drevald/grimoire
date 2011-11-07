@@ -32,6 +32,11 @@ public class Word {
         translation = NOT_TRANSLATED;
     }
 
+    public Word(String value, String langId) {
+        this.value = value;
+        this.langId = langId;
+    }
+
 //    @OneToMany(cascade=ALL, mappedBy="translation")
 //    public Set<Translation> getTranslations() {
 //        return orders;

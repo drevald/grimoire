@@ -49,6 +49,20 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
+-- Table `text`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `text` ;
+
+CREATE  TABLE IF NOT EXISTS `text` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT ,
+  `orig_path` VARCHAR(128) NOT NULL ,
+  `utf8_path` VARCHAR(128) NOT NULL ,
+  `encoding` VARCHAR(32) NOT NULL ,
+  PRIMARY KEY (`id`) )
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `dict`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `dict` ;
@@ -63,9 +77,11 @@ CREATE  TABLE IF NOT EXISTS `dict` (
   `preview` BLOB NULL DEFAULT NULL ,
   `lang_id` VARCHAR(2) NOT NULL ,
   `user_id` BIGINT NOT NULL ,
+  `text_id` BIGINT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_dict_lang1` (`lang_id` ASC) ,
   INDEX `fk_dict_user1` (`user_id` ASC) ,
+  INDEX `fk_dict_text1` (`text_id` ASC) ,
   CONSTRAINT `fk_dict_lang1`
     FOREIGN KEY (`lang_id` )
     REFERENCES `lang` (`id` )
@@ -75,7 +91,12 @@ CREATE  TABLE IF NOT EXISTS `dict` (
     FOREIGN KEY (`user_id` )
     REFERENCES `user` (`id` )
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_dict_text1`
+    FOREIGN KEY (`text_id` )
+    REFERENCES `text` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 DEFAULT CHARACTER SET = utf8;
 
 
