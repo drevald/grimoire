@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface DictService {
 	
+    public Dict findDict(Long id, Long userId);
+
     public Dict findDict(Long id);
 
-    public Dict loadPreviewFile(Long id, String langId, InputStream is, String name);
+    public Dict loadPreviewFile(Long id, String langId, InputStream is, String name, String storage);
 
     public void saveDict(Dict dict);
 

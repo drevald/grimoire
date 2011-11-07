@@ -31,6 +31,11 @@ public class WordServiceImpl implements WordService {
     }
 
     @Transactional
+    public void batchStore(List<Word> words, Long dictId) {
+        wordDAO.batchStore(words, dictId);
+    }
+
+    @Transactional
     public List<DictWord> getWords(Long dictId) {
         return dictWordDAO.getWords(dictId);
     }

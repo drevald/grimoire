@@ -1,11 +1,12 @@
 package org.helico.dao;
 
+import org.apache.log4j.Logger;
+import org.helico.domain.DictWord;
 import org.helico.domain.Word;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.apache.log4j.Logger;
 
 import java.util.List;
 
@@ -41,5 +42,53 @@ public class WordDAOImpl implements WordDAO {
             return result;
         }
 
+    }
+
+    public synchronized void batchStore(List<Word> words, Long dictId) {
+
+        Session session = sessionFactory.getCurrentSession();
+
+        try {
+
+            session.beginTransaction();
+
+            for (Word word : words) {
+
+                LOG.debug(">>>>saving value:"+word.getValue()+" lang:"+word.getLangId());
+                    Word storedWord = (Word)session.createQuery("from Word where value=? and langId=?")
+                            .setString(0, word.getValue()).setString(1, word.getLangId()).uniqueResult();
+
+                if (storedWord == null) {
+                    Word newWord = new Word();
+                    newWord.setValue(word.getValue());
+                    newWord.setLangId(word.getLangId());
+                    try {
+                        session.saveOrUpdate(newWord);
+                        storedWord = newWord;
+                    } catch (Exception e) {
+                        session.clear();
+                        LOG.warn(e, e);
+                    }
+                }
+
+                DictWord dictWord = (DictWord)session.createQuery("from DictWord where dictId=? and word.id=?")
+                    .setLong(0, dictId).setLong(1, word.getId()).uniqueResult();
+
+                if (dictWord == null) {
+                    dictWord = new DictWord();
+                    dictWord.setDictId(dictId);
+                    dictWord.setWord(word);
+                }
+
+                dictWord.setCounter(dictWord.getCounter() + 1);
+
+                session.saveOrUpdate(dictWord);
+
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            LOG.error("Batch insert failed", e);
+            session.getTransaction().rollback();
+        }
     }
 }

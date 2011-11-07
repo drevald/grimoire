@@ -1,6 +1,7 @@
 package org.helico.service;
 
 import org.helico.domain.DictWord;
+import org.helico.domain.Word;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ import java.util.List;
  * @version 17.05.11
  */
 public interface WordService {
+
+    public void batchStore(List<Word> words, Long dictId);
 
     public void store(String word, String langId, Long dictId);
 

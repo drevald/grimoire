@@ -4,11 +4,14 @@ import org.apache.log4j.Logger;
 import org.helico.domain.*;
 import org.helico.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -16,13 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
 @Controller
-public class DictController {
+public class DictController implements ApplicationContextAware {
 
     private static final Logger LOG = Logger.getLogger(DictController.class);
 
-    private static final int PREVIEW_SIZE = 1000;
+    private ApplicationContext appContext;
 
     @Autowired
     private DictService dictService;
@@ -83,10 +85,13 @@ public class DictController {
 	    User user = userService.findUser(getCurrentUser());
 	    if (!file.isEmpty()) {
 			try {
+                WebApplicationContext webApplicationContext = (WebApplicationContext)appContext;
+                String storagePath = webApplicationContext.getServletContext().getInitParameter("localStorage");
 			    dict = dictService.loadPreviewFile(user.getId(),
                                     langId,
 								    file.getInputStream(), 
-								    file.getOriginalFilename());
+								    file.getOriginalFilename(),
+                                    storagePath);
 			    dict.setEncoding("UTF-8");
 			    dict.setLangId(langId);
 			    map.put("dict", dict);
@@ -109,7 +114,8 @@ public class DictController {
             @RequestParam("langId") String langId,
 			@RequestParam("encoding") String encoding)
 	{
-		Dict dict = dictService.findDict(id);
+        User user = userService.findUser(getCurrentUser());
+		Dict dict = dictService.findDict(id, user.getId());
 		dict.setEncoding(encoding);
 		dictService.saveDict(dict);
 	    return "redirect:/dict/edit/"+dict.getId() + "?langId=" + langId;
@@ -121,7 +127,8 @@ public class DictController {
 			@RequestParam("encoding") String encoding,
 			@RequestParam("langId") String langId)
 	{
-		Dict dict = dictService.findDict(id);
+        User user = userService.findUser(getCurrentUser());
+		Dict dict = dictService.findDict(id, user.getId());
 		dict.setEncoding(encoding);
 		dict.setLangId(langId);
 		dictService.saveDict(dict);
@@ -140,7 +147,8 @@ public class DictController {
 	public String editDict(@PathVariable("dictId") Long dictId,
                            @RequestParam("langId") String langId,
 			       Map<String, Object> map) {
-		Dict dict = dictService.findDict(dictId);
+        User user = userService.findUser(getCurrentUser());
+		Dict dict = dictService.findDict(dictId, user.getId());
 		map.put("dict", dict);
         map.put("langId", langId);
         map.put("encodings", langService.getEncodings(langId));
@@ -156,7 +164,8 @@ public class DictController {
 	
 	@RequestMapping("/dict/view/{dictId}")
 	public String viewDict(@PathVariable("dictId") Long dictId, Map<String, Object> map) {
-		Dict dict = dictService.findDict(dictId);
+        User user = userService.findUser(getCurrentUser());
+		Dict dict = dictService.findDict(dictId, user.getId());
 		map.put("dict", dict);
         try {
 	    map.put("preview", new String(dict.getPreview(), dict.getEncoding()));
@@ -168,13 +177,21 @@ public class DictController {
 	
 	@RequestMapping("/dict/delete/{dictId}")
 	public String deleteUser(@PathVariable("dictId") Long dictId) {
-		dictService.removeDict(dictId);
+        User user = userService.findUser(getCurrentUser());
+        Dict dict = dictService.findDict(dictId, user.getId());
+        if (dict != null) {
+		    dictService.removeDict(dictId);
+        }
 		return "redirect:/dict";
 	}
 
 	@RequestMapping("/dict/view/generate")
 	public String parseDict(@RequestParam("dictId") Long id) {
-		dictService.parseText(id);
+        User user = userService.findUser(getCurrentUser());
+        Dict dict = dictService.findDict(id, user.getId());
+        if (dict != null) {
+		    dictService.parseText(id);
+        }
 		return "redirect:/dict/view/" +  id;
 	}
 
@@ -183,27 +200,42 @@ public class DictController {
 				@PathVariable("dictId") Long dictId,
 				@RequestParam("offset") Integer offset, 
 				Map<String, Object> map) {
-	    Integer size = 12;
-	    offset = (offset == null) ? size : offset;
-	    List<DictWord> words = dictWordService.getWords(dictId, offset, size);
-	    Long wordsNum = dictWordService.countWords(dictId);
-        List<TranslatorProvider> providers = translationService.listProviders();
-	    map.put("dict", dictService.findDict(dictId));
-	    map.put("wordsNum", wordsNum);
-	    map.put("words", words);
-        map.put("providers", providers);
-	    map.put("offset", offset);
-	    map.put("maxOffset", wordsNum-(wordsNum%size));
-	    map.put("size", size);
-	    map.put("currPage", 1+(int)(offset/size));
-	    map.put("totalPage", 1+(int)(wordsNum/size));
-	    return "viewWords";
+        User user = userService.findUser(getCurrentUser());
+        Dict dict = dictService.findDict(dictId, user.getId());
+        if (dict != null) {
+            Integer size = 12;
+            offset = (offset == null) ? size : offset;
+            List<DictWord> words = dictWordService.getWords(dictId, offset, size);
+            Long wordsNum = dictWordService.countWords(dictId);
+            List<TranslatorProvider> providers = translationService.listProviders();
+            map.put("dict", dictService.findDict(dictId, user.getId()));
+            map.put("wordsNum", wordsNum);
+            map.put("words", words);
+            map.put("providers", providers);
+            map.put("offset", offset);
+            map.put("maxOffset", wordsNum-(wordsNum%size));
+            map.put("size", size);
+            map.put("currPage", 1+(int)(offset/size));
+            map.put("totalPage", 1+(int)(wordsNum/size));
+            return "viewWords";
+        } else {
+            return "/dict";
+        }
 	}
 
     @RequestMapping(value = "/dict/words/translate", method = RequestMethod.POST)
 	public String translateDict(@RequestParam("dictId") Long id) {
-		translationService.translateText(id);
+        User user = userService.findUser(getCurrentUser());
+        Dict dict = dictService.findDict(id, user.getId());
+        if (dict != null) {
+		    translationService.translateText(id);
+        }
 		return "redirect:/dict";
 	}
+
+    public void setApplicationContext(ApplicationContext appContext) {
+        LOG.debug("setting application context: " + appContext);
+        this.appContext = appContext;
+    }
 
 }

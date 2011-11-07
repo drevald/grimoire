@@ -2,13 +2,7 @@ package org.helico.domain;
 
 import org.apache.log4j.Logger;
 
-import javax.persistence.Column;
-import javax.persistence.Basic;
-import javax.persistence.FetchType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "dict")
@@ -60,6 +54,10 @@ public class Dict {
 
     @Column(name = "lang_id")
     private String langId;
+
+    @OneToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="text_id")
+    private Text text;
 
     public String getLangId() {
         return langId;
@@ -139,6 +137,14 @@ public class Dict {
 	this.utfText = utfText;
     }
 	
+    public Text getText() {
+        return text;
+    }
+
+    public void setText(Text text) {
+        this.text = text;
+    }
+
     public String toString() {
 	return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", utf:" + utfText + ", data:" + origDoc + ", status:" + status +", enc:"+encoding+", lang:"+langId;
     }

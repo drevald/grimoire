@@ -1,19 +1,20 @@
 package org.helico.service;
 
-import java.io.InputStream;
-import java.util.List;
-
-import org.helico.domain.Dict;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.io.PushbackInputStream;
-
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.helico.dao.DictDAO;
+import org.helico.domain.Dict;
 import org.helico.domain.Dict.Status;
+import org.helico.domain.Text;
 import org.helico.sm.StateMachine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.File;
+import java.io.InputStream;
+import java.io.PushbackInputStream;
+import java.util.List;
 
 @Service
 public class DictServiceImpl implements DictService {
@@ -58,8 +59,25 @@ public class DictServiceImpl implements DictService {
 
 	@Transactional
 	public void removeDict(Long id) {
+        Dict dict = dictDao.findDict(id);
+        if (dict != null && dict.getText() != null) {
+            try {
+                FileUtils.deleteQuietly(new File(dict.getText().getOrigPath()));
+                FileUtils.deleteQuietly(new File(dict.getText().getUtfPath()));
+            } catch (Exception e) {
+                LOG.error("Can not delete text files", e);
+            }
+        }
 	    dictDao.removeDict(id);
 	}
+
+    @Transactional
+	public Dict findDict(Long id, Long userId) {
+	    LOG.info(">>>findDict start");
+	    Dict dict = dictDao.findDict(id, userId);
+	    LOG.info("<<<findDict end");
+	    return dict;
+    }
 
     @Transactional
 	public Dict findDict(Long id) {
@@ -75,7 +93,7 @@ public class DictServiceImpl implements DictService {
 	}
 
 	@Transactional
-	    public Dict loadPreviewFile(Long userId, String langId, InputStream is, String name) {
+	    public Dict loadPreviewFile(Long userId, String langId, InputStream is, String name, String storage) {
 	    LOG.info(">>>loadPreview start");
 	    PushbackInputStream pis = new PushbackInputStream(is, PREVIEW_SIZE);
 	    byte[] data = new byte[PREVIEW_SIZE];
@@ -91,6 +109,13 @@ public class DictServiceImpl implements DictService {
 	    dict.setPreview(data);
 	    dict.setName(name.substring(0, name.indexOf(".")).toUpperCase());
 	    dict.setStatus(Status.PERSISTED);
+        Text text = new Text();
+        long stamp = System.currentTimeMillis();
+        text.setOrigPath(storage + "/" + name + "." + stamp);
+        text.setUtfPath(storage + "/" + name + ".utf" + "." + stamp);
+        text.setEncoding("UTF-8");
+        dictDao.saveText(text);
+        dict.setText(text);
 	    dictDao.saveDict(dict);
 	    stateMachine.sendEvent(StateMachine.Event.LOAD, pis, dict.getId());
 	    //textFileLoader.load(dict.getId(), is);
@@ -113,7 +138,7 @@ public class DictServiceImpl implements DictService {
 	
     @Transactional
     public void setStatus(Long id, Status status) {
-		Dict dict = findDict(id);
+        Dict dict = dictDao.findDict(id);
 		dict.setStatus(status.name());
 	    LOG.info("setStatus(" + dict + ")");
 		dictDao.saveDict(dict);	
@@ -121,7 +146,7 @@ public class DictServiceImpl implements DictService {
 
     @Transactional
 	public void setPreview(Long id, byte[] data) {
-        Dict dict = findDict(id);
+        Dict dict = dictDao.findDict(id);
         dict.setPreview(data);
         LOG.info("setPreview(" + dict + ")");
         dictDao.saveDict(dict);

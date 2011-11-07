@@ -6,15 +6,11 @@ import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.service.DictService;
 import org.helico.service.JobService;
-import org.helico.sm.Handler;
 import org.helico.sm.StateMachine;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
+import java.io.*;
 
 @Component("storeHandler")
 public class StoreHandler extends AbstractHandler {
@@ -34,12 +30,15 @@ public class StoreHandler extends AbstractHandler {
     protected void process(Object object, Job job) throws Exception {
         Dict dict = dictService.findDict(job.getDictId());
         InputStreamReader reader = new InputStreamReader(
-                new ByteArrayInputStream(dict.getOrigDoc()), dict.getEncoding());
-         StringWriter writer = new StringWriter();
+                new FileInputStream(
+                        new File(dict.getText().getOrigPath())),
+                dict.getEncoding());
+         Writer writer = new OutputStreamWriter(
+                 new FileOutputStream(
+                         new File(dict.getText().getUtfPath())), "UTF-8");
          IOUtils.copyLarge(reader, writer);
          IOUtils.closeQuietly(reader);
          IOUtils.closeQuietly(writer);
-         dict.setUtfText(writer.toString().getBytes("UTF-8"));
          dictService.saveDict(dict);
     }
 
