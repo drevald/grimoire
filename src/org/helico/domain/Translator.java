@@ -31,6 +31,10 @@ public class Translator {
     @Column(name = "dest_lang_id")
     private Long destLangId;
 
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="serviceId")
+    private TranslatorProvider provider;
+
     public Long getId() {
         return id;
     }

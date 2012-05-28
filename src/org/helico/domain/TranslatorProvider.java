@@ -1,6 +1,7 @@
 package org.helico.domain;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
 
@@ -37,6 +38,9 @@ public class TranslatorProvider {
 
     @Column(name = "res_pattern")
     private String resPattern;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "provider")
+    private Set<Translator> translators;
 
     public Long getId() {
         return id;
