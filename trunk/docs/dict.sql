@@ -34,9 +34,13 @@ INSERT INTO user VALUES (NULL, 'user', 'pass', 'USER', 1);
 INSERT INTO user VALUES (NULL, 'helicobacter', 'pilory', 'USER', 1);
 INSERT INTO user VALUES (NULL, 'admin', 'admin', 'ADMIN', 1);
 
-INSERT INTO translator_provider VALUES (0, 'Bing', 'api.microsofttranslator.com', 'UNDEF', 'UNDEF');
+INSERT INTO translator_provider VALUES (0, 'Bing', 'api.microsofttranslator.com', '<{1}>{0}</{2}>',
+'http://api.microsofttranslator.com/V2/Http.svc/Translate?appId=CDCB8BFFDD9E4C3054316BC629E82D1E39CA585C&text={0}&from={1}&to={2}');
 
 INSERT INTO translator VALUES (0, 0, 'en', 'ru');
+INSERT INTO translator VALUES (1, 0, 'fr', 'ru');
+INSERT INTO translator VALUES (2, 0, 'de', 'ru');
+
 --
 -- CREATE  TABLE IF NOT EXISTS `service` (
 --   `id` BIGINT NOT NULL AUTO_INCREMENT ,

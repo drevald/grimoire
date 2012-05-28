@@ -3,10 +3,7 @@ package org.helico.sm.handler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
-import org.helico.domain.Dict;
-import org.helico.domain.DictWord;
-import org.helico.domain.Job;
-import org.helico.domain.Word;
+import org.helico.domain.*;
 import org.helico.service.DictWordService;
 import org.helico.service.JobService;
 import org.helico.service.TranslationService;
@@ -42,6 +39,8 @@ public class TranslateHandler extends AbstractHandler {
     HttpClient httpClient;
 
     public void process(Object data, Job job) throws Exception {
+        Long transProviderId = data==null ? 0 : (Long)data;
+        TranslatorProvider provider = transService.getProvider(transProviderId);
         Dict dict = dictService.findDict(job.getDictId());
         LOG.debug("dict=" + dict);
         Long wordsNum = dictWordService.countWords(dict.getId());
@@ -51,7 +50,7 @@ public class TranslateHandler extends AbstractHandler {
             for (DictWord dictWord : dictWords) {
                 Word word = dictWord.getWord();
                 if (!transService.isTranslated(word.getId(), 0L)) {
-                    String translation = fetchTranslation(word.getValue(), dict.getLangId(), "ru");
+                    String translation = fetchTranslation(word.getValue(), provider, dict.getLangId(), "ru");
                     if (translation != null) {
 						try {
 	                        transService.storeTranslation(word.getId(), 0L, translation.toLowerCase());
@@ -67,20 +66,37 @@ public class TranslateHandler extends AbstractHandler {
 
     }
 
-    private String fetchTranslation(String text, String srcLangId, String destLangId) {
+    private String fetchTranslation(String text, TranslatorProvider provider, String srcLangId, String destLangId) {
         String result = null;
         try {
             if (httpClient == null) {
                 httpClient = new HttpClient();
             }
-            GetMethod getMethod = new GetMethod(BING_OUTPUT_FORMAT.format(new String[] {text, srcLangId, destLangId}));
+            GetMethod getMethod = new GetMethod(
+                    String.format(provider.getReqPattern(), new String[] {text, srcLangId, destLangId}));
             httpClient.executeMethod(getMethod);
             String output = getMethod.getResponseBodyAsString();
-            result = (String)BING_FORMAT.parse(output)[0];
+            result = (String)new MessageFormat(provider.getResPattern()).parse(output)[0];
         } catch (Exception e) {
             LOG.error("Can not get translation", e);
         }
         return result;
     }
+
+//    private String fetchTranslation(String text, String srcLangId, String destLangId) {
+//        String result = null;
+//        try {
+//            if (httpClient == null) {
+//                httpClient = new HttpClient();
+//            }
+//            GetMethod getMethod = new GetMethod(BING_OUTPUT_FORMAT.format(new String[] {text, srcLangId, destLangId}));
+//            httpClient.executeMethod(getMethod);
+//            String output = getMethod.getResponseBodyAsString();
+//            result = (String)BING_FORMAT.parse(output)[0];
+//        } catch (Exception e) {
+//            LOG.error("Can not get translation", e);
+//        }
+//        return result;
+//    }
 
 }

@@ -46,6 +46,20 @@ public class TranslationServiceImpl implements TranslationService {
         return translatorProviderDAO.listProviders();  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Transactional
+    public List<TranslatorProvider> listProviders(String langId) {
+        return translatorProviderDAO.listProviders(langId);  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Transactional
+    public TranslatorProvider getProvider(Long transProvId) {
+        return translatorProviderDAO.getProvider(transProvId);  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void translateText(Long dictId, Long transId) {
+        stateMachine.sendEvent(StateMachine.Event.TRANSLATE, transId, dictId);
+    }
+
     public void translateText(Long dictId) {
         stateMachine.sendEvent(StateMachine.Event.TRANSLATE, null, dictId);
     }
