@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -31,10 +32,16 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
 
     public List<TranslatorProvider> listProviders(String langId) {
         LOG.info(">>>>find translator providers for lang #" + langId);
-        List<TranslatorProvider> result = sessionFactory.getCurrentSession().createQuery(
+        List<TranslatorProvider> result = new ArrayList<TranslatorProvider>();
+        List objResult = sessionFactory.getCurrentSession().createQuery(
                 "from TranslatorProvider tp inner join tp.translators as translator where translator.destLangId=?")
                 .setString(0, langId)
                 .list();
+        for (Object obj : objResult) {
+            TranslatorProvider provider = (TranslatorProvider)((Object[])obj)[0];
+            result.add(provider);
+        }
+
         LOG.info("<<<<find translator providers for lang #" + langId);
         return result;
     }

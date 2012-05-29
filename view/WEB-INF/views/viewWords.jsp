@@ -1,3 +1,5 @@
+<%@ page import="org.helico.domain.TranslatorProvider" %>
+<%@ page import="java.util.List" %>
 <%@ include file="/WEB-INF/dictHeader.jsp" %>
 
 <h3>${dict.name}</h3>
