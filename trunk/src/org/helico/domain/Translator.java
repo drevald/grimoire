@@ -22,17 +22,14 @@ public class Translator {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "service_id")
-    private Long serviceId;
-
     @Column(name = "src_lang_id")
-    private Long srcLangId;
+    private String srcLangId;
 
     @Column(name = "dest_lang_id")
-    private Long destLangId;
+    private String destLangId;
 
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="serviceId")
+    @JoinColumn(name="service_id")
     private TranslatorProvider provider;
 
     public Long getId() {
@@ -43,27 +40,19 @@ public class Translator {
         this.id = id;
     }
 
-    public Long getServiceId() {
-        return serviceId;
-    }
-
-    public void setServiceId(Long serviceId) {
-        this.serviceId = serviceId;
-    }
-
-    public Long getSrcLangId() {
+    public String getSrcLangId() {
         return srcLangId;
     }
 
-    public void setSrcLangId(Long srcLangId) {
+    public void setSrcLangId(String srcLangId) {
         this.srcLangId = srcLangId;
     }
 
-    public Long getDestLangId() {
+    public String getDestLangId() {
         return destLangId;
     }
 
-    public void setDestLangId(Long destLangId) {
+    public void setDestLangId(String destLangId) {
         this.destLangId = destLangId;
     }
 
