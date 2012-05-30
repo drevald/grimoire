@@ -10,6 +10,7 @@ import org.helico.service.TranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -19,11 +20,9 @@ public class TranslateHandler extends AbstractHandler {
 
     private static final Logger LOG = Logger.getLogger(TranslateHandler.class);
 
-    private static final MessageFormat BING_FORMAT = new MessageFormat ("<{1}>{0}</{2}>");
+    private MessageFormat reqFormat;
 
-    private static final MessageFormat BING_OUTPUT_FORMAT =
-            new MessageFormat("http://api.microsofttranslator.com/V2/Http.svc/Translate" +
-                    "?appId=CDCB8BFFDD9E4C3054316BC629E82D1E39CA585C&text={0}&from={1}&to={2}");
+    private MessageFormat resFormat;
 
     private static final int WORDS_PORTION = 32;
 
@@ -39,8 +38,10 @@ public class TranslateHandler extends AbstractHandler {
     HttpClient httpClient;
 
     public void process(Object data, Job job) throws Exception {
-        Long transProviderId = data==null ? 0 : (Long)data;
+        Long transProviderId = data==null ? 1 : (Long)data;
         TranslatorProvider provider = transService.getProvider(transProviderId);
+        reqFormat=new MessageFormat(provider.getReqPattern());
+        resFormat=new MessageFormat(provider.getResPattern());
         Dict dict = dictService.findDict(job.getDictId());
         LOG.debug("dict=" + dict);
         Long wordsNum = dictWordService.countWords(dict.getId());
@@ -72,11 +73,13 @@ public class TranslateHandler extends AbstractHandler {
             if (httpClient == null) {
                 httpClient = new HttpClient();
             }
-            GetMethod getMethod = new GetMethod(
-                    String.format(provider.getReqPattern(), new String[] {text, srcLangId, destLangId}));
+//            GetMethod getMethod = new GetMethod(
+//                    String.format(provider.getReqPattern(), new String[] {text, srcLangId, destLangId}));
+            GetMethod getMethod = new GetMethod(resFormat.format(new String[] {URLEncoder.encode(text), srcLangId, destLangId}));
+//            getMethod.addRequestHeader("User-Agent","Opera/9.80 (Windows NT 6.1; WOW64; U; ru) Presto/2.10.229 Version/11.64");
             httpClient.executeMethod(getMethod);
             String output = getMethod.getResponseBodyAsString();
-            result = (String)new MessageFormat(provider.getResPattern()).parse(output)[0];
+            result = (String)reqFormat.parse(output)[0];
         } catch (Exception e) {
             LOG.error("Can not get translation", e);
         }
