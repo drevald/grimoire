@@ -18,6 +18,14 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
+    public Translator getTranslator(Long id) {
+        LOG.info(">>>>find translator#" + id);
+    	Translator translator = (Translator)sessionFactory.getCurrentSession()
+                .get(Translator.class, id);
+        LOG.info("<<<<find translator");
+        return translator;
+    }
+
     public TranslatorProvider getProvider(Long id) {
         LOG.info(">>>>find translator provider#" + id);
     	TranslatorProvider provider = (TranslatorProvider)sessionFactory.getCurrentSession()
@@ -43,6 +51,16 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
         }
 
         LOG.info("<<<<find translator providers for lang #" + langId);
+        return result;
+    }
+
+    public List<Translator> listTranslators(String langId) {
+        LOG.info(">>>>find translators for lang #" + langId);
+        List<Translator> result = (List<Translator>)sessionFactory.getCurrentSession().createQuery(
+                "from Translator where srcLangId=?")
+                .setString(0, langId)
+                .list();
+        LOG.info("<<<<find translators for lang #" + langId);
         return result;
     }
 

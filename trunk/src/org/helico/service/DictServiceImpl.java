@@ -155,4 +155,9 @@ public class DictServiceImpl implements DictService {
     public void parseText(Long dictId) {
         stateMachine.sendEvent(StateMachine.Event.PARSE, null, dictId);
     }
+
+    public void fixStatus() {
+        dictDao.fixStatus();
+    }
+
 }

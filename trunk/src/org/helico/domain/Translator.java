@@ -56,4 +56,16 @@ public class Translator {
         this.destLangId = destLangId;
     }
 
+    public TranslatorProvider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(TranslatorProvider provider) {
+        this.provider = provider;
+    }
+
+//    public String toString() {
+//        return String.format("id=%s,srcLangId=%s,dstlangId=%s,providerId=%s,providerName=%s",id,srcLangId,destLangId,provider.getId(),provider.getTitle());
+//    }
+
 }

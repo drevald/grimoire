@@ -56,6 +56,4 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
         this.appContext = appContext;
     }
 
-
-
 }

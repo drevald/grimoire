@@ -68,4 +68,7 @@ public class DictDAOImpl implements DictDAO {
 		return dict;
     }
 
+    public void fixStatus() {
+        LOG.info("Fixing");
+    }
 }
