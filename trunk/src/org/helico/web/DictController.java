@@ -225,11 +225,12 @@ public class DictController implements ApplicationContextAware {
 	}
 
     @RequestMapping(value = "/dict/words/translate", method = RequestMethod.POST)
-	public String translateDict(@RequestParam("dictId") Long dictId) {
+	public String translateDict(@RequestParam("dictId") Long dictId,
+                                @RequestParam("providerId") Long providerId) {
         User user = userService.findUser(getCurrentUser());
         Dict dict = dictService.findDict(dictId, user.getId());
         if (dict != null) {
-		    translationService.translateText(dictId);
+		    translationService.translateText(dictId, providerId);
         }
 		return "redirect:/dict";
 	}

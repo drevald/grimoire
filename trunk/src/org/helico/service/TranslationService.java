@@ -11,6 +11,8 @@ public interface  TranslationService {
 
     public void translateText(Long dictId);
 
+    public void translateText(Long dictId, Long providerId);
+
     public boolean isTranslated(Long wordId, Long translationServiceId);
 
     public void storeTranslation(Long wordId, Long translatorId, String values);
