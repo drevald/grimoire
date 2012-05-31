@@ -73,10 +73,7 @@ public class TranslateHandler extends AbstractHandler {
             if (httpClient == null) {
                 httpClient = new HttpClient();
             }
-//            GetMethod getMethod = new GetMethod(
-//                    String.format(provider.getReqPattern(), new String[] {text, srcLangId, destLangId}));
-            GetMethod getMethod = new GetMethod(resFormat.format(new String[] {URLEncoder.encode(text), srcLangId, destLangId}));
-//            getMethod.addRequestHeader("User-Agent","Opera/9.80 (Windows NT 6.1; WOW64; U; ru) Presto/2.10.229 Version/11.64");
+            GetMethod getMethod = new GetMethod(resFormat.format(new String[] {URLEncoder.encode(text,"utf-8"), srcLangId, destLangId}));
             httpClient.executeMethod(getMethod);
             String output = getMethod.getResponseBodyAsString();
             result = (String)reqFormat.parse(output)[0];
@@ -85,21 +82,5 @@ public class TranslateHandler extends AbstractHandler {
         }
         return result;
     }
-
-//    private String fetchTranslation(String text, String srcLangId, String destLangId) {
-//        String result = null;
-//        try {
-//            if (httpClient == null) {
-//                httpClient = new HttpClient();
-//            }
-//            GetMethod getMethod = new GetMethod(BING_OUTPUT_FORMAT.format(new String[] {text, srcLangId, destLangId}));
-//            httpClient.executeMethod(getMethod);
-//            String output = getMethod.getResponseBodyAsString();
-//            result = (String)BING_FORMAT.parse(output)[0];
-//        } catch (Exception e) {
-//            LOG.error("Can not get translation", e);
-//        }
-//        return result;
-//    }
 
 }

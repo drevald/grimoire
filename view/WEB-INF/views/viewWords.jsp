@@ -38,7 +38,7 @@
     </div>
 </div>
 </div>
-<c:if test="${dict.status eq 'PARSED'}">
+<c:if test="${dict.status eq 'PARSED' || dict.status eq 'TRANSLATED'}">
 <hr>
 <form action="translate" method="post">
     <input type="hidden" name="dictId" value="${dict.id}"/>
