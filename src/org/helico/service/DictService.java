@@ -30,5 +30,7 @@ public interface DictService {
     public void storeDict(Dict dict);
 
     public void parseText(Long dictId);
+
+    public void fixStatus();
     
 }

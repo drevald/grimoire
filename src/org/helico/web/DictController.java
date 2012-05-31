@@ -207,12 +207,12 @@ public class DictController implements ApplicationContextAware {
             offset = (offset == null) ? size : offset;
             List<DictWord> words = dictWordService.getWords(dictId, offset, size);
             Long wordsNum = dictWordService.countWords(dictId);
-            List<TranslatorProvider> providers = translationService.listProviders(dict.getLangId());
+            List<Translator> translators = translationService.listTranslators(dict.getLangId());
             //List<TranslatorProvider> providers = translationService.listProviders();
             map.put("dict", dictService.findDict(dictId, user.getId()));
             map.put("wordsNum", wordsNum);
             map.put("words", words);
-            map.put("providers", providers);
+            map.put("translators", translators);
             map.put("offset", offset);
             map.put("maxOffset", wordsNum-(wordsNum%size));
             map.put("size", size);
@@ -226,11 +226,11 @@ public class DictController implements ApplicationContextAware {
 
     @RequestMapping(value = "/dict/words/translate", method = RequestMethod.POST)
 	public String translateDict(@RequestParam("dictId") Long dictId,
-                                @RequestParam("providerId") Long providerId) {
+                                @RequestParam("translatorId") Long translatorId) {
         User user = userService.findUser(getCurrentUser());
         Dict dict = dictService.findDict(dictId, user.getId());
         if (dict != null) {
-		    translationService.translateText(dictId, providerId);
+		    translationService.translateText(dictId, translatorId);
         }
 		return "redirect:/dict";
 	}

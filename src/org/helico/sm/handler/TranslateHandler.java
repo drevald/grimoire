@@ -38,8 +38,9 @@ public class TranslateHandler extends AbstractHandler {
     HttpClient httpClient;
 
     public void process(Object data, Job job) throws Exception {
-        Long transProviderId = data==null ? 1 : (Long)data;
-        TranslatorProvider provider = transService.getProvider(transProviderId);
+//        Long transProviderId = data==null ? 1 : (Long)data;
+        Translator translator = transService.getTranslator((Long)data);
+        TranslatorProvider provider = translator.getProvider();
         reqFormat=new MessageFormat(provider.getReqPattern());
         resFormat=new MessageFormat(provider.getResPattern());
         Dict dict = dictService.findDict(job.getDictId());
@@ -50,11 +51,11 @@ public class TranslateHandler extends AbstractHandler {
             List<DictWord> dictWords = dictWordService.getWords(dict.getId(), offset, WORDS_PORTION);
             for (DictWord dictWord : dictWords) {
                 Word word = dictWord.getWord();
-                if (!transService.isTranslated(word.getId(), 0L)) {
+                if (!transService.isTranslated(word.getId(), provider.getId())) {
                     String translation = fetchTranslation(word.getValue(), provider, dict.getLangId(), "ru");
                     if (translation != null) {
 						try {
-	                        transService.storeTranslation(word.getId(), 0L, translation.toLowerCase());
+	                        transService.storeTranslation(word.getId(), provider.getId(), translation.toLowerCase());
 						} catch (Exception e) {
 							LOG.error("Can not save translation for " + word.getValue() + " : " + translation, e);
 						}

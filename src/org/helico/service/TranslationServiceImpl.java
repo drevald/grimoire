@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.helico.dao.TranslationDAO;
 import org.helico.dao.TranslatorProviderDAO;
 import org.helico.domain.Translation;
+import org.helico.domain.Translator;
 import org.helico.domain.TranslatorProvider;
 import org.helico.sm.StateMachine;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,21 +44,31 @@ public class TranslationServiceImpl implements TranslationService {
 
     @Transactional
     public List<TranslatorProvider> listProviders() {
-        return translatorProviderDAO.listProviders();  //To change body of implemented methods use File | Settings | File Templates.
+        return translatorProviderDAO.listProviders();
     }
 
     @Transactional
     public List<TranslatorProvider> listProviders(String langId) {
-        return translatorProviderDAO.listProviders(langId);  //To change body of implemented methods use File | Settings | File Templates.
+        return translatorProviderDAO.listProviders(langId);
+    }
+
+    @Transactional
+    public List<Translator> listTranslators(String langId) {
+        return translatorProviderDAO.listTranslators(langId);
     }
 
     @Transactional
     public TranslatorProvider getProvider(Long transProvId) {
-        return translatorProviderDAO.getProvider(transProvId);  //To change body of implemented methods use File | Settings | File Templates.
+        return translatorProviderDAO.getProvider(transProvId);
     }
 
-    public void translateText(Long dictId, Long transId) {
-        stateMachine.sendEvent(StateMachine.Event.TRANSLATE, transId, dictId);
+    @Transactional
+    public Translator getTranslator(Long transId) {
+        return translatorProviderDAO.getTranslator(transId);
+    }
+
+    public void translateText(Long dictId, Long translatorId) {
+        stateMachine.sendEvent(StateMachine.Event.TRANSLATE, translatorId, dictId);
     }
 
     public void translateText(Long dictId) {

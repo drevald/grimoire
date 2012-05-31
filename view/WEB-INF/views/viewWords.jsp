@@ -20,7 +20,12 @@
                     <td>&nbsp;</td>
                     <td>${word.counter}</td>
                     <td>&nbsp;</td>
-                    <td>${word.word.translation}</td>
+                    <td>
+
+                    <c:forEach items="${word.word.translations}" var="translation">
+                        ${translation.value}(${translation.translatorId})
+                    </c:forEach>
+                    </td>
                 </tr>
             </c:forEach>
         </table>
@@ -45,9 +50,9 @@
     <spring:message code="words.not.translated"/>
     <input type="submit" value="Translate"/>
     <spring:message code="using"/>
-    <select name="providerId">
-        <c:forEach items="${providers}" var="provider">
-                <option value="${provider.id}">${provider.title}</option>
+    <select name="translatorId">
+        <c:forEach items="${translators}" var="translator">
+                <option value="${translator.id}">${translator.provider.title}</option>
         </c:forEach>
     </select>
 </form>
