@@ -156,8 +156,18 @@ public class DictServiceImpl implements DictService {
         stateMachine.sendEvent(StateMachine.Event.PARSE, null, dictId);
     }
 
+    @Transactional
     public void fixStatus() {
-        dictDao.fixStatus();
+        List<Dict> parsing = dictDao.findDictByStatus(Status.PARSING.name());
+        for (Dict dict : parsing) {
+            dict.setStatus(Status.STORED.name());
+            dictDao.saveDict(dict);
+        }
+        List<Dict> translating = dictDao.findDictByStatus(Status.TRANSLATING.name());
+        for (Dict dict : translating) {
+            dict.setStatus(Status.PARSED.name());
+            dictDao.saveDict(dict);
+        }
     }
 
 }

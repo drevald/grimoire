@@ -21,6 +21,6 @@ public interface DictDAO {
 
     public Dict findDict(Long id);
 
-    public void fixStatus();
+    public List<Dict> findDictByStatus(String state);
 
 }

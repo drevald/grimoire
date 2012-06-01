@@ -28,6 +28,7 @@ INSERT INTO lang VALUES ('ja', 'Japanese', 'UTF-8');
 INSERT INTO lang VALUES ('es', 'Spanish', 'ISO-8859-1,UTF-8');
 INSERT INTO lang VALUES ('sv', 'Swedish', 'ISO-8859-1,UTF-8');
 INSERT INTO lang VALUES ('ar', 'Arabic', 'UTF-8');
+INSERT INTO lang VALUES ('la', 'Latin', 'ISO-8859-1');
 
 INSERT INTO user VALUES (NULL, 'guest', '', 'GUEST', 1);
 INSERT INTO user VALUES (NULL, 'user', 'pass', 'USER', 1);
