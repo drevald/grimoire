@@ -68,7 +68,8 @@ public class DictDAOImpl implements DictDAO {
 		return dict;
     }
 
-    public void fixStatus() {
-        LOG.info("Fixing");
-    }
+    @SuppressWarnings("unchecked")
+	public List<Dict> findDictByStatus(String status) {
+	    return sessionFactory.getCurrentSession().createQuery("from Dict where status=?").setString(0, status).list();
+	}
 }

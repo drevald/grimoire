@@ -4,9 +4,13 @@ import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.domain.Transition;
 import org.helico.service.JobService;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextStartedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.helico.service.DictService;
@@ -15,7 +19,7 @@ import org.helico.service.TransitionService;
 import org.apache.log4j.Logger;
 
 @Component
-public class StateMachineImpl implements StateMachine, ApplicationContextAware {
+public class StateMachineImpl implements StateMachine, ApplicationContextAware, ApplicationListener {
 
     private static final Logger LOG = Logger.getLogger(StateMachineImpl.class);
 
@@ -56,4 +60,10 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
         this.appContext = appContext;
     }
 
+    public void onApplicationEvent(ApplicationEvent applicationEvent) {
+        LOG.info("Event received: " + applicationEvent);
+        if (applicationEvent instanceof ContextRefreshedEvent) {
+            dictService.fixStatus();
+        }
+    }
 }
