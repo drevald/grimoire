@@ -29,6 +29,7 @@ INSERT INTO lang VALUES ('es', 'Spanish', 'ISO-8859-1,UTF-8');
 INSERT INTO lang VALUES ('sv', 'Swedish', 'ISO-8859-1,UTF-8');
 INSERT INTO lang VALUES ('ar', 'Arabic', 'UTF-8');
 INSERT INTO lang VALUES ('la', 'Latin', 'ISO-8859-1');
+INSERT INTO lang VALUES ('da', 'Danish', 'ISO-8859-1,UTF-8');
 
 INSERT INTO user VALUES (NULL, 'guest', '', 'GUEST', 1);
 INSERT INTO user VALUES (NULL, 'user', 'pass', 'USER', 1);
@@ -49,6 +50,7 @@ INSERT INTO translator VALUES (5, 1, 'de', 'ru');
 INSERT INTO translator VALUES (6, 1, 'el', 'ru');
 INSERT INTO translator VALUES (7, 1, 'sv', 'ru');
 INSERT INTO translator VALUES (8, 1, 'is', 'ru');
+INSERT INTO translator VALUES (9, 1, 'da', 'ru');
 
 --
 -- CREATE  TABLE IF NOT EXISTS `service` (
