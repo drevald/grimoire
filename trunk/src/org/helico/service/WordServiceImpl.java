@@ -40,4 +40,9 @@ public class WordServiceImpl implements WordService {
         return dictWordDAO.getWords(dictId);
     }
 
+    @Transactional
+    public Word getWord(String langId, String word) {
+        return wordDAO.get(langId, word);
+    }
+
 }

@@ -20,4 +20,6 @@ public interface WordService {
 
     public List<DictWord> getWords(Long dictId);
 
+    public Word getWord(String langId, String word);
+
 }
