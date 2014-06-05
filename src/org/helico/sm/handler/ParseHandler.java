@@ -6,6 +6,8 @@ import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.service.JobService;
 import org.helico.service.WordService;
+import org.helico.util.WordReader;
+import org.helico.util.WordReaderResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,53 +39,58 @@ public class ParseHandler extends AbstractHandler {
     public void process(Object data, Job job) throws Exception {
         Dict dict = dictService.findDict(job.getDictId());
         LOG.debug("dict="+dict);
-//        byte[] rawUtfBytes = dict.getUtfText();
-//        do {
-//            rawUtfBytes = dict.getUtfText();
-//            try {
-//                Thread.currentThread().sleep(WAIT_FOR_TEXT_PARSED);
-//            } catch (InterruptedException ie) {
-//                LOG.warn(ie, ie);
-//            }
-//        } while (rawUtfBytes == null);
-//        CountingInputStream is = new CountingInputStream(new ByteArrayInputStream(rawUtfBytes));
         File utfFile = new File(dict.getText().getUtfPath());
         CountingInputStream is = new CountingInputStream(
                 new FileInputStream(utfFile));
-        InputStreamReader reader = new InputStreamReader(is, "UTF-8");
-        StringBuilder sb = new StringBuilder();
-	    long counter = 0L;
-        boolean readingWord = false;
-        //List<Word> words = new ArrayList<Word>();
 
+//        InputStreamReader reader = new InputStreamReader(is, "UTF-8");
+//        StringBuilder sb = new StringBuilder();
+//	    long counter = 0L;
+//        boolean readingWord = false;
+//        //List<Word> words = new ArrayList<Word>();
+//
+//        while(reader.ready()) {
+//
+//            int ch = reader.read();
+//
+//            if (!Character.isLetter(ch) && readingWord) {
+//                wordService.store(sb.toString().toLowerCase(), dict.getLangId(), dict.getId());
+//                LOG.trace("WORD:"+sb.toString());
+//                sb.delete(0, sb.length());
+//                readingWord = false;
+//            } else if (!Character.isLetter(ch) && !readingWord) {
+//                continue;
+//            } else if (Character.isLetter(ch) && readingWord) {
+//                sb.append(Character.toChars(ch));
+//            } else if (Character.isLetter(ch) && !readingWord) {
+//                sb.append(Character.toChars(ch));
+//                readingWord = true;
+//            }
+//
+//            if (++counter % PROGRESS_GRANULARITY == 0) {
+//                LOG.debug("is.getByteCount()="+is.getByteCount()+" total=" + utfFile.length());
+//                LOG.debug("!!! percentage = "+(int)((is.getByteCount() * 100) / utfFile.length()));
+//                jobService.setProgress(job.getId(), (int)((is.getByteCount() * 100) / utfFile.length()));
+////                wordService.batchStore(words, dict.getId());
+////                words.clear();
+//            }
+//
+//        }
+
+
+        WordReader reader = new WordReader(is);
         while(reader.ready()) {
-
-            int ch = reader.read();
-
-            if (!Character.isLetter(ch) && readingWord) {
-                wordService.store(sb.toString().toLowerCase(), dict.getLangId(), dict.getId());
-                //words.add(new Word(sb.toString().toLowerCase(), dict.getLangId()));
-                LOG.trace("WORD:"+sb.toString());
-                sb.delete(0, sb.length());
-                readingWord = false;
-            } else if (!Character.isLetter(ch) && !readingWord) {
-                continue;
-            } else if (Character.isLetter(ch) && readingWord) {
-                sb.append(Character.toChars(ch));
-            } else if (Character.isLetter(ch) && !readingWord) {
-                sb.append(Character.toChars(ch));
-                readingWord = true;
+            WordReaderResult result = reader.readWord();
+            if (result != null && result.isWord()) {
+                wordService.store(result.getResult().toLowerCase(), dict.getLangId(), dict.getId());
             }
-
-            if (++counter % PROGRESS_GRANULARITY == 0) {
+            if (reader.getCounter() % PROGRESS_GRANULARITY == 0) {
                 LOG.debug("is.getByteCount()="+is.getByteCount()+" total=" + utfFile.length());
                 LOG.debug("!!! percentage = "+(int)((is.getByteCount() * 100) / utfFile.length()));
                 jobService.setProgress(job.getId(), (int)((is.getByteCount() * 100) / utfFile.length()));
-//                wordService.batchStore(words, dict.getId());
-//                words.clear();
             }
-
         }
+
 
         LOG.debug("is.getByteCount()="+is.getByteCount()+" total=" + utfFile.length());
         LOG.debug("!!! percentage = "+(int)((is.getByteCount() * 100) / utfFile.length()));

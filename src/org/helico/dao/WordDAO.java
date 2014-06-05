@@ -17,4 +17,6 @@ public interface WordDAO {
 
     public void batchStore(List<Word> words, Long dictId);
 
+    public Word get(String langId, String word);
+
 }

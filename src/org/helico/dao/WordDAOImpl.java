@@ -91,4 +91,20 @@ public class WordDAOImpl implements WordDAO {
             session.getTransaction().rollback();
         }
     }
+
+
+    public synchronized Word get(String langId, String value) {
+
+        Session session = sessionFactory.getCurrentSession();
+
+        LOG.debug(">>>>saving value:"+value+" lang:"+langId);
+        Word result = (Word)session.createQuery("from Word where value=? and langId=?")
+                .setString(0, value).setString(1, langId).uniqueResult();
+        return result;
+
+    }
+
+//    LOG.debug(">>>>saving value:"+word.getValue()+" lang:"+word.getLangId());
+//    Word storedWord = (Word)session.createQuery("from Word where value=? and langId=?")
+
 }

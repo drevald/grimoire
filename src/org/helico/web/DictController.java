@@ -45,13 +45,13 @@ public class DictController implements ApplicationContextAware {
 	private TranslationService translationService;
 	
     private String getCurrentUser() {
-	Object principal = SecurityContextHolder.getContext()
-	    .getAuthentication().getPrincipal();
-	if (principal instanceof UserDetails) {
-	    return ((UserDetails)principal).getUsername();
-	} else {
-	    return principal.toString();
-	}
+        Object principal = SecurityContextHolder.getContext()
+            .getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((UserDetails)principal).getUsername();
+        } else {
+            return principal.toString();
+        }
     }
 
     @RequestMapping("/dict")
