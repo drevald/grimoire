@@ -53,22 +53,26 @@ public class TextController  implements ApplicationContextAware {
         Dict dict = dictService.findDict(dictId, user.getId());
         StringBuilder sb = new StringBuilder();
         try {
-            Reader reader = textService.getTextReader(dictId, 0, 10000);
+            Reader reader = textService.getTextReader(dictId, 0, 1000);
             WordReader wordReader = new WordReader(reader);
+            int counter = 0;
             while (wordReader.ready()) {
                 WordReaderResult result = wordReader.readWord();
                 if (result.isWord()) {
                     String wordString = result.getResult();
                     Word word = wordService.getWord(dict.getLangId(), wordString);
-                    sb.append("<a title=\"" + word.getTranslation() + "\" href=\"#\">");
-                    sb.append(wordString);
-                    sb.append("</a>");
+                    sb.append("<span id=" + counter + ">" + wordString + "</span>");
+                    sb.append("<script>words[" + counter + "] = \"" + word.getTranslation() + "\";</script>");
+                    counter++;
                 } else {
-                    sb.append(result.getResult());
+                    sb.append(result.getResult().replaceAll("\n", "<br>"));
                 }
             }
         } catch (Exception e) {
-            sb.append(e.getMessage());
+            if(e.getMessage()!=null) {
+                sb.append(String.format("<br><b>%s</b>", e.getMessage()));
+            }
+            LOG.error(e, e);
         }
         map.put("text", sb.toString());
         return "viewText";
