@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<mapping class="org.helico.domain.User" />
+		<mapping class="org.helico.domain.Dict" />
+		<mapping class="org.helico.domain.Transition"/>
+		<mapping class="org.helico.domain.Job"/>
+		<mapping class="org.helico.domain.Lang"/>
+		<mapping class="org.helico.domain.Word"/>
+        <mapping class="org.helico.domain.DictWord"/>
+        <mapping class="org.helico.domain.Translation"/>
+        <mapping class="org.helico.domain.Translator"/>
+        <mapping class="org.helico.domain.TranslatorProvider"/>
+        <mapping class="org.helico.domain.Text"/>
+	</session-factory>
+</hibernate-configuration>
