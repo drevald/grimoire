@@ -75,6 +75,7 @@ public class TextController  implements ApplicationContextAware {
             LOG.error(e, e);
         }
         map.put("text", sb.toString());
+        map.put("dict", dict);
         return "viewText";
     }
 

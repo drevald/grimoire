@@ -6,7 +6,7 @@
 </c:if>
 
 <form method="POST" action="<c:url value="/registerUser" />">
-<table>
+<table border=1>
 	<tr>
 		<td align="right"><spring:message code="login" /></td>
 		<td><input type="text" name="username" value="user"/></td>
@@ -16,7 +16,28 @@
 		<td><input type="password" name="password" value="pass"/></td>
 	</tr>
 	<tr>
-		<td colspan="2" align="right"><input type="submit" value="Register" />
+		<td align="right"><spring:message code="register.lang.native" /></td>
+		<td>
+            <select name="nativeLangId" style="width:100%">
+                <c:forEach items="${langs}" var="lang">
+                        <option value="${lang.id}">${lang.name}</option>
+                </c:forEach>
+            </select>
+		</td>
+    </tr>
+    <tr>
+		<td align="right"><spring:message code="register.lang.learn" /></td>
+		<td>
+            <select name="learnedLangId" size="12" style="width:100%" multiple="yes">
+                <c:forEach items="${langs}" var="lang">
+                        <option value="${lang.id}">${lang.name}</option>
+                </c:forEach>
+            </select>
+		</td>
+    </tr>
+	<tr>
+	    <td>&nbsp;</td>
+		<td><input type="submit" value="Register" />
 		<input type="reset" value="Reset" /></td>
 	</tr>
 </table>

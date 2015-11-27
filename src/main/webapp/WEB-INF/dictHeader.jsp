@@ -7,16 +7,17 @@
 	</div>
 
     <div style="float:left;margin-right:20px">
-        <a href="<c:url value="/dict/view/${dict.id}" />">
-            <spring:message code="text" />
-        </a>
-	</div>
-
-    <div style="float:left">
         <a href="<c:url value="/dict/words/${dict.id}?offset=0" />">
             <spring:message code="dict" />
         </a>
 	</div>
+
+    <div style="float:left;margin-right:20px">
+        <a href="<c:url value="/text/view/${dict.id}" />">
+            <spring:message code="text" />
+        </a>
+	</div>
+
 
     <div style="float:right">
         <a href="<c:url value="/logout" />">

@@ -2,6 +2,7 @@ package org.helico.web;
 
 import org.apache.log4j.Logger;
 import org.helico.domain.User;
+import org.helico.service.LangService;
 import org.helico.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,9 +18,11 @@ public class UserController {
 
 	private static final Logger LOG = Logger.getLogger(UserController.class);
 
-
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private LangService langService;
 
 
     @RequestMapping(value="/form", method = RequestMethod.POST)
@@ -80,7 +83,8 @@ public class UserController {
 	}
 
     @RequestMapping("/register")
-	public String register() {
+	public String register(Map<String, Object> map) {
+		map.put("langs", langService.list());
 		return "register";
 	}
 
