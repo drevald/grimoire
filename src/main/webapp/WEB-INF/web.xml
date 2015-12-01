@@ -37,7 +37,7 @@
 
     <context-param>
       <param-name>localStorage</param-name>
-      <param-value>./texts</param-value>
+      <param-value>@storage.location@</param-value>
     </context-param>
 
 
