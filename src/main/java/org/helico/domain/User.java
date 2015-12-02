@@ -21,6 +21,9 @@ public class User {
     @Column(name = "password")
 	private String password;
 
+	@Column(name = "native_lang_id")
+	private String nativeLangId;
+
     public User() {
 
     }
@@ -53,6 +56,10 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-	
+
+	public String getNativeLangId() {return nativeLangId;}
+
+	public void setNativeLangId(String nativeLangId) {this.nativeLangId = nativeLangId;}
+
 }
 

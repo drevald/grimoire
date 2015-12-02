@@ -32,10 +32,10 @@ INSERT INTO lang VALUES ('la', 'Latin', 'ISO-8859-1');
 INSERT INTO lang VALUES ('da', 'Danish', 'ISO-8859-1,UTF-8');
 INSERT INTO lang VALUES ('pl', 'Polish', 'UTF-8,Windows-1250,ISO-8859-2');
 
-INSERT INTO user VALUES (NULL, 'guest', '', 'GUEST', 1);
-INSERT INTO user VALUES (NULL, 'user', 'pass', 'USER', 1);
-INSERT INTO user VALUES (NULL, 'helicobacter', 'pilory', 'USER', 1);
-INSERT INTO user VALUES (NULL, 'admin', 'admin', 'ADMIN', 1);
+INSERT INTO user VALUES (NULL, 'guest', '', 'GUEST', 1, 'en');
+INSERT INTO user VALUES (NULL, 'user', 'pass', 'USER', 1, 'en');
+INSERT INTO user VALUES (NULL, 'helicobacter', 'pilory', 'USER', 1, 'en');
+INSERT INTO user VALUES (NULL, 'admin', 'admin', 'ADMIN', 1, 'en');
 
 INSERT INTO translator_provider VALUES (0, 'Bing', 'api.microsofttranslator.com', '<{1}>{0}</{2}>',
 'http://api.microsofttranslator.com/V2/Http.svc/Translate?appId=CDCB8BFFDD9E4C3054316BC629E82D1E39CA585C&text={0}&from={1}&to={2}');

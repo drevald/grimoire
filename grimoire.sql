@@ -43,6 +43,7 @@ CREATE  TABLE IF NOT EXISTS `user` (
   `password` VARCHAR(32) NOT NULL ,
   `role` VARCHAR(8) NOT NULL DEFAULT 'USER' ,
   `enabled` TINYINT(1)  NOT NULL DEFAULT TRUE ,
+  `native_lang_id` VARCHAR(2),
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) )
 DEFAULT CHARACTER SET = utf8;
@@ -198,7 +199,10 @@ CREATE  TABLE IF NOT EXISTS `translation` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `value` VARCHAR(64) NULL DEFAULT NULL ,
   `word_id` BIGINT NOT NULL ,
-  `translator_id` BIGINT NOT NULL ,
+  `translator_id` BIGINT,
+  `user_id` BIGINT,
+  `pre_text` VARCHAR(128) NULL DEFAULT NULL ,
+  `post_text` VARCHAR(128) NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_translation_word1` (`word_id` ASC) ,
   INDEX `fk_translation_translator1` (`translator_id` ASC) ,

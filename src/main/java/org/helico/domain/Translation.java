@@ -28,8 +28,17 @@ public class Translation {
     @Column(name = "translator_id")
     private Long translatorId;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @Column(name = "value")
     private String value;
+
+    @Column(name = "pre_text")
+    private String preText;
+
+    @Column(name = "post_text")
+    private String postText;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="word_id", insertable=false, updatable=false)
@@ -70,5 +79,17 @@ public class Translation {
     public void setValue(String value) {
         this.value = value;
     }
+
+    public Long getUserId() {return userId;}
+
+    public void setUserId(Long userId) {this.userId = userId;}
+
+    public String getPostText() {return postText;}
+
+    public void setPostText(String postText) {this.postText = postText;}
+
+    public String getPreText() {return preText;}
+
+    public void setPreText(String preText) {this.preText = preText;}
 
 }
