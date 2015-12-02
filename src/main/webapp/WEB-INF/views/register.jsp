@@ -6,7 +6,7 @@
 </c:if>
 
 <form method="POST" action="<c:url value="/registerUser" />">
-<table border=1>
+<table>
 	<tr>
 		<td align="right"><spring:message code="login" /></td>
 		<td><input type="text" name="username" value="user"/></td>
@@ -26,7 +26,7 @@
 		</td>
     </tr>
     <tr>
-		<td align="right"><spring:message code="register.lang.learn" /></td>
+		<td align="right" valign="top"><spring:message code="register.lang.learn" /></td>
 		<td>
             <select name="learnedLangId" size="12" style="width:100%" multiple="yes">
                 <c:forEach items="${langs}" var="lang">
