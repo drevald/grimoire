@@ -245,7 +245,7 @@ public class DictController implements ApplicationContextAware {
     public String uploadDict(Map<String, Object> map) {
         User currUser = userService.findUser(getCurrentUser());
         map.put("currUser", currUser);
-        map.put("langs", langService.list());
+        map.put("langs", currUser.getUserLangs());
         return "uploadDict";
     }
 

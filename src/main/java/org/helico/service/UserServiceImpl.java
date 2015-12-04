@@ -2,12 +2,17 @@ package org.helico.service;
 
 import org.apache.log4j.Logger;
 import org.helico.dao.UserDAO;
+import org.helico.dao.UserLangDAO;
+import org.helico.domain.Lang;
 import org.helico.domain.User;
+import org.helico.domain.UserLang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,6 +21,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserDAO userDao;
+
+	@Autowired
+	private UserLangDAO userLangDao;
 
 	@Transactional
 	public void addUser(User user) {
@@ -49,5 +57,19 @@ public class UserServiceImpl implements UserService {
         Long userId = userDao.addUser(user);
         return userId;
     }
+
+	@Transactional
+	public Long registerUser(String username, String password, String nativeLangId, Set<String> userLangIds) {
+		User user = new User(username, password);
+		Long userId = userDao.addUser(user);
+		for (String userLangId : userLangIds) {
+			UserLang userLang = new UserLang(userLangId, user);
+			userLangDao.addUserLang(userLang);
+		}
+		user.setNativeLangId(nativeLangId);
+		userDao.saveUser(user);
+		return userId;
+	}
+
 
 }

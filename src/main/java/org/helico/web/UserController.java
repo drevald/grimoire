@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class UserController {
@@ -23,9 +24,10 @@ public class UserController {
 
 	@Autowired
 	private LangService langService;
+	private Set<String> learnedLangId;
 
 
-    @RequestMapping(value="/form", method = RequestMethod.POST)
+	@RequestMapping(value="/form", method = RequestMethod.POST)
 	public String handleFormUpload(@RequestParam("name") String name,
 				       @RequestParam("file") MultipartFile file) {
     	
@@ -70,11 +72,14 @@ public class UserController {
 	public String registerUser(
             @RequestParam("username") String username,
 			@RequestParam("password") String password,
+			@RequestParam("nativeLangId") String nativeLangId,
+			@RequestParam("learnedLangId") Set<String> learnedLangId,
             @ModelAttribute("user") User dict,
             Errors errors
     ) {
-        try {
-		    userService.registerUser(username, password);
+		this.learnedLangId = learnedLangId;
+		try {
+		    userService.registerUser(username, password, nativeLangId, learnedLangId);
 		    return "redirect:/dict";
         } catch (Exception e) {
             errors.reject("error.reading.file");

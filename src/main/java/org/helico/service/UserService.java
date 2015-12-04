@@ -3,6 +3,7 @@ package org.helico.service;
 import org.helico.domain.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
 
@@ -15,4 +16,7 @@ public interface UserService {
 	public User findUser(String name);
 
     public Long registerUser(String username, String password);
+
+	public Long registerUser(String username, String password, String bativeLangId, Set<String> userLangIds);
+
 }

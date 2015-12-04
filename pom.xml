@@ -19,7 +19,6 @@
             <artifactId>spring-context</artifactId>
             <version>3.1.0.RELEASE</version>
         </dependency>
-
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
@@ -36,7 +35,6 @@
             <artifactId>hibernate-annotations</artifactId>
             <version>3.4.0.GA</version>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -57,8 +55,6 @@
             <artifactId>standard</artifactId>
             <version>1.1.2</version>
         </dependency>
-
-
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -69,7 +65,6 @@
             <artifactId>spring-core</artifactId>
             <version>3.1.0.RELEASE</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
@@ -95,8 +90,6 @@
             <artifactId>spring-webmvc</artifactId>
             <version>3.1.0.RELEASE</version>
         </dependency>
-
-
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -117,7 +110,6 @@
             <artifactId>aopalliance</artifactId>
             <version>1.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-acl</artifactId>
@@ -143,8 +135,6 @@
             <artifactId>spring-security-web</artifactId>
             <version>3.1.7.RELEASE</version>
         </dependency>
-
-
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -199,7 +189,7 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <version>2.1.1</version>
                         <configuration>
-                            <outputDirectory>webapps</outputDirectory>
+                            <!--outputDirectory>webapps</outputDirectory-->
                             <warName>grimoire</warName>
                             <webResources>
                                 <resource>
@@ -207,6 +197,17 @@
                                     <filtering>true</filtering>
                                 </resource>
                             </webResources>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <configuration>
+                            <url>http://127.0.0.1:9090/manager/text</url>
+                            <server>Tomcat7</server>
+                            <username>helicobacter</username>
+                            <password>pilory</password>
                         </configuration>
                     </plugin>
                 </plugins>

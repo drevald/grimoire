@@ -48,6 +48,6 @@
 		</c:forEach>
 	</table>
 	</c:if>
-	<a href="/upload">Create New Dictionary</a>
+	<a href="upload">Create New Dictionary</a>
 
 <%@ include file="/WEB-INF/footer.jsp"%>

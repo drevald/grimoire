@@ -16,5 +16,6 @@
         <mapping class="org.helico.domain.Translator"/>
         <mapping class="org.helico.domain.TranslatorProvider"/>
         <mapping class="org.helico.domain.Text"/>
+		<mapping class="org.helico.domain.UserLang"/>
 	</session-factory>
 </hibernate-configuration>

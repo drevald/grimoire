@@ -14,6 +14,11 @@ public class UserDAOImpl implements UserDAO {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	public long saveUser(User user) {
+		sessionFactory.getCurrentSession().merge(user);
+		return user.getId();
+	}
+
 	public long addUser(User user) {
 		sessionFactory.getCurrentSession().save(user);
 		return user.getId();
