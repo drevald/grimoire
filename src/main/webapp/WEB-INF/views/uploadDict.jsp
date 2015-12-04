@@ -1,5 +1,4 @@
-<%@ include file = "/WEB-INF/dictHeader.jsp"%>
-
+<%@ include file = "/WEB-INF/userHeader.jsp"%>
 
     <h3><spring:message code="dict.upload"/></h3>
 
