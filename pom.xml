@@ -150,6 +150,18 @@
             <artifactId>jstl</artifactId>
             <version>1.1.2</version>
         </dependency>
+        <!--
+        <dependency>
+            <groupId>org.apache.tomcat.maven</groupId>
+            <artifactId>tomcat6-maven-plugin</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.maven</groupId>
+            <artifactId>tomcat7-maven-plugin</artifactId>
+            <version>2.2</version>
+        </dependency>
+        -->
     </dependencies>
     <profiles>
         <profile>
@@ -208,6 +220,16 @@
                             <server>Tomcat7</server>
                             <username>helicobacter</username>
                             <password>pilory</password>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat6-maven-plugin</artifactId>
+                        <version>2.0</version>
+                        <configuration>
+                            <url>http://localhost:8080/manager</url>
+                            <username>manager</username>
+                            <password>manager</password>
                         </configuration>
                     </plugin>
                 </plugins>
