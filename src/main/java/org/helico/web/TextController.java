@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.Reader;
 import java.util.Map;
@@ -29,9 +30,11 @@ import java.util.Map;
  */
 
 @Controller
-public class TextController  implements ApplicationContextAware {
+public class TextController  extends AbstractController {
 
     private static final Logger LOG = Logger.getLogger(TextController.class);
+
+    private static final int TEXT_SIZE = 1000;
 
     private ApplicationContext appContext;
 
@@ -48,12 +51,14 @@ public class TextController  implements ApplicationContextAware {
     private WordService wordService;
 
     @RequestMapping("/text/view/{textId}")
-    public String viewDict(@PathVariable("textId") Long dictId, Map<String, Object> map) {
+    public String viewDict(
+            @PathVariable("textId") Long dictId, Map<String, Object> map,
+            @RequestParam("offset") long offset) {
         User user = userService.findUser(getCurrentUser());
         Dict dict = dictService.findDict(dictId, user.getId());
         StringBuilder sb = new StringBuilder();
         try {
-            Reader reader = textService.getTextReader(dictId, 0, 1000);
+            Reader reader = textService.getTextReader(dictId, 0, TEXT_SIZE);
             WordReader wordReader = new WordReader(reader);
             int counter = 0;
             while (wordReader.ready()) {
@@ -76,28 +81,9 @@ public class TextController  implements ApplicationContextAware {
         }
         map.put("text", sb.toString());
         map.put("dict", dict);
+        map.put("offset", offset);
+        map.put("size", TEXT_SIZE);
         return "viewText";
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        LOG.debug("setting application context: " + appContext);
-        this.appContext = appContext;
-    }
-//
-//    public void setApplicationContext(ApplicationContext appContext) {
-//        LOG.debug("setting application context: " + appContext);
-//        this.appContext = appContext;
-//    }
-
-    private String getCurrentUser() {
-        Object principal = SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((UserDetails)principal).getUsername();
-        } else {
-            return principal.toString();
-        }
     }
 
 }

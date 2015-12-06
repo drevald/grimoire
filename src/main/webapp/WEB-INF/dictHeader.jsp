@@ -13,7 +13,7 @@
 	</div>
 
     <div style="float:left;margin-right:20px">
-        <a href="<c:url value="/text/view/${dict.id}" />">
+        <a href="<c:url value="/text/view/${dict.id}?offset=0" />">
             <spring:message code="text" />
         </a>
 	</div>

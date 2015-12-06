@@ -29,7 +29,7 @@
             <td><a href="dict/delete/${helper.dict.id}"><spring:message code="delete" /></a></td>
             <td><a href="dict/words/${helper.dict.id}?offset=0"><spring:message code="words" /></a></td>
             <td><a href="dict/view/${helper.dict.id}"><spring:message code="dict.preview" /></a></td>
-            <td><a href="text/view/${helper.dict.id}"><spring:message code="text" /></a></td>
+            <td><a href="text/view/${helper.dict.id}?offset=0"><spring:message code="text" /></a></td>
         </tr>
 		</c:forEach>
 	</table>

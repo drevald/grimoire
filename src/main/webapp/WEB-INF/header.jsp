@@ -10,6 +10,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf8">
 	<title><spring:message code="title" /></title>
     <script>
+    /*
         var i = 0;
         var words = [];
         function show(x) {
@@ -26,6 +27,7 @@
             element1 = document.getElementById("result");
             element1.innerText = words[i];
         }
+    */
     </script>
 </head>
 <body>
