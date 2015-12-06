@@ -20,8 +20,8 @@
 		<td><input type="checkbox" name="_spring_security_remember_me" /></td>
 	</tr>
 	<tr>
-		<td colspan="2" align="right"><input type="submit" value="Login" />
-		<input type="reset" value="Reset" /></td>
+	    <td>&nbsp;</td>
+		<td><input type="submit" value="<spring:message code='login'/>" /></td>
 	</tr>
 </table>
 </form>

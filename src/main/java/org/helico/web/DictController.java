@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class DictController implements ApplicationContextAware {
+public class DictController extends AbstractController {
 
     private static final Logger LOG = Logger.getLogger(DictController.class);
 
@@ -43,16 +43,6 @@ public class DictController implements ApplicationContextAware {
 
     @Autowired
     private TranslationService translationService;
-
-    private String getCurrentUser() {
-        Object principal = SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((UserDetails) principal).getUsername();
-        } else {
-            return principal.toString();
-        }
-    }
 
     @RequestMapping("/dict")
     public String listDicts(Map<String, Object> map) {
@@ -106,19 +96,20 @@ public class DictController implements ApplicationContextAware {
             return "redirect:/dict";
         }
     }
-//
-//    @RequestMapping(value = "/dict/edit/save", method = RequestMethod.POST)
-//    public String addDict(
-//            @RequestParam("id") Long id,
-//            @RequestParam("langId") String langId,
-//            @RequestParam("encoding") String encoding) {
-//        User user = userService.findUser(getCurrentUser());
-//        Dict dict = dictService.findDict(id, user.getId());
-//        dict.setEncoding(encoding);
-//        dictService.saveDict(dict);
-//        return "redirect:/dict/edit/" + dict.getId() + "?langId=" + langId;
-//    }
-//
+
+
+    @RequestMapping(value = "/dict/edit/save", method = RequestMethod.POST)
+    public String addDict(
+            @RequestParam("id") Long id,
+            @RequestParam("langId") String langId,
+            @RequestParam("encoding") String encoding) {
+        User user = userService.findUser(getCurrentUser());
+        Dict dict = dictService.findDict(id, user.getId());
+        dict.setEncoding(encoding);
+        dictService.saveDict(dict);
+        return "redirect:/dict/edit/" + dict.getId() + "?langId=" + langId;
+    }
+
 
 
     /**

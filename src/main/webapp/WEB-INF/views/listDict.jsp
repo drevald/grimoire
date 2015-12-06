@@ -34,6 +34,6 @@
 		</c:forEach>
 	</table>
 	</c:if>
-	<a href="upload">Create New Dictionary</a>
+	<a href="upload"><spring:message code="dict.create" /></a>
 
 <%@ include file="/WEB-INF/footer.jsp"%>

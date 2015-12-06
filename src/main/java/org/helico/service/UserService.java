@@ -19,4 +19,6 @@ public interface UserService {
 
 	public Long registerUser(String username, String password, String bativeLangId, Set<String> userLangIds);
 
+	public Long updateUser(Long id, String username, String password, String bativeLangId, Set<String> userLangIds);
+
 }

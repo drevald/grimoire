@@ -1,11 +1,10 @@
 package org.helico.service;
 
 import org.apache.log4j.Logger;
+import org.helico.dao.LangDAO;
 import org.helico.dao.UserDAO;
-import org.helico.dao.UserLangDAO;
 import org.helico.domain.Lang;
 import org.helico.domain.User;
-import org.helico.domain.UserLang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,7 @@ public class UserServiceImpl implements UserService {
 	private UserDAO userDao;
 
 	@Autowired
-	private UserLangDAO userLangDao;
+	private LangDAO langDao;
 
 	@Transactional
 	public void addUser(User user) {
@@ -62,14 +61,28 @@ public class UserServiceImpl implements UserService {
 	public Long registerUser(String username, String password, String nativeLangId, Set<String> userLangIds) {
 		User user = new User(username, password);
 		Long userId = userDao.addUser(user);
-		for (String userLangId : userLangIds) {
-			UserLang userLang = new UserLang(userLangId, user);
-			userLangDao.addUserLang(userLang);
+		Set<Lang> userLangs = new HashSet<Lang>();
+		for (String langId : userLangIds) {
+			userLangs.add(langDao.find(langId));
 		}
+		user.setUserLangs(userLangs);
 		user.setNativeLangId(nativeLangId);
 		userDao.saveUser(user);
 		return userId;
 	}
 
+	@Transactional
+	public Long updateUser(Long userId, String username, String password, String nativeLangId, Set<String> userLangIds) {
+		User user = userDao.findUser(username);
+		Set<Lang> userLangs = new HashSet<Lang>();
+		for (String langId : userLangIds) {
+			userLangs.add(langDao.find(langId));
+		}
+		user.setUserLangs(userLangs);
+		user.setNativeLangId(nativeLangId);
+		user.setPassword(password);
+		userDao.saveUser(user);
+		return userId;
+	}
 
 }

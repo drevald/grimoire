@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Controller
-public class UserController {
+public class UserController  extends AbstractController  {
 
 	private static final Logger LOG = Logger.getLogger(UserController.class);
 
@@ -87,11 +87,37 @@ public class UserController {
         }
 	}
 
+	@RequestMapping("/updateUser")
+	public String updateUser(
+			@RequestParam("userId") Long userId,
+			@RequestParam("username") String username,
+			@RequestParam("password") String password,
+			@RequestParam("nativeLangId") String nativeLangId,
+			@RequestParam("learnedLangId") Set<String> learnedLangId,
+			@ModelAttribute("user") User dict,
+			Errors errors
+	) {
+		this.learnedLangId = learnedLangId;
+		try {
+			userService.updateUser(userId, username, password, nativeLangId, learnedLangId);
+			return "redirect:/dict";
+		} catch (Exception e) {
+			errors.reject("error.reading.file");
+			return "register";
+		}
+	}
+
     @RequestMapping("/register")
 	public String register(Map<String, Object> map) {
 		map.put("langs", langService.list());
 		return "register";
 	}
 
+	@RequestMapping("/preferences")
+	public String viewUser(Map<String, Object> map) {
+		map.put("langs", langService.list());
+		map.put("user", userService.findUser(getCurrentUser()));
+		return "viewUser";
+	}
 
 }

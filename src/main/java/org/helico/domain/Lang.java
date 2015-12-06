@@ -46,4 +46,15 @@ public class Lang {
     public void setEncodings(String encodings) {
         this.encodings = encodings;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Lang)&&(((Lang) obj).getId().equals(id));
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
 }
