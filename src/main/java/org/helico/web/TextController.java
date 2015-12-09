@@ -53,12 +53,12 @@ public class TextController  extends AbstractController {
     @RequestMapping("/text/view/{textId}")
     public String viewDict(
             @PathVariable("textId") Long dictId, Map<String, Object> map,
-            @RequestParam("offset") long offset) {
+            @RequestParam("offset") int offset) {
         User user = userService.findUser(getCurrentUser());
         Dict dict = dictService.findDict(dictId, user.getId());
         StringBuilder sb = new StringBuilder();
         try {
-            Reader reader = textService.getTextReader(dictId, 0, TEXT_SIZE);
+            Reader reader = textService.getTextReader(dictId, offset, TEXT_SIZE);
             WordReader wordReader = new WordReader(reader);
             int counter = 0;
             while (wordReader.ready()) {

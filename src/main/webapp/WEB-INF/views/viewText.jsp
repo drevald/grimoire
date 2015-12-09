@@ -5,7 +5,6 @@
         var i = 0;
         var words = [];
 
-        document.onload = show;
         document.onkeydown = show;
 
         function show(event) {
@@ -66,12 +65,12 @@
         }
 
         function nextPage() {
-            self.location = "3?offset=20";
+            self.location = "${dict.id}?offset=${offset-size}";
             alert("Next Page");
         }
 
         function prevPage() {
-            self.location = "3?offset=10";
+            self.location = "${dict.id}?offset=${offset+size}";
             alert("Prev Page");
         }
 
@@ -91,5 +90,6 @@
     </tr>
 </table>
 
+<script>highlight(0);</script>
 
 <%@ include file = "/WEB-INF/footer.jsp"%>
