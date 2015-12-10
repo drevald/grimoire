@@ -189,7 +189,7 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <version>2.1.1</version>
                         <configuration>
-                            <!--outputDirectory>webapps</outputDirectory-->
+                            <outputDirectory>C:\apache-tomcat-7.0.65\webapps</outputDirectory>
                             <warName>grimoire</warName>
                             <webResources>
                                 <resource>
@@ -204,10 +204,9 @@
                         <artifactId>tomcat7-maven-plugin</artifactId>
                         <version>2.2</version>
                         <configuration>
-                            <url>http://127.0.0.1:9090/manager/text</url>
-                            <server>Tomcat7</server>
-                            <username>helicobacter</username>
-                            <password>pilory</password>
+                            <url>http://localhost:9090/manager</url>
+                            <username>manager</username>
+                            <password>manager</password>
                         </configuration>
                     </plugin>
                     <plugin>

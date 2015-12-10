@@ -23,17 +23,15 @@
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/123</url-pattern>
     </servlet-mapping>
-    <!--
-    <filter>
-        <filter-name>Test</filter-name>
-        <filter-class>org.helico.InspectionFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>Test</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
 
--->
+    <!--<filter>-->
+        <!--<filter-name>Test</filter-name>-->
+        <!--<filter-class>org.helico.InspectionFilter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>Test</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
 
     <context-param>
       <param-name>localStorage</param-name>

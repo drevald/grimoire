@@ -63,14 +63,18 @@ public class TextController  extends AbstractController {
             int counter = 0;
             while (wordReader.ready()) {
                 WordReaderResult result = wordReader.readWord();
-                if (result.isWord()) {
+                if (result!=null && result.isWord()) {
                     String wordString = result.getResult();
                     Word word = wordService.getWord(dict.getLangId(), wordString);
-                    sb.append("<span id=" + counter + ">" + wordString + "</span>");
-                    sb.append("<script>words[" + counter + "] = \"" + word.getTranslation() + "\";</script>");
-                    counter++;
-                } else {
+                    if (word != null) {
+                        sb.append("<span id=" + counter + ">" + wordString + "</span>");
+                        sb.append("<script>words[" + counter + "] = \"" + word.getTranslation() + "\";</script>");
+                        counter++;
+                    }
+                } else if (result != null) {
                     sb.append(result.getResult().replaceAll("\n", "<br>"));
+                } else {
+
                 }
             }
         } catch (Exception e) {
@@ -79,6 +83,8 @@ public class TextController  extends AbstractController {
             }
             LOG.error(e, e);
         }
+        LOG.info(String.format("MARKED STRING Dict #%d Offset %d \n ++++++++++ \n %s \n ----------\n"
+                ,dict.getId(), offset, sb.toString()));
         map.put("text", sb.toString());
         map.put("dict", dict);
         map.put("offset", offset);

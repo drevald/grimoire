@@ -1,6 +1,7 @@
 package org.helico.web;
 
 import org.apache.log4j.Logger;
+import org.helico.domain.User;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,12 +21,31 @@ public class AbstractController implements ApplicationContextAware {
     protected String getCurrentUser() {
         Object principal = SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
+        String userName;
         if (principal instanceof UserDetails) {
-            return ((UserDetails) principal).getUsername();
+            userName = ((UserDetails) principal).getUsername();
         } else {
-            return principal.toString();
+            userName = principal.toString();
         }
+
+//        User user = userService.findUser(userName);
+//
+//        if (user == null) {
+//            try {
+//                request.getRequestDispatcher("login.jsp").forward(request, response);
+//            } catch (Exception e) {
+//                LOG.error("Could not redirect to login", e);
+//            }
+//
+//        } else {
+//
+//        }
+
+        return userName;
+
+
     }
+
 
     public void setApplicationContext(ApplicationContext appContext) {
         LOG.debug("setting application context: " + appContext);

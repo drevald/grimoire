@@ -58,9 +58,15 @@ public class WordReader extends Reader {
 
         WordReaderResult result = null;
 
-        while (reader.ready()) {
+        int ch = 0;
 
-            int ch = reader.read();
+        while (reader.ready() && (ch > -1)) {
+
+            ch = reader.read();
+
+//            if (ch == -1) {
+//                break;
+//            }
 
             counter++;
 
@@ -68,11 +74,19 @@ public class WordReader extends Reader {
                 LOG.trace("WORD:"+sb.toString());
                 result = new WordReaderResult(sb.toString(), true);
                 sb.delete(0, sb.length());
-                sb.append(Character.toChars(ch));
+                try {
+                    sb.append(Character.toChars(ch));
+                } catch (IllegalArgumentException e) {
+                    LOG.error("Failed to parse " + ch + " HEX " + Integer.toHexString(ch));
+                }
                 readingWord = false;
                 break;
             } else if (!Character.isLetter(ch) && !readingWord) {
-                sb.append(Character.toChars(ch));
+                try {
+                    sb.append(Character.toChars(ch));
+                } catch (IllegalArgumentException e) {
+                    LOG.error("Failed to convert " + ch);
+                }
             } else if (Character.isLetter(ch) && readingWord) {
                 sb.append(Character.toChars(ch));
             } else if (Character.isLetter(ch) && !readingWord) {

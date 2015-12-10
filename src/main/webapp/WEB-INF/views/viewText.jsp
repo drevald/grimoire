@@ -19,7 +19,6 @@
 
         function processKey(holder) {
             // restoring state of current selection
-
             element = document.getElementById(i);
             element.style.backgroundColor="white";
 
@@ -65,13 +64,17 @@
         }
 
         function nextPage() {
-            self.location = "${dict.id}?offset=${offset-size}";
-            alert("Next Page");
+            alert("nextPage");
+            self.location = "${dict.id}?offset=${offset+size}";
         }
 
         function prevPage() {
-            self.location = "${dict.id}?offset=${offset+size}";
-            alert("Prev Page");
+            alert("prevPage");
+            if(offset>size) {
+                self.location = "${dict.id}?offset=${offset-size}";
+            } else {
+                alert("${offset} < ${size}");
+            }
         }
 
     </script>
@@ -90,6 +93,6 @@
     </tr>
 </table>
 
-<script>highlight(0);</script>
+<script>highlight(1);</script>
 
 <%@ include file = "/WEB-INF/footer.jsp"%>
