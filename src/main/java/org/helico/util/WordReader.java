@@ -27,8 +27,10 @@ public class WordReader extends Reader {
 
     private int counter = 0;
 
+    private int ch = 0;
+
     public WordReader(Reader aReader) {
-            reader = aReader;
+        reader = aReader;
     }
 
     public WordReader(InputStream is) {
@@ -46,7 +48,7 @@ public class WordReader extends Reader {
 
     @Override
     public boolean ready() throws  IOException {
-        return reader.ready();
+        return reader.ready() && (ch != -1);
     }
 
     @Override
@@ -56,17 +58,20 @@ public class WordReader extends Reader {
 
     public WordReaderResult readWord() throws Exception {
 
+        if (!reading && reader.ready()) {
+            ch = reader.read();
+            if (Character.isLetter(ch)) {
+                readingWord = true;
+            }
+            sb.append(Character.toChars(ch));
+            reading = true;
+        }
+
         WordReaderResult result = null;
 
-        int ch = 0;
-
-        while (reader.ready() && (ch > -1)) {
+        while (ch != -1) {
 
             ch = reader.read();
-
-//            if (ch == -1) {
-//                break;
-//            }
 
             counter++;
 
@@ -74,25 +79,21 @@ public class WordReader extends Reader {
                 LOG.trace("WORD:"+sb.toString());
                 result = new WordReaderResult(sb.toString(), true);
                 sb.delete(0, sb.length());
-                try {
+                if (ch != -1)
                     sb.append(Character.toChars(ch));
-                } catch (IllegalArgumentException e) {
-                    LOG.error("Failed to parse " + ch + " HEX " + Integer.toHexString(ch));
-                }
                 readingWord = false;
                 break;
             } else if (!Character.isLetter(ch) && !readingWord) {
-                try {
+                if (ch != -1)
                     sb.append(Character.toChars(ch));
-                } catch (IllegalArgumentException e) {
-                    LOG.error("Failed to convert " + ch);
-                }
             } else if (Character.isLetter(ch) && readingWord) {
-                sb.append(Character.toChars(ch));
+                if (ch != -1)
+                    sb.append(Character.toChars(ch));
             } else if (Character.isLetter(ch) && !readingWord) {
                 result = new WordReaderResult(sb.toString(), false);
                 sb.delete(0, sb.length());
-                sb.append(Character.toChars(ch));
+                if (ch != -1)
+                    sb.append(Character.toChars(ch));
                 readingWord = true;
                 break;
             }

@@ -93,6 +93,6 @@
     </tr>
 </table>
 
-<script>highlight(1);</script>
+<script>highlight(0);</script>
 
 <%@ include file = "/WEB-INF/footer.jsp"%>
