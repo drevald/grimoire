@@ -2,7 +2,7 @@
 
     <script>
 
-        var i = 0;
+        var currSelectionId = 0;
         var words = [];
 
         document.onkeydown = show;
@@ -18,38 +18,37 @@
         }
 
         function processKey(holder) {
-            // restoring state of current selection
-            element = document.getElementById(i);
-            element.style.backgroundColor="white";
+
+            var newSelectionId = 0;
 
             if (holder == 37) {
-                if (i > 0) {
-                    i--;
-                    highlight(i);
+                if (currSelectionId > 0) {
+                    newSelectionId = currSelectionId - 1;
+                    highlight(newSelectionId);
                 } else {
                     prevPage();
                 }
             }
             if (holder == 39) {
-                if (i < words.length-1) {
-                    i++;
-                    highlight(i);
+                if (currSelectionId < words.length-1) {
+                    newSelectionId = currSelectionId + 1;
+                    highlight(newSelectionId);
                 } else {
                     nextPage();
                 }
             }
             if (holder == 38) {
-                if (i >20) {
-                    i -= 20;
-                    highlight(i);
+                if (currSelectionId >20) {
+                    newSelectionId = currSelectionId - 20;
+                    highlight(newSelectionId);
                 } else {
                     prevPage();
                 }
             }
             if (holder == 40) {
-                if (i + 19 < words.length) {
-                    i += 20;
-                    highlight(i);
+                if (currSelectionId + 19 < words.length) {
+                    newSelectionId = currSelectionId + 20;
+                    highlight(newSelectionId);
                 } else {
                     nextPage();
                 }
@@ -57,10 +56,17 @@
         }
 
         function highlight(i) {
-            element = document.getElementById(i);
+
+            // restoring state of current selection
+            element = document.getElementById(currSelectionId);
+            element.style.backgroundColor="white";
+
+            currSelectionId = i;
+
+            element = document.getElementById(currSelectionId);
             element.style.backgroundColor="yellow";
             element1 = document.getElementById("result");
-            element1.innerText = words[i];
+            element1.innerText = words[currSelectionId];
         }
 
         function nextPage() {

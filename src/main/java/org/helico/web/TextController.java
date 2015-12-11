@@ -36,6 +36,9 @@ public class TextController  extends AbstractController {
 
     private static final int TEXT_SIZE = 1000;
 
+    private static final String HIGHLIGHTED_WORD =
+            "<span id=%d onclick='javascript:highlight(%d);' style='cursor:pointer'>%s</span>";
+
     private ApplicationContext appContext;
 
     @Autowired
@@ -67,7 +70,7 @@ public class TextController  extends AbstractController {
                     String wordString = result.getResult();
                     Word word = wordService.getWord(dict.getLangId(), wordString);
                     if (word != null) {
-                        sb.append("<span id=" + counter + ">" + wordString + "</span>");
+                        sb.append(String.format(HIGHLIGHTED_WORD, counter, counter, wordString));
                         sb.append("<script>words[" + counter + "] = \"" + word.getTranslation() + "\";</script>");
                         counter++;
                     }
