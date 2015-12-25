@@ -8,6 +8,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 /**
  * Created by helicobacter on 06.11.15.
@@ -24,6 +26,17 @@ public class InspectionFilter implements Filter {
     }
 
     public void	doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
+        try {
+            LOG.info("User principal is " + ((HttpServletRequest)request).getUserPrincipal());
+            Principal principal = ((HttpServletRequest)request).getUserPrincipal();
+//            if (principal == null) {
+//                request.getRequestDispatcher("/login.jsp").forward(request, response);
+//            } else {
+                chain.doFilter(request, response);
+//            }
+        } catch (Exception e) {
+             LOG.error(e, e);
+        }
 //        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        String userName;
 //        if (principal instanceof UserDetails) {

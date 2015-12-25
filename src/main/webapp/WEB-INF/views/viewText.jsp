@@ -19,39 +19,17 @@
 
         function processKey(holder) {
 
-            var newSelectionId = 0;
-
             if (holder == 37) {
-                if (currSelectionId > 0) {
-                    newSelectionId = currSelectionId - 1;
-                    highlight(newSelectionId);
-                } else {
-                    prevPage();
-                }
+                prevWord();
             }
             if (holder == 39) {
-                if (currSelectionId < words.length-1) {
-                    newSelectionId = currSelectionId + 1;
-                    highlight(newSelectionId);
-                } else {
-                    nextPage();
-                }
+                nextWord();
             }
             if (holder == 38) {
-                if (currSelectionId >20) {
-                    newSelectionId = currSelectionId - 20;
-                    highlight(newSelectionId);
-                } else {
-                    prevPage();
-                }
+                prevWordFast();
             }
             if (holder == 40) {
-                if (currSelectionId + 19 < words.length) {
-                    newSelectionId = currSelectionId + 20;
-                    highlight(newSelectionId);
-                } else {
-                    nextPage();
-                }
+                nextWordFast();
             }
         }
 
@@ -69,17 +47,59 @@
             element1.innerText = words[currSelectionId];
         }
 
+
+
+        function nextWordFast() {
+            var newSelectionId = 0;
+            if (currSelectionId + 19 < words.length) {
+                newSelectionId = currSelectionId + 20;
+                highlight(newSelectionId);
+            } else {
+                nextPage();
+            }
+        }
+
+        function prevWordFast() {
+            var newSelectionId = 0;
+            if (currSelectionId >20) {
+                newSelectionId = currSelectionId - 20;
+                highlight(newSelectionId);
+            } else {
+                prevPage();
+            }
+        }
+
+        function nextWord() {
+            var newSelectionId = 0;
+            if (currSelectionId < words.length-1) {
+                newSelectionId = currSelectionId + 1;
+                highlight(newSelectionId);
+            } else {
+                nextPage();
+            }
+        }
+
+        function prevWord() {
+            var newSelectionId = 0;
+            if (currSelectionId > 0) {
+                newSelectionId = currSelectionId - 1;
+                highlight(newSelectionId);
+            } else {
+                prevPage();
+            }
+        }
+
         function nextPage() {
-            alert("nextPage");
+            //alert("nextPage");
             self.location = "${dict.id}?offset=${offset+size}";
         }
 
         function prevPage() {
-            alert("prevPage");
+            //alert("prevPage");
             if(offset>size) {
                 self.location = "${dict.id}?offset=${offset-size}";
             } else {
-                alert("${offset} < ${size}");
+                //alert("${offset} < ${size}");
             }
         }
 
@@ -90,12 +110,14 @@
 
 <table width="100%">
     <tr>
-        <td  width="50%">
+        <td width="5%" onclick="javascript:prevWord();" ondblclick="javascript:prevWordFast();">&nbsp;</td>
+        <td  width="45%">
             ${text}
         </td>
-        <td  width="50%" valign="top" align="center">
+        <td  width="45%" valign="top" align="center">
             <h3><div id="result">&nbsp;</div></h3>
         </td>
+        <td width="5%" onclick="javascript:nextWord();" ondblclick="javascript:nextWordFast();">&nbsp;</td>
     </tr>
 </table>
 
