@@ -86,7 +86,7 @@ public class TextController  extends AbstractController {
             }
             LOG.error(e, e);
         }
-        LOG.info(String.format("MARKED STRING Dict #%d Offset %d \n ++++++++++ \n %s \n ----------\n"
+        LOG.trace(String.format("MARKED STRING Dict #%d Offset %d \n ++++++++++ \n %s \n ----------\n"
                 ,dict.getId(), offset, sb.toString()));
         map.put("text", sb.toString());
         map.put("dict", dict);

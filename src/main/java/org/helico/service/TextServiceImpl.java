@@ -42,7 +42,7 @@ public class TextServiceImpl implements TextService {
         fr.skip(offset);
         fr.read(buffer);
         StringReader sr = new StringReader(new String(buffer));
-        LOG.info(String.format("NOT MARKED STRING Dict #%d Offset %d \n ++++++++++ \n %s \n ----------\n"
+        LOG.trace(String.format("NOT MARKED STRING Dict #%d Offset %d \n ++++++++++ \n %s \n ----------\n"
                 ,dict.getId(), offset, new String(buffer)));
         return sr;  //To change body of implemented methods use File | Settings | File Templates.
     }
