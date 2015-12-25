@@ -84,7 +84,9 @@
             if (currSelectionId > 0) {
                 newSelectionId = currSelectionId - 1;
                 highlight(newSelectionId);
+                alert("3");
             } else {
+                alert("4");
                 prevPage();
             }
         }
@@ -96,7 +98,8 @@
 
         function prevPage() {
             //alert("prevPage");
-            if(offset>size) {
+            if(${offset} >= ${size}) {
+                //alert("${offset} >= ${size}");
                 self.location = "${dict.id}?offset=${offset-size}";
             } else {
                 //alert("${offset} < ${size}");
