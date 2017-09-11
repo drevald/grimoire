@@ -152,7 +152,7 @@
         </dependency>
     </dependencies>
     <profiles>
-        <!--profile>
+        <profile>
             <id>openshift</id>
             <build>
                 <finalName>grimoire</finalName>
@@ -164,7 +164,8 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <version>2.1.1</version>
                         <configuration>
-                            <outputDirectory>webapps</outputDirectory>
+                            <!--outputDirectory>webapps</outputDirectory-->
+                            <outputDirectory>target</outputDirectory>
                             <warName>ROOT</warName>
                             <webResources>
                                 <resource>
@@ -176,7 +177,7 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile-->
+        </profile>
         <profile>
             <id>local</id>
             <build>
