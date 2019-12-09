@@ -179,6 +179,24 @@
             </build>
         </profile>
         <profile>
+            <id>heroku</id>
+            <build>
+                <finalName>grimoire</finalName>
+                <filters>
+                    <filter>heroku.properties</filter>
+                </filters>
+            </build>
+        </profile>
+        <profile>
+            <id>postgresql</id>
+            <build>
+                <finalName>grimoire</finalName>
+                <filters>
+                    <filter>postgresql.properties</filter>
+                </filters>
+            </build>
+        </profile>
+        <profile>
             <id>local</id>
             <build>
                 <finalName>grimoire</finalName>
