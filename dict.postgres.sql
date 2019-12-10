@@ -39,7 +39,7 @@ INSERT INTO user VALUES (DEFAULT, 'admin', 'admin', 'ADMIN', 1, 'en');
 
 INSERT INTO translator_provider VALUES (0, 'Bing', 'api.microsofttranslator.com', '<{1}>{0}</{2}>',
 'http://api.microsofttranslator.com/V2/Http.svc/Translate?appId=CDCB8BFFDD9E4C3054316BC629E82D1E39CA585C&text={0}&from={1}&to={2}');
-INSERT INTO `translator_provider` VALUES (1,'Google','',
+INSERT INTO translator_provider VALUES (1,'Google','',
 '{1}<span id=result_box class=\"short_text\"><span {2}>{0}</span>{3}','http://translate.google.com/?sl={1}&tl={2}&text={0}');
 
 INSERT INTO translator VALUES (0, 0, 'en', 'ru');

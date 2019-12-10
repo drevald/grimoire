@@ -1,19 +1,19 @@
-INSERT INTO transition VALUES (NULL, 'LOAD', 'PERSISTED', 'LOADING', 'uploadHandler');
-INSERT INTO transition VALUES (NULL, 'OK', 'LOADING', 'STORING', 'storeHandler');
-INSERT INTO transition VALUES (NULL, 'FAIL', 'LOADING', 'PERSISTED', 'dummyHandler');
-INSERT INTO transition VALUES (NULL, 'STORE', 'LOADED', 'STORING', 'storeHandler');
-INSERT INTO transition VALUES (NULL, 'STORE', 'STORED', 'STORING', 'storeHandler');
-INSERT INTO transition VALUES (NULL, 'FAIL', 'STORING', 'LOADED', 'dummyHandler');
-INSERT INTO transition VALUES (NULL, 'WAIT', 'STORING', 'LOADED', 'storeHandler');
-INSERT INTO transition VALUES (NULL, 'OK', 'STORING', 'PARSING', 'parseHandler');
-INSERT INTO transition VALUES (NULL, 'PARSE', 'STORED', 'PARSING', 'parseHandler');
-INSERT INTO transition VALUES (NULL, 'PARSE', 'PARSED', 'PARSING', 'parseHandler');
-INSERT INTO transition VALUES (NULL, 'OK', 'PARSING', 'PARSED', 'dummyHandler');
-INSERT INTO transition VALUES (NULL, 'FAIL', 'PARSING', 'STORED', 'dummyHandler');
-INSERT INTO transition VALUES (NULL, 'TRANSLATE', 'PARSED', 'TRANSLATING', 'translateHandler');
-INSERT INTO transition VALUES (NULL, 'TRANSLATE', 'TRANSLATED', 'TRANSLATING', 'translateHandler');
-INSERT INTO transition VALUES (NULL, 'OK', 'TRANSLATING', 'TRANSLATED', 'dummyHandler');
-INSERT INTO transition VALUES (NULL, 'FAIL', 'TRANSLATING', 'PARSED', 'dummyHandler');
+INSERT INTO transition VALUES (DEFAULT, 'LOAD', 'PERSISTED', 'LOADING', 'uploadHandler');
+INSERT INTO transition VALUES (DEFAULT, 'OK', 'LOADING', 'STORING', 'storeHandler');
+INSERT INTO transition VALUES (DEFAULT, 'FAIL', 'LOADING', 'PERSISTED', 'dummyHandler');
+INSERT INTO transition VALUES (DEFAULT, 'STORE', 'LOADED', 'STORING', 'storeHandler');
+INSERT INTO transition VALUES (DEFAULT, 'STORE', 'STORED', 'STORING', 'storeHandler');
+INSERT INTO transition VALUES (DEFAULT, 'FAIL', 'STORING', 'LOADED', 'dummyHandler');
+INSERT INTO transition VALUES (DEFAULT, 'WAIT', 'STORING', 'LOADED', 'storeHandler');
+INSERT INTO transition VALUES (DEFAULT, 'OK', 'STORING', 'PARSING', 'parseHandler');
+INSERT INTO transition VALUES (DEFAULT, 'PARSE', 'STORED', 'PARSING', 'parseHandler');
+INSERT INTO transition VALUES (DEFAULT, 'PARSE', 'PARSED', 'PARSING', 'parseHandler');
+INSERT INTO transition VALUES (DEFAULT, 'OK', 'PARSING', 'PARSED', 'dummyHandler');
+INSERT INTO transition VALUES (DEFAULT, 'FAIL', 'PARSING', 'STORED', 'dummyHandler');
+INSERT INTO transition VALUES (DEFAULT, 'TRANSLATE', 'PARSED', 'TRANSLATING', 'translateHandler');
+INSERT INTO transition VALUES (DEFAULT, 'TRANSLATE', 'TRANSLATED', 'TRANSLATING', 'translateHandler');
+INSERT INTO transition VALUES (DEFAULT, 'OK', 'TRANSLATING', 'TRANSLATED', 'dummyHandler');
+INSERT INTO transition VALUES (DEFAULT, 'FAIL', 'TRANSLATING', 'PARSED', 'dummyHandler');
 
 
 INSERT INTO lang VALUES ('ru', 'Russian', 'Windows-1251,KOI8-R,Cp866,UTF-8');
@@ -32,10 +32,10 @@ INSERT INTO lang VALUES ('la', 'Latin', 'ISO-8859-1');
 INSERT INTO lang VALUES ('da', 'Danish', 'ISO-8859-1,UTF-8');
 INSERT INTO lang VALUES ('pl', 'Polish', 'UTF-8,Windows-1250,ISO-8859-2');
 
-INSERT INTO user VALUES (NULL, 'guest', '', 'GUEST', 1, 'en');
-INSERT INTO user VALUES (NULL, 'user', 'pass', 'USER', 1, 'en');
-INSERT INTO user VALUES (NULL, 'helicobacter', 'pilory', 'USER', 1, 'en');
-INSERT INTO user VALUES (NULL, 'admin', 'admin', 'ADMIN', 1, 'en');
+INSERT INTO user VALUES (DEFAULT, 'guest', '', 'GUEST', 1, 'en');
+INSERT INTO user VALUES (DEFAULT, 'user', 'pass', 'USER', 1, 'en');
+INSERT INTO user VALUES (DEFAULT, 'helicobacter', 'pilory', 'USER', 1, 'en');
+INSERT INTO user VALUES (DEFAULT, 'admin', 'admin', 'ADMIN', 1, 'en');
 
 INSERT INTO translator_provider VALUES (0, 'Bing', 'api.microsofttranslator.com', '<{1}>{0}</{2}>',
 'http://api.microsofttranslator.com/V2/Http.svc/Translate?appId=CDCB8BFFDD9E4C3054316BC629E82D1E39CA585C&text={0}&from={1}&to={2}');

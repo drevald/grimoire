@@ -7,6 +7,9 @@
     <version>1.0-SNAPSHOT</version>
     <name>grimoire</name>
     <url>http://maven.apache.org</url>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -150,6 +153,11 @@
             <artifactId>jstl</artifactId>
             <version>1.1.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.8</version>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>
@@ -185,6 +193,22 @@
                 <filters>
                     <filter>heroku.properties</filter>
                 </filters>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.1.1</version>
+                        <configuration>
+                            <outputDirectory>C:\apache-tomcat-7.0.65\webapps</outputDirectory>
+                            <warName>grimoire</warName>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+                </plugins>
             </build>
         </profile>
         <profile>
@@ -194,6 +218,22 @@
                 <filters>
                     <filter>postgresql.properties</filter>
                 </filters>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.1.1</version>
+                        <configuration>
+                            <outputDirectory>C:\apache-tomcat-7.0.65\webapps</outputDirectory>
+                            <warName>grimoire</warName>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+                </plugins>
             </build>
         </profile>
         <profile>
