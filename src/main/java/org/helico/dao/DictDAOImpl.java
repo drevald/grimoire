@@ -6,6 +6,7 @@ import org.helico.domain.Text;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.QueryProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -70,6 +71,6 @@ public class DictDAOImpl implements DictDAO {
 
     @SuppressWarnings("unchecked")
 	public List<Dict> findDictByStatus(String status) {
-	    return sessionFactory.getCurrentSession().createQuery("from Dict where status=?").setString(0, status).list();
+	    return ((QueryProducer)(sessionFactory.getCurrentSession())).createQuery("from Dict where status=?1").setString(1, status).list();
 	}
 }
