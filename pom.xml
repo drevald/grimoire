@@ -193,6 +193,11 @@
         </profile>
         <profile>
             <id>heroku</id>
+            <activation>
+                <property>
+                    <name>env.DYNO</name>
+                </property>
+            </activation>
             <build>
                 <finalName>grimoire</finalName>
                 <filters>
