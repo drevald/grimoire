@@ -23,8 +23,8 @@ public class WordDAOImpl implements WordDAO {
         Session session = sessionFactory.getCurrentSession();
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
-            Word result = (Word)session.createQuery("from Word where value=? and langId=?")
-                    .setString(0, value).setString(1, langId).uniqueResult();
+            Word result = (Word)session.createQuery("from Word where value=?1 and langId=?2")
+                    .setString(1, value).setString(2, langId).uniqueResult();
 
         if (result==null) {
             Word word = new Word();
@@ -55,8 +55,8 @@ public class WordDAOImpl implements WordDAO {
             for (Word word : words) {
 
                 LOG.debug(">>>>saving value:"+word.getValue()+" lang:"+word.getLangId());
-                    Word storedWord = (Word)session.createQuery("from Word where value=? and langId=?")
-                            .setString(0, word.getValue()).setString(1, word.getLangId()).uniqueResult();
+                    Word storedWord = (Word)session.createQuery("from Word where value=?1 and langId=?2")
+                            .setString(1, word.getValue()).setString(2, word.getLangId()).uniqueResult();
 
                 if (storedWord == null) {
                     Word newWord = new Word();
@@ -98,8 +98,8 @@ public class WordDAOImpl implements WordDAO {
         Session session = sessionFactory.getCurrentSession();
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
-        Word result = (Word)session.createQuery("from Word where value=? and langId=?")
-                .setString(0, value).setString(1, langId).uniqueResult();
+        Word result = (Word)session.createQuery("from Word where value=?1 and langId=?2")
+                .setString(1, value).setString(2, langId).uniqueResult();
         return result;
 
     }

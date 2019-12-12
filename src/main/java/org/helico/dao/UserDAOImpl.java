@@ -30,8 +30,8 @@ public class UserDAOImpl implements UserDAO {
 	}
 	
 	public User findUser(String name) {
-		return (User)sessionFactory.getCurrentSession().createQuery("from User where name=?")
-		.setString(0,name).uniqueResult();
+		return (User)sessionFactory.getCurrentSession().createQuery("from User where name=?1")
+		.setString(1,name).uniqueResult();
 	}
 
 	public void removeUser(Long id) {

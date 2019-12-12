@@ -8,10 +8,10 @@
 	http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 
   <http>
-    <intercept-url pattern="*" access="ROLE_ADMIN" />
-    <intercept-url pattern="/dict*" access="ROLE_USER"/>
-    <intercept-url pattern="/dict/words*" access="ROLE_ANONYMOUS"/>
-    <intercept-url pattern="/dict/view*" access="ROLE_ANONYMOUS"/>
+<!--    <intercept-url pattern="*" access="ROLE_ADMIN" />-->
+<!--    <intercept-url pattern="/dict*" access="ROLE_USER"/>-->
+<!--    <intercept-url pattern="/dict/words*" access="ROLE_ANONYMOUS"/>-->
+<!--    <intercept-url pattern="/dict/view*" access="ROLE_ANONYMOUS"/>-->
     <form-login login-page="/login.jsp" default-target-url="/dict"
 		authentication-failure-url="/login.jsp?error=true" />
     <logout logout-url="/logout" logout-success-url="/login.jsp" />
@@ -24,9 +24,9 @@
       <jdbc-user-service data-source-ref="dataSource"
 	users-by-username-query="SELECT username, password, enabled FROM user WHERE username = ?"
  	authorities-by-username-query="SELECT u.username, 'ROLE_USER' FROM user u WHERE u.username = ?"/>
-	<!-- user-service>
+	<user-service>
 	  <user name="admin" password="pass" authorities="ROLE_ADMIN, ROLE_USER" />
-	</user-service -->
+	</user-service>
     </authentication-provider>
   </authentication-manager>
 

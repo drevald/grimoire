@@ -41,8 +41,8 @@ public class DictWordDAOImpl implements DictWordDAO {
     public List<DictWord> getWords(Long dictId, Integer offset, Integer num) {
         Session session = sessionFactory.getCurrentSession();
             List<DictWord> words = (List<DictWord>)session
-            .createQuery("from DictWord where dictId=? order by counter desc")
-                .setLong(0, dictId)
+            .createQuery("from DictWord where dictId=?1 order by counter desc")
+                .setLong(1, dictId)
             .setFirstResult(offset)
             .setMaxResults(num)
             .list();
@@ -52,8 +52,8 @@ public class DictWordDAOImpl implements DictWordDAO {
     public Long countWords(Long dictId) {
         Session session = sessionFactory.getCurrentSession();
             Long count = (Long)session
-            .createQuery("select count(*) from DictWord where dictId=?")
-                .setLong(0, dictId)
+            .createQuery("select count(*) from DictWord where dictId=?1")
+                .setLong(1, dictId)
             .uniqueResult();
         return count;
     }
