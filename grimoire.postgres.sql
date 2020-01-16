@@ -107,5 +107,5 @@ DROP TABLE IF EXISTS user_lang
 
 CREATE  TABLE IF NOT EXISTS user_lang (
   id BIGSERIAL NOT NULL,
-  user_id BIGINT NOT NULL ,
+  user_id BIGINT NOT NULL,
   lang_id VARCHAR(2) NOT NULL)
