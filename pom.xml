@@ -183,7 +183,7 @@
             <build>
                 <finalName>grimoire</finalName>
                 <filters>
-                    <filter>local.properties</filter>
+                    <filter>postgresql.properties</filter>
                 </filters>
                 <plugins>
 <!--                    <plugin>-->
