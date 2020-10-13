@@ -1,0 +1,21 @@
+version: '3.3'
+services:
+  mysql:
+    image: mysql/mysql-server
+    # volumes:
+    #   - data:/var/lib/mysql/data
+    # ports:
+    #   - 5432:5432
+  web:
+    build: .
+    # environment:
+    #   - DATABASE_URL=postgres://postgres:password@postgres:5432/type_one
+    #   - PORT=8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+volumes:
+  data:
