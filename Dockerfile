@@ -1,5 +1,5 @@
 FROM tomcat
-COPY target/grimoire.war /usr/local/tomcat/webapps
+COPY target/grimoire-dict.war /usr/local/tomcat/webapps
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
 
