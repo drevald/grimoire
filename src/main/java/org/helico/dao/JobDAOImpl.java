@@ -32,6 +32,7 @@ public class JobDAOImpl implements JobDAO {
 	    LOG.info("<<<<saved job sess#"+sessionFactory.getCurrentSession().hashCode()+" " + job.toString());
     }
 
+	@SuppressWarnings("unchecked") 
     public List<Job> findActive(Long dictId) {
 	Session session = sessionFactory.getCurrentSession();
     	List<Job> jobs = (List<Job>)session.createQuery("from Job where dictId=? and active=1")
@@ -40,6 +41,7 @@ public class JobDAOImpl implements JobDAO {
 		return jobs;
     }
 
+	@SuppressWarnings("unchecked") 
     public Job findLastOrActive(Long dictId) {
 	Session session = sessionFactory.getCurrentSession();
     	List<Job> jobs = (List<Job>)session

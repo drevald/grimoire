@@ -3,7 +3,7 @@ package org.helico.util;
 import junit.framework.TestCase;
 
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
+import java.io.ByteArrayInputStream;
 
 /**
  * Created by ddreval on 11.12.2015.
@@ -12,7 +12,7 @@ public class WordReaderTest extends TestCase {
 
     public void test() throws Exception {
 
-        InputStream is = new StringBufferInputStream("In god we trust");
+        InputStream is = new ByteArrayInputStream("In god we trust".getBytes());
         WordReader wordReader = new WordReader(is);
 
         assertTrue(wordReader.ready());

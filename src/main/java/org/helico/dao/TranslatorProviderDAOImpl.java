@@ -34,10 +34,12 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
         return provider;
     }
 
+    @SuppressWarnings("unchecked") 
     public List<TranslatorProvider> listProviders() {
         return sessionFactory.getCurrentSession().createQuery("from TranslatorProvider").list();
     }
 
+    @SuppressWarnings("unchecked") 
     public List<TranslatorProvider> listProviders(String langId) {
         LOG.info(">>>>find translator providers for lang #" + langId);
         List<TranslatorProvider> result = new ArrayList<TranslatorProvider>();
@@ -54,6 +56,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
         return result;
     }
 
+    @SuppressWarnings("unchecked") 
     public List<Translator> listTranslators(String langId) {
         LOG.info(">>>>find translators for lang #" + langId);
         List<Translator> result = (List<Translator>)sessionFactory.getCurrentSession().createQuery(

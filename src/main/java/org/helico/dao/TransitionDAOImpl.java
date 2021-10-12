@@ -26,6 +26,7 @@ public class TransitionDAOImpl implements TransitionDAO {
 	    return trans;
     }
 
+    @SuppressWarnings("unchecked") 
     public List<Transition> list() {
         return sessionFactory.getCurrentSession().createQuery("from Transition").list();
     }

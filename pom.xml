@@ -6,7 +6,7 @@
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>grimoire</name>
-    <url>http://maven.apache.org</url>
+    <url>http://maven.apache.org</url>    
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -157,32 +157,6 @@
         </dependency>
     </dependencies>
     <profiles>
-<!--        <profile>-->
-<!--            <id>openshift</id>-->
-<!--            <build>-->
-<!--                <finalName>grimoire</finalName>-->
-<!--                <filters>-->
-<!--                    <filter>openshift.properties</filter>-->
-<!--                </filters>-->
-<!--                <plugins>-->
-<!--                    <plugin>-->
-<!--                        <artifactId>maven-war-plugin</artifactId>-->
-<!--                        <version>2.1.1</version>-->
-<!--                        <configuration>-->
-<!--                            &lt;!&ndash;outputDirectory>webapps</outputDirectory&ndash;&gt;-->
-<!--                            <outputDirectory>target</outputDirectory>-->
-<!--                            <warName>ROOT</warName>-->
-<!--                            <webResources>-->
-<!--                                <resource>-->
-<!--                                    <directory>src/main/webapp</directory>-->
-<!--                                    <filtering>true</filtering>-->
-<!--                                </resource>-->
-<!--                            </webResources>-->
-<!--                        </configuration>-->
-<!--                    </plugin>-->
-<!--                </plugins>-->
-<!--            </build>-->
-<!--        </profile>-->
         <profile>
             <id>local</id>
             <build>
@@ -190,46 +164,9 @@
                 <filters>
                     <filter>postgresql.properties</filter>
                 </filters>
-                <plugins>
-<!--                    <plugin>-->
-<!--                        <artifactId>maven-war-plugin</artifactId>-->
-<!--                        <version>2.1.1</version>-->
-<!--                        <configuration>-->
-<!--                            <outputDirectory>C:\apache-tomcat-7.0.65\webapps</outputDirectory>-->
-<!--                            <warName>grimoire</warName>-->
-<!--                            <webResources>-->
-<!--                                <resource>-->
-<!--                                    <directory>src/main/webapp</directory>-->
-<!--                                    <filtering>true</filtering>-->
-<!--                                </resource>-->
-<!--                            </webResources>-->
-<!--                        </configuration>-->
-<!--                    </plugin>-->
-<!--                    <plugin>-->
-<!--                        <groupId>org.apache.tomcat.maven</groupId>-->
-<!--                        <artifactId>tomcat7-maven-plugin</artifactId>-->
-<!--                        <version>2.2</version>-->
-<!--                        <configuration>-->
-<!--                            <url>http://localhost:9090/manager</url>-->
-<!--                            <username>manager</username>-->
-<!--                            <password>manager</password>-->
-<!--                        </configuration>-->
-<!--                    </plugin>-->
-<!--                    <plugin>-->
-<!--                        <groupId>org.apache.tomcat.maven</groupId>-->
-<!--                        <artifactId>tomcat6-maven-plugin</artifactId>-->
-<!--                        <version>2.0</version>-->
-<!--                        <configuration>-->
-<!--                            <url>http://localhost:8080/manager</url>-->
-<!--                            <username>manager</username>-->
-<!--                            <password>manager</password>-->
-<!--                        </configuration>-->
-<!--                    </plugin>-->
-                </plugins>
             </build>
         </profile>
     </profiles>
-
     <build>
         <finalName>grimoire-dict</finalName>
         <plugins>
@@ -253,10 +190,19 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <compilerArgument>-Xlint:all</compilerArgument>
+                </configuration>
+            </plugin>            
         </plugins>
     </build>
-
-
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>
 
 
