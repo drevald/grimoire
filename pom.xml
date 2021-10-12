@@ -156,6 +156,7 @@
             <version>9.1-901.jdbc4</version>
         </dependency>
     </dependencies>
+<<<<<<< HEAD
     <profiles>
         <profile>
             <id>local</id>
@@ -167,28 +168,18 @@
             </build>
         </profile>
     </profiles>
+=======
+>>>>>>> 6fc69f520c60a8e6c774ccfae112dfa891c73f2a
     <build>
-        <finalName>grimoire-dict</finalName>
+        <finalName>grimoire</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals><goal>copy</goal></goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>com.github.jsimone</groupId>
-                                    <artifactId>webapp-runner</artifactId>
-                                    <version>9.0.24.0</version>
-                                    <destFileName>webapp-runner.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -204,5 +195,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
+
 
 
