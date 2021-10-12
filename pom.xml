@@ -156,7 +156,6 @@
             <version>9.1-901.jdbc4</version>
         </dependency>
     </dependencies>
-<<<<<<< HEAD
     <profiles>
         <profile>
             <id>local</id>
@@ -168,8 +167,6 @@
             </build>
         </profile>
     </profiles>
-=======
->>>>>>> 6fc69f520c60a8e6c774ccfae112dfa891c73f2a
     <build>
         <finalName>grimoire</finalName>
         <plugins>
