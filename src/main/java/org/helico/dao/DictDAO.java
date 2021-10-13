@@ -5,6 +5,10 @@ import org.helico.domain.Text;
 
 import java.util.List;
 
+
+/**
+ * written by ${name}
+ */
 public interface DictDAO {
 	
     public long saveDict(Dict dict);

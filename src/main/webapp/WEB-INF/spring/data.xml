@@ -31,17 +31,10 @@
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		p:driverClassName="${jdbc.driverClass}"
-		p:url="${jdbc.databaseurl}"
-		p:username="${jdbc.username}"
-		p:password="${jdbc.password}" />
-
-	<!-- <bean id="dataSource"
-		  class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		  p:driverClassName="org.postgresql.Driver"
-		  p:url="postgres://uudabojcdgucte:c1f4bb44f919c20f6ba5b2450a113ddde014ce534d06b899ccc2219a4bf1569a@ec2-54-247-82-14.eu-west-1.compute.amazonaws.com:5432/d1jdqqfoocu8vi"
-		  p:username="uudabojcdgucte"
-		  p:password="c1f4bb44f919c20f6ba5b2450a113ddde014ce534d06b899ccc2219a4bf1569a" /> -->
+		p:driverClassName="@jdbc.driverClass@"
+		p:url="@jdbc.databaseurl@"
+		p:username="@jdbc.username@"
+		p:password="@jdbc.password@" />
 
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">

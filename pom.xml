@@ -167,8 +167,12 @@
             </build>
         </profile>
     </profiles>
+
     <build>
         <finalName>grimoire</finalName>
+        <filters>
+            <filter>postgresql.properties</filter>
+        </filters>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -179,11 +183,32 @@
                 </configuration>
             </plugin>            
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/webapp/WEB-INF/spring</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
+<!--
+  <build>
+    <filters>
+      <filter>postgresql.properties</filter>
+    </filters>
+    <resources>
+      <resource>
+        <directory>src/main/webapp/WEB-INF/spring</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+  </build>
+-->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>        
     </properties>
 </project>
-
-
-
