@@ -24,9 +24,6 @@
       <jdbc-user-service data-source-ref="dataSource"
 	users-by-username-query="SELECT username, password, enabled FROM user WHERE username = ?"
  	authorities-by-username-query="SELECT u.username, 'ROLE_USER' FROM user u WHERE u.username = ?"/>
-	<!-- user-service>
-	  <user name="admin" password="pass" authorities="ROLE_ADMIN, ROLE_USER" />
-	</user-service -->
     </authentication-provider>
   </authentication-manager>
 
