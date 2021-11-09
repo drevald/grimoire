@@ -2,6 +2,7 @@
 -- -----------------------------------------------------
 -- Table `transition`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS job;
 DROP TABLE IF EXISTS transition;
 
 CREATE TABLE IF NOT EXISTS transition (
@@ -16,8 +17,13 @@ CREATE TABLE IF NOT EXISTS transition (
 -- -----------------------------------------------------
 -- Table `lang`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS dict_word;
+DROP TABLE IF EXISTS dict;
+DROP TABLE IF EXISTS translation;
+DROP TABLE IF EXISTS translator;
+DROP TABLE IF EXISTS user_lang;
 DROP TABLE IF EXISTS lang;
-  
+
 CREATE TABLE IF NOT EXISTS lang (
   id varchar(2),
   "name" varchar(16),
@@ -31,7 +37,7 @@ DROP TABLE IF EXISTS "user";
 
 CREATE  TABLE IF NOT EXISTS "user" (
   id bigserial NOT NULL,
-  username varchar(32) NOT NULL ,
+  username varchar(32) NOT NULL UNIQUE,
   password varchar(32) NOT NULL ,
   role varchar(8) NOT NULL DEFAULT 'USER',
   enabled boolean NOT NULL DEFAULT TRUE ,
@@ -53,7 +59,6 @@ CREATE  TABLE IF NOT EXISTS text (
 -- -----------------------------------------------------
 -- Table `dict`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS dict;
 
 CREATE TABLE IF NOT EXISTS dict (
   id BIGSERIAL NOT NULL,
@@ -80,7 +85,6 @@ CREATE TABLE IF NOT EXISTS dict (
 -- -----------------------------------------------------
 -- Table `job`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS job;
 
 CREATE TABLE IF NOT EXISTS job (
   id bigserial NOT NULL,
@@ -119,12 +123,12 @@ CREATE TABLE IF NOT EXISTS word (
   id bigserial NOT NULL,
   lang_id varchar(2) NOT NULL ,
   value varchar(32) NOT NULL ,
+  UNIQUE(value, lang_id),
   PRIMARY KEY (id));
 
 -- -----------------------------------------------------
 -- Table `translator`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS translator;
 
 CREATE  TABLE IF NOT EXISTS translator (
   id bigint NOT NULL ,
@@ -145,12 +149,11 @@ CREATE  TABLE IF NOT EXISTS translator (
 -- -----------------------------------------------------
 -- Table `translation`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS translation;
 
 CREATE  TABLE IF NOT EXISTS translation (
   id bigserial NOT NULL,
   value varchar(64),
-  word_id bigint NOT NULL ,
+  word_id bigint NOT NULL UNIQUE,
   translator_id bigint,
   user_id bigint,
   pre_text varchar(128),
@@ -166,7 +169,6 @@ CREATE  TABLE IF NOT EXISTS translation (
 -- -----------------------------------------------------
 -- Table `dict_word`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS dict_word;
 
 CREATE  TABLE IF NOT EXISTS dict_word (
   id bigserial NOT NULL,
@@ -187,7 +189,6 @@ CREATE  TABLE IF NOT EXISTS dict_word (
 -- -----------------------------------------------------
 -- Table `user_lang`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS user_lang;
 
 CREATE  TABLE IF NOT EXISTS user_lang (
   id bigserial NOT NULL,
