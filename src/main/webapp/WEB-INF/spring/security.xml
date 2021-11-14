@@ -7,24 +7,52 @@
 	http://www.springframework.org/schema/security	
 	http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-  <http access-denied-page="/error403.jsp">
-    <intercept-url pattern="*" access="ROLE_ADMIN" />
-    <intercept-url pattern="/dict*" access="ROLE_USER"/>
-    <intercept-url pattern="/dict/words*" access="ROLE_ANONYMOUS"/>
-    <intercept-url pattern="/dict/view*" access="ROLE_ANONYMOUS"/>
-    <form-login login-page="/login.jsp" default-target-url="/dict"
-		authentication-failure-url="/login.jsp?error=true" />
-    <logout logout-url="/logout" logout-success-url="/login.jsp" />
-    <anonymous username="guest" granted-authority="ROLE_ANONYMOUS" />
-    <remember-me />
-  </http>
+    <!-- <http auto-config="true"  use-expressions="true">
+        <intercept-url pattern="/login.jsp" access="permitAll" />
+        <intercept-url pattern="/logout" access="permitAll" />
+        <intercept-url pattern="/accessdenied" access="permitAll" />
+        <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+        <form-login login-page="/login.jsp" default-target-url="/dict" authentication-failure-url="/login.jsp?error=true" />
+        <logout logout-success-url="/logout" />
+    </http> -->
 
-  <authentication-manager>
-    <authentication-provider>
-      <jdbc-user-service data-source-ref="dataSource"
-	users-by-username-query='SELECT username, password, enabled FROM &quot;user&quot; WHERE username = ?'
- 	authorities-by-username-query="SELECT username, &apos;ROLE_USER&apos; FROM &quot;user&quot; WHERE username = ?"/>
-    </authentication-provider>
-  </authentication-manager>
+    <http access-denied-page="/error403.jsp">
+        <intercept-url pattern="*" access="ROLE_ADMIN" />
+        <intercept-url pattern="/dict*" access="ROLE_USER"/>
+        <intercept-url pattern="/dict/words*" access="ROLE_ANONYMOUS"/>
+        <intercept-url pattern="/dict/view*" access="ROLE_ANONYMOUS"/>
+        <form-login login-page="/login.jsp" default-target-url="/dict"
+            authentication-failure-url="/login.jsp?error=true" />
+        <logout logout-url="/logout" logout-success-url="/login.jsp" />
+        <anonymous username="guest" granted-authority="ROLE_ANONYMOUS" />
+        <remember-me />
+    </http>
+
+    <authentication-manager>
+        <authentication-provider>
+            <jdbc-user-service data-source-ref="dataSource"
+            users-by-username-query="SELECT accountname, password, 'true' FROM account WHERE accountname = ?"
+            authorities-by-username-query="SELECT accountname, 'ROLE_USER' FROM account WHERE accountname = ?"/>
+        </authentication-provider>
+    </authentication-manager>
+
+    <!-- <authentication-manager alias="authenticationManager">
+		<authentication-provider>
+			<jdbc-user-service data-source-ref="dataSource"
+ 
+                users-by-username-query="
+                    SELECT USERNAME, PASSWORD, CASE ENABLED WHEN 1 THEN 'true' ELSE 'true' END as &quot;ENABLED&quot;
+                    FROM tbl_users 
+                    WHERE USERNAME=?;"
+    
+                authorities-by-username-query="
+                    SELECT u.USERNAME, r.ROLENAME 
+                    FROM tbl_users u, tbl_user_role r
+                    WHERE u.ID = r.USERID
+                    AND u.USERNAME=?;"
+            
+            />
+		</authentication-provider>
+	</authentication-manager> -->
 
 </beans:beans>

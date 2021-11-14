@@ -1,11 +1,11 @@
-<%@ include file = "/WEB-INF/userHeader.jsp"%>
+<%@ include file = "/WEB-INF/accountHeader.jsp"%>
 
 	<h3><spring:message code="dict.edit.properties" /></h3>
 
 	<table>
 	<form method="post" action="save">
 	<input type="hidden" name="id" value="${dict.id}"/>
-	<input type="hidden" name="userId" value="${dict.userId}"/>
+	<input type="hidden" name="accountId" value="${dict.accountId}"/>
 	<input type="hidden" name="langId" value="${langId}"/>
 		<tr>
 			<td>

@@ -5,7 +5,7 @@ import java.io.Reader;
 
 /**
  * Created with IntelliJ IDEA.
- * User: ddreval
+ * Account: ddreval
  * Date: 05.06.14
  * Time: 17:38
  * To change this template use File | Settings | File Templates.

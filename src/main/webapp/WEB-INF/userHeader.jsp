@@ -14,7 +14,7 @@
 	</div>
 
     <div style="float:right">
-        <%=request.getUserPrincipal().getName()%>
+        <%=request.getAccountPrincipal().getName()%>
         <a href="<c:url value="/logout" />">
             <spring:message code="logout" />
         </a>

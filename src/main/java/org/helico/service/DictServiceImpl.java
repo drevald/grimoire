@@ -50,8 +50,8 @@ public class DictServiceImpl implements DictService {
 	}
 
     @Transactional
-	public List<Dict> listDicts(Long userId) {
-	    List<Dict> result = dictDao.listDicts(userId);
+	public List<Dict> listDicts(Long accountId) {
+	    List<Dict> result = dictDao.listDicts(accountId);
 	    LOG.info("Number of results is " + result.size());
 	    return result;
 	}
@@ -72,9 +72,9 @@ public class DictServiceImpl implements DictService {
 	}
 
     @Transactional
-	public Dict findDict(Long id, Long userId) {
+	public Dict findDict(Long id, Long accountId) {
 	    LOG.info(">>>findDict start");
-	    Dict dict = dictDao.findDict(id, userId);
+	    Dict dict = dictDao.findDict(id, accountId);
 	    LOG.info("<<<findDict end");
 	    return dict;
     }
@@ -93,7 +93,7 @@ public class DictServiceImpl implements DictService {
 	}
 
 	@Transactional
-	    public Dict loadPreviewFile(Long userId, String langId, InputStream is, String name, String storage) {
+	    public Dict loadPreviewFile(Long accountId, String langId, InputStream is, String name, String storage) {
 	    LOG.info(">>>loadPreview start");
 	    PushbackInputStream pis = new PushbackInputStream(is, PREVIEW_SIZE);
 	    byte[] data = new byte[PREVIEW_SIZE];
@@ -105,7 +105,7 @@ public class DictServiceImpl implements DictService {
 	    }
 	    Dict dict = new Dict();
         dict.setLangId(langId);
-	    dict.setUserId(userId);
+	    dict.setAccountId(accountId);
 	    dict.setPreview(data);
 	    dict.setName(name.substring(0, name.indexOf(".")).toUpperCase());
 	    dict.setStatus(Status.PERSISTED);
@@ -124,10 +124,10 @@ public class DictServiceImpl implements DictService {
 	}
 
     @Transactional
-	    public Dict createDict(Long userId, String name) {
+	    public Dict createDict(Long accountId, String name) {
 	    LOG.info(">>>createDict start");
 		Dict dict = new Dict();
-		dict.setUserId(userId);
+		dict.setAccountId(accountId);
 		dict.setName(name);
 		LOG.debug("Status persisted = " + Status.PERSISTED);
 		dict.setStatus("PERSISTED");

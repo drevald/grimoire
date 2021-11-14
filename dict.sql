@@ -48,13 +48,13 @@ INSERT INTO lang(id,"name",encodings) VALUES ('la', 'Latin', 'ISO-8859-1');
 INSERT INTO lang(id,"name",encodings) VALUES ('da', 'Danish', 'ISO-8859-1,UTF-8');
 INSERT INTO lang(id,"name",encodings) VALUES ('pl', 'Polish', 'UTF-8,Windows-1250,ISO-8859-2');
 
-INSERT INTO "user"(username, password, role, enabled, native_lang_id) 
+INSERT INTO "account"(accountname, password, role, enabled, native_lang_id) 
 	VALUES ('guest', '', 'GUEST', True, 'en');
-INSERT INTO "user"(username, password, role, enabled, native_lang_id) 
-	VALUES ('user', 'pass', 'USER', True, 'en');
-INSERT INTO "user"(username, password, role, enabled,native_lang_id) 
+INSERT INTO "account"(accountname, password, role, enabled, native_lang_id) 
+	VALUES ('account', 'pass', 'USER', True, 'en');
+INSERT INTO "account"(accountname, password, role, enabled,native_lang_id) 
 	VALUES ('helicobacter', 'pilory', 'USER', True, 'en');
-INSERT INTO "user"(username, password, role, enabled, native_lang_id) 
+INSERT INTO "account"(accountname, password, role, enabled, native_lang_id) 
 	VALUES ('admin', 'admin', 'ADMIN', True, 'en');
 
 INSERT INTO translator_provider(id, title, host, req_pattern, res_pattern) 

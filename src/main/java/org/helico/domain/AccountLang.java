@@ -3,8 +3,8 @@ package org.helico.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user_lang")
-public class UserLang {
+@Table(name = "account_lang")
+public class AccountLang {
 
     @Id
     @Column(name = "id")
@@ -15,14 +15,14 @@ public class UserLang {
     private String langId;
 
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="user_id")
-    private User user;
+    @JoinColumn(name="account_id")
+    private Account account;
 
-    public UserLang() {    }
+    public AccountLang() {    }
 
-    public UserLang(String langId, User user) {
+    public AccountLang(String langId, Account account) {
         this.langId = langId;
-        this.user = user;
+        this.account = account;
     }
 
     public String getDictId() {
@@ -33,12 +33,12 @@ public class UserLang {
         this.langId = langId;
     }
 
-    public User getUser() {
-        return user;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public Long getId() {return id;}

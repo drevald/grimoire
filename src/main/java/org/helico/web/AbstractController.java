@@ -1,7 +1,6 @@
 package org.helico.web;
 
 import org.apache.log4j.Logger;
-import org.helico.domain.User;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,19 +17,19 @@ public class AbstractController implements ApplicationContextAware {
 
     private ApplicationContext appContext;
 
-    protected String getCurrentUser() {
+    protected String getCurrentAccount() {
         Object principal = SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
-        String userName;
+        String accountName;
         if (principal instanceof UserDetails) {
-            userName = ((UserDetails) principal).getUsername();
+            accountName = ((UserDetails) principal).getUsername();
         } else {
-            userName = principal.toString();
+            accountName = principal.toString();
         }
 
-//        User user = userService.findUser(userName);
+//        Account account = accountService.findAccount(accountName);
 //
-//        if (user == null) {
+//        if (account == null) {
 //            try {
 //                request.getRequestDispatcher("login.jsp").forward(request, response);
 //            } catch (Exception e) {
@@ -41,7 +40,7 @@ public class AbstractController implements ApplicationContextAware {
 //
 //        }
 
-        return userName;
+        return accountName;
 
 
     }

@@ -25,5 +25,4 @@ public interface JobService {
 
     public Job getLastOrActive(Long dictId);
 
-
 }

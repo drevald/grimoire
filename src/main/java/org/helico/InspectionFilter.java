@@ -1,11 +1,8 @@
 package org.helico;
 
 import org.apache.log4j.Logger;
-import org.helico.domain.User;
-import org.helico.service.UserService;
+import org.helico.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +16,7 @@ public class InspectionFilter implements Filter {
     private static final Logger LOG = Logger.getLogger(InspectionFilter.class);
 
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
     public void	destroy() {
         LOG.debug("Destroying InspectionFilter");
@@ -27,7 +24,7 @@ public class InspectionFilter implements Filter {
 
     public void	doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
         try {
-            LOG.info("User principal is " + ((HttpServletRequest)request).getUserPrincipal());
+            LOG.info("Account principal is " + ((HttpServletRequest)request).getUserPrincipal());
             Principal principal = ((HttpServletRequest)request).getUserPrincipal();
 //            if (principal == null) {
 //                request.getRequestDispatcher("/login.jsp").forward(request, response);
@@ -38,14 +35,14 @@ public class InspectionFilter implements Filter {
              LOG.error(e, e);
         }
 //        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String userName;
-//        if (principal instanceof UserDetails) {
-//            userName = ((UserDetails) principal).getUsername();
+//        String accountName;
+//        if (principal instanceof AccountDetails) {
+//            accountName = ((AccountDetails) principal).getAccountname();
 //        } else {
-//            userName = principal.toString();
+//            accountName = principal.toString();
 //        }
-//        User user = userService.findUser(userName);
-//        if (user == null) {
+//        Account account = accountService.findAccount(accountName);
+//        if (account == null) {
 //            try {
 //                request.getRequestDispatcher("login.jsp").forward(request, response);
 //            } catch (Exception e) {

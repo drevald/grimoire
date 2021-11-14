@@ -5,9 +5,6 @@ import org.helico.domain.*;
 import org.helico.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +30,7 @@ public class DictController extends AbstractController {
     private LangService langService;
 
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
     @Autowired
     private JobService jobService;
@@ -46,10 +43,10 @@ public class DictController extends AbstractController {
 
     @RequestMapping("/dict")
     public String listDicts(Map<String, Object> map) {
-        User currUser = userService.findUser(getCurrentUser());
-        map.put("currUser", currUser);
+        Account currAccount = accountService.findAccount(getCurrentAccount());
+        map.put("currAccount", currAccount);
         List<DictHelper> helperList = new ArrayList<DictHelper>();
-        List<Dict> dicts = dictService.listDicts(currUser.getId());
+        List<Dict> dicts = dictService.listDicts(currAccount.getId());
         for (Dict dict : dicts) {
             DictHelper dictHelper = new DictHelper();
             dictHelper.setDict(dict);
@@ -71,12 +68,12 @@ public class DictController extends AbstractController {
                                    Map<String, Object> map,
                                    @ModelAttribute("dict") Dict dict,
                                    Errors errors) {
-        User user = userService.findUser(getCurrentUser());
+        Account account = accountService.findAccount(getCurrentAccount());
         if (!file.isEmpty()) {
             try {
                 WebApplicationContext webApplicationContext = (WebApplicationContext) appContext;
                 String storagePath = webApplicationContext.getServletContext().getInitParameter("localStorage");
-                dict = dictService.loadPreviewFile(user.getId(),
+                dict = dictService.loadPreviewFile(account.getId(),
                         langId,
                         file.getInputStream(),
                         file.getOriginalFilename(),
@@ -103,8 +100,8 @@ public class DictController extends AbstractController {
             @RequestParam("id") Long id,
             @RequestParam("langId") String langId,
             @RequestParam("encoding") String encoding) {
-        User user = userService.findUser(getCurrentUser());
-        Dict dict = dictService.findDict(id, user.getId());
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(id, account.getId());
         dict.setEncoding(encoding);
         dictService.saveDict(dict);
         return "redirect:/dict/edit/" + dict.getId() + "?langId=" + langId;
@@ -124,8 +121,8 @@ public class DictController extends AbstractController {
             @RequestParam("id") Long id,
             @RequestParam("encoding") String encoding,
             @RequestParam("langId") String langId) {
-        User user = userService.findUser(getCurrentUser());
-        Dict dict = dictService.findDict(id, user.getId());
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(id, account.getId());
         dict.setEncoding(encoding);
         dict.setLangId(langId);
         dictService.saveDict(dict);
@@ -144,8 +141,8 @@ public class DictController extends AbstractController {
     public String editDict(@PathVariable("dictId") Long dictId,
                            @RequestParam("langId") String langId,
                            Map<String, Object> map) {
-        User user = userService.findUser(getCurrentUser());
-        Dict dict = dictService.findDict(dictId, user.getId());
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(dictId, account.getId());
         map.put("dict", dict);
         map.put("langId", langId);
         map.put("encodings", langService.getEncodings(langId));
@@ -161,8 +158,8 @@ public class DictController extends AbstractController {
 
     @RequestMapping("/dict/view/{dictId}")
     public String viewDict(@PathVariable("dictId") Long dictId, Map<String, Object> map) {
-        User user = userService.findUser(getCurrentUser());
-        Dict dict = dictService.findDict(dictId, user.getId());
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(dictId, account.getId());
         map.put("dict", dict);
         try {
             map.put("preview", new String(dict.getPreview(), dict.getEncoding()));
@@ -173,9 +170,9 @@ public class DictController extends AbstractController {
     }
 
     @RequestMapping("/dict/delete/{dictId}")
-    public String deleteUser(@PathVariable("dictId") Long dictId) {
-        User user = userService.findUser(getCurrentUser());
-        Dict dict = dictService.findDict(dictId, user.getId());
+    public String deleteAccount(@PathVariable("dictId") Long dictId) {
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(dictId, account.getId());
         if (dict != null) {
             dictService.removeDict(dictId);
         }
@@ -184,8 +181,8 @@ public class DictController extends AbstractController {
 
     @RequestMapping("/dict/view/generate")
     public String parseDict(@RequestParam("dictId") Long id) {
-        User user = userService.findUser(getCurrentUser());
-        Dict dict = dictService.findDict(id, user.getId());
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(id, account.getId());
         if (dict != null) {
             dictService.parseText(id);
         }
@@ -197,8 +194,8 @@ public class DictController extends AbstractController {
             @PathVariable("dictId") Long dictId,
             @RequestParam("offset") Integer offset,
             Map<String, Object> map) {
-        User user = userService.findUser(getCurrentUser());
-        Dict dict = dictService.findDict(dictId, user.getId());
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(dictId, account.getId());
         if (dict != null) {
             Integer size = 12;
             offset = (offset == null) ? size : offset;
@@ -206,7 +203,7 @@ public class DictController extends AbstractController {
             Long wordsNum = dictWordService.countWords(dictId);
             List<Translator> translators = translationService.listTranslators(dict.getLangId());
             //List<TranslatorProvider> providers = translationService.listProviders();
-            map.put("dict", dictService.findDict(dictId, user.getId()));
+            map.put("dict", dictService.findDict(dictId, account.getId()));
             map.put("wordsNum", wordsNum);
             map.put("words", words);
             map.put("translators", translators);
@@ -224,8 +221,8 @@ public class DictController extends AbstractController {
     @RequestMapping(value = "/dict/words/translate", method = RequestMethod.POST)
     public String translateDict(@RequestParam("dictId") Long dictId,
                                 @RequestParam("translatorId") Long translatorId) {
-        User user = userService.findUser(getCurrentUser());
-        Dict dict = dictService.findDict(dictId, user.getId());
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(dictId, account.getId());
         if (dict != null) {
             translationService.translateText(dictId, translatorId);
         }
@@ -234,9 +231,9 @@ public class DictController extends AbstractController {
 
     @RequestMapping(value = "/upload")
     public String uploadDict(Map<String, Object> map) {
-        User currUser = userService.findUser(getCurrentUser());
-        map.put("currUser", currUser);
-        map.put("langs", currUser.getUserLangs());
+        Account currAccount = accountService.findAccount(getCurrentAccount());
+        map.put("currAccount", currAccount);
+        map.put("langs", currAccount.getAccountLangs());
         return "uploadDict";
     }
 

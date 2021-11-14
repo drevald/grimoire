@@ -28,8 +28,8 @@ public class Dict {
 	@GeneratedValue
 	private Long id;
     
-    @Column(name = "user_id")
-	private Long userId;
+    @Column(name = "account_id")
+	private Long accountId;
     
     @Column(name = "name")
 	private String name;
@@ -108,12 +108,12 @@ public class Dict {
 	return utfText;
     }
 
-    public Long getUserId() {
-	return userId;
+    public Long getAccountId() {
+	return accountId;
     }
 
-    public void setUserId(Long userId) {
-	this.userId = userId;
+    public void setAccountId(Long accountId) {
+	this.accountId = accountId;
     }
 
     public String getName() {

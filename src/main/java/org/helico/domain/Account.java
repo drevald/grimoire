@@ -4,15 +4,15 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "account")
+public class Account {
 
 	@Id
 	@Column(name = "id")
 	@GeneratedValue
 	private Long id;
 
-	@Column(name = "username")
+	@Column(name = "accountname")
 	private String name;
 
     @Column(name = "password")
@@ -21,29 +21,29 @@ public class User {
 	@Column(name = "native_lang_id")
 	private String nativeLangId;
 
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
-//    private Set<UserLang> userLangs;
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "account")
+//    private Set<AccountLang> accountLangs;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_lang",
-            joinColumns = {@JoinColumn(name = "user_id")},
+    @JoinTable(name = "account_lang",
+            joinColumns = {@JoinColumn(name = "account_id")},
             inverseJoinColumns = {@JoinColumn(name = "lang_id")})
-    private Set<Lang> userLangs;
+    private Set<Lang> accountLangs;
 
-    public User() {
+    public Account() {
 
     }
 
-    public User(String name, String password) {
+    public Account(String name, String password) {
         this.name = name;
         this.password = password;
     }
 
-    public User(String name, String password, String nativeLangId, Set<Lang> userLangs) {
+    public Account(String name, String password, String nativeLangId, Set<Lang> accountLangs) {
         this.name = name;
         this.password = password;
         this.nativeLangId = nativeLangId;
-        this.userLangs = userLangs;
+        this.accountLangs = accountLangs;
     }
 
     public Long getId() {
@@ -74,9 +74,9 @@ public class User {
 
     public void setNativeLangId(String nativeLangId) {this.nativeLangId = nativeLangId;}
 
-    public Set<Lang> getUserLangs() {return userLangs;}
+    public Set<Lang> getAccountLangs() {return accountLangs;}
 
-    public void setUserLangs(Set<Lang> userLangs) {this.userLangs = userLangs;}
+    public void setAccountLangs(Set<Lang> accountLangs) {this.accountLangs = accountLangs;}
 
 }
 

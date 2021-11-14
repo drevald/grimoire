@@ -2,17 +2,13 @@ package org.helico.web;
 
 import org.apache.log4j.Logger;
 import org.helico.domain.Dict;
-import org.helico.domain.User;
+import org.helico.domain.Account;
 import org.helico.domain.Word;
 import org.helico.service.*;
 import org.helico.util.WordReader;
 import org.helico.util.WordReaderResult;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +19,7 @@ import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
- * User: ddreval
+ * Account: ddreval
  * Date: 05.06.14
  * Time: 15:19
  * To change this template use File | Settings | File Templates.
@@ -45,7 +41,7 @@ public class TextController  extends AbstractController {
     private DictService dictService;
 
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
     @Autowired
     private TextService textService;
@@ -57,8 +53,8 @@ public class TextController  extends AbstractController {
     public String viewDict(
             @PathVariable("textId") Long dictId, Map<String, Object> map,
             @RequestParam("offset") int offset) {
-        User user = userService.findUser(getCurrentUser());
-        Dict dict = dictService.findDict(dictId, user.getId());
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(dictId, account.getId());
         StringBuilder sb = new StringBuilder();
         try {
             Reader reader = textService.getTextReader(dictId, offset, TEXT_SIZE);

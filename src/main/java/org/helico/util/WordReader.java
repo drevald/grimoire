@@ -6,7 +6,7 @@ import java.io.*;
 
 /**
  * Created with IntelliJ IDEA.
- * User: ddreval
+ * Account: ddreval
  * Date: 05.06.14
  * Time: 13:38
  * To change this template use File | Settings | File Templates.

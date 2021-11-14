@@ -28,8 +28,8 @@ public class Translation {
     @Column(name = "translator_id")
     private Long translatorId;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "account_id")
+    private Long accountId;
 
     @Column(name = "value")
     private String value;
@@ -80,9 +80,9 @@ public class Translation {
         this.value = value;
     }
 
-    public Long getUserId() {return userId;}
+    public Long getAccountId() {return accountId;}
 
-    public void setUserId(Long userId) {this.userId = userId;}
+    public void setAccountId(Long accountId) {this.accountId = accountId;}
 
     public String getPostText() {return postText;}
 

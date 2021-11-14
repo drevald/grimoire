@@ -6,7 +6,7 @@ import org.helico.domain.Word;
 
 /**
  * Created by IntelliJ IDEA.
- * User: Administrator
+ * Account: Administrator
  * Date: 5/20/11
  * Time: 7:31 AM
  * To change this template use File | Settings | File Templates.

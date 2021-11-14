@@ -5,11 +5,11 @@
 	: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} </div>
 </c:if>
 
-<form method="POST" action="<c:url value="/registerUser" />">
+<form method="POST" action="<c:url value="/registerAccount" />">
 <table>
 	<tr>
 		<td align="right"><spring:message code="login" /></td>
-		<td><input type="text" name="username" value="user"/></td>
+		<td><input type="text" name="accountname" value="account"/></td>
 	</tr>
 	<tr>
 		<td align="right"><spring:message code="password" /></td>

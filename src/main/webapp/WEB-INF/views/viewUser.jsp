@@ -5,12 +5,12 @@
 	: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} </div>
 </c:if>
 
-<form method="POST" action="<c:url value="/updateUser" />">
-<input type="hidden" name="userId" value="${user.id}"/>
+<form method="POST" action="<c:url value="/updateAccount" />">
+<input type="hidden" name="accountId" value="${account.id}"/>
 <table>
 	<tr>
 		<td align="right"><spring:message code="login" /></td>
-		<td><input type="text" name="username" value="user"/></td>
+		<td><input type="text" name="accountname" value="account"/></td>
 	</tr>
 	<tr>
 		<td align="right"><spring:message code="password" /></td>
@@ -21,10 +21,10 @@
 		<td>
             <select name="nativeLangId" style="width:100%">
                 <c:forEach items="${langs}" var="lang">
-                    <c:if test="${user.nativeLangId==lang.id}">
+                    <c:if test="${account.nativeLangId==lang.id}">
                         <option value="${lang.id}" selected><spring:message code='${lang.name}' /></option>
                     </c:if>
-                    <c:if test="${user.nativeLangId!=lang.id}">
+                    <c:if test="${account.nativeLangId!=lang.id}">
                         <option value="${lang.id}"><spring:message code='${lang.name}' /></option>
                     </c:if>
                 </c:forEach>
@@ -35,14 +35,14 @@
 		<td align="right" valign="top"><spring:message code="register.lang.learn" /></td>
 		<td>
             <select name="learnedLangId" size="12" style="width:100%" multiple="yes">
-            <c:out value="${user}"/>
-            <c:out value="${user.userLangs}"/>
+            <c:out value="${account}"/>
+            <c:out value="${account.accountLangs}"/>
                 <c:forEach items="${langs}" var="lang">
                     <c:out value="${lang}"/>
-                    <c:if test="${fn:contains(user.userLangs, lang)}">
+                    <c:if test="${fn:contains(account.accountLangs, lang)}">
                         <option value="${lang.id}" selected><spring:message code='${lang.name}' /></option>
                     </c:if>
-                    <c:if test="${!fn:contains(user.userLangs, lang)}">
+                    <c:if test="${!fn:contains(account.accountLangs, lang)}">
                         <option value="${lang.id}"><spring:message code='${lang.name}' /></option>
                     </c:if>
                 </c:forEach>

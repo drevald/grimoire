@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DictService {
 	
-    public Dict findDict(Long id, Long userId);
+    public Dict findDict(Long id, Long accountId);
 
     public Dict findDict(Long id);
 
@@ -19,7 +19,7 @@ public interface DictService {
 
     public List<Dict> listDicts();
 
-    public List<Dict> listDicts(Long userId);
+    public List<Dict> listDicts(Long accountId);
 	
     public void removeDict(Long id);
     

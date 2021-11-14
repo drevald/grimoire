@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS dict_word;
 DROP TABLE IF EXISTS dict;
 DROP TABLE IF EXISTS translation;
 DROP TABLE IF EXISTS translator;
-DROP TABLE IF EXISTS user_lang;
+DROP TABLE IF EXISTS account_lang;
 DROP TABLE IF EXISTS lang;
 
 CREATE TABLE IF NOT EXISTS lang (
@@ -31,13 +31,13 @@ CREATE TABLE IF NOT EXISTS lang (
   PRIMARY KEY(id));
 
 -- -----------------------------------------------------
--- Table `user`
+-- Table `account`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS "user";
+DROP TABLE IF EXISTS "account";
 
-CREATE  TABLE IF NOT EXISTS "user" (
+CREATE  TABLE IF NOT EXISTS "account" (
   id bigserial NOT NULL,
-  username varchar(32) NOT NULL UNIQUE,
+  accountname varchar(32) NOT NULL UNIQUE,
   password varchar(32) NOT NULL ,
   role varchar(8) NOT NULL DEFAULT 'USER',
   enabled boolean NOT NULL DEFAULT TRUE ,
@@ -69,13 +69,13 @@ CREATE TABLE IF NOT EXISTS dict (
   "encoding" varchar(32),
   preview bytea,
   lang_id varchar(2) NOT NULL ,
-  user_id BIGINT NOT NULL ,
+  account_id BIGINT NOT NULL ,
   text_id BIGINT NULL ,
   PRIMARY KEY(id) ,
   CONSTRAINT fk_dict_lang1 FOREIGN KEY (lang_id) REFERENCES lang(id)
 	ON DELETE CASCADE 
 	ON UPDATE CASCADE,
-  CONSTRAINT fk_dict_user1 FOREIGN KEY (user_id) REFERENCES "user"(id)
+  CONSTRAINT fk_dict_account1 FOREIGN KEY (account_id) REFERENCES "account"(id)
 	ON DELETE CASCADE 
 	ON UPDATE CASCADE,
   CONSTRAINT fk_dict_text1 FOREIGN KEY (text_id) REFERENCES text(id)
@@ -155,7 +155,7 @@ CREATE  TABLE IF NOT EXISTS translation (
   value varchar(64),
   word_id bigint NOT NULL UNIQUE,
   translator_id bigint,
-  user_id bigint,
+  account_id bigint,
   pre_text varchar(128),
   post_text  varchar(128),
   PRIMARY KEY(id),
@@ -187,18 +187,18 @@ CREATE  TABLE IF NOT EXISTS dict_word (
 	ON UPDATE CASCADE);
 
 -- -----------------------------------------------------
--- Table `user_lang`
+-- Table `account_lang`
 -- -----------------------------------------------------
 
-CREATE  TABLE IF NOT EXISTS user_lang (
+CREATE  TABLE IF NOT EXISTS account_lang (
   id bigserial NOT NULL,
-  user_id bigserial NOT NULL,
+  account_id bigserial NOT NULL,
   lang_id varchar(2) NOT NULL,
   PRIMARY KEY (id),
-  CONSTRAINT fk_user_lang_user1 FOREIGN KEY(user_id) REFERENCES "user"(id)
+  CONSTRAINT fk_account_lang_account1 FOREIGN KEY(account_id) REFERENCES "account"(id)
 	ON DELETE CASCADE 
 	ON UPDATE CASCADE,
-  CONSTRAINT fk_user_lang_lang1 FOREIGN KEY(lang_id) REFERENCES lang(id)
+  CONSTRAINT fk_account_lang_lang1 FOREIGN KEY(lang_id) REFERENCES lang(id)
 	ON DELETE CASCADE 
 	ON UPDATE CASCADE);
 

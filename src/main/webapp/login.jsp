@@ -8,8 +8,8 @@
 <form method="POST" action="<c:url value="/j_spring_security_check" />">
 <table>
 	<tr>
-		<td align="right"><spring:message code="username" /></td>
-		<td><input type="text" name="j_username" value="user"/></td>
+		<td align="right"><spring:message code="accountname" /></td>
+		<td><input type="text" name="j_accountname" value="account"/></td>
 	</tr>
 	<tr>
 		<td align="right"><spring:message code="password" /></td>

@@ -1,9 +1,9 @@
 package org.helico.web;
 
 import org.apache.log4j.Logger;
-import org.helico.domain.User;
+import org.helico.domain.Account;
 import org.helico.service.LangService;
-import org.helico.service.UserService;
+import org.helico.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -15,12 +15,12 @@ import java.util.Map;
 import java.util.Set;
 
 @Controller
-public class UserController  extends AbstractController  {
+public class AccountController  extends AbstractController  {
 
-	private static final Logger LOG = Logger.getLogger(UserController.class);
+	private static final Logger LOG = Logger.getLogger(AccountController.class);
 
 	@Autowired
-	private UserService userService;
+	private AccountService accountService;
 
 	@Autowired
 	private LangService langService;
@@ -44,10 +44,10 @@ public class UserController  extends AbstractController  {
     }
 
 	@RequestMapping("/index")
-	public String listUsers(Map<String, Object> map) {
-		map.put("user", new User());
-		map.put("userList", userService.listUsers());
-		return "user";
+	public String listAccounts(Map<String, Object> map) {
+		map.put("account", new Account());
+		map.put("accountList", accountService.listAccounts());
+		return "account";
 	}
 	
 //	@RequestMapping("/")
@@ -56,30 +56,30 @@ public class UserController  extends AbstractController  {
 //	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String adduser(@ModelAttribute("user") User user,
+	public String addaccount(@ModelAttribute("account") Account account,
 			BindingResult result) {
-		userService.addUser(user);
+		accountService.addAccount(account);
 		return "redirect:/index";
 	}
 
-	@RequestMapping("/delete/{userId}")
-	public String deleteUser(@PathVariable("userId") Long userId) {
-		userService.removeUser(userId);
+	@RequestMapping("/delete/{accountId}")
+	public String deleteAccount(@PathVariable("accountId") Long accountId) {
+		accountService.removeAccount(accountId);
 		return "redirect:/index";
 	}
 
-	@RequestMapping("/registerUser")
-	public String registerUser(
-            @RequestParam("username") String username,
+	@RequestMapping("/registerAccount")
+	public String registerAccount(
+            @RequestParam("accountname") String accountname,
 			@RequestParam("password") String password,
 			@RequestParam("nativeLangId") String nativeLangId,
 			@RequestParam("learnedLangId") Set<String> learnedLangId,
-            @ModelAttribute("user") User dict,
+            @ModelAttribute("account") Account dict,
             Errors errors
     ) {
 		this.learnedLangId = learnedLangId;
 		try {
-		    userService.registerUser(username, password, nativeLangId, learnedLangId);
+		    accountService.registerAccount(accountname, password, nativeLangId, learnedLangId);
 		    return "redirect:/dict";
         } catch (Exception e) {
             errors.reject("error.reading.file");
@@ -87,19 +87,19 @@ public class UserController  extends AbstractController  {
         }
 	}
 
-	@RequestMapping("/updateUser")
-	public String updateUser(
-			@RequestParam("userId") Long userId,
-			@RequestParam("username") String username,
+	@RequestMapping("/updateAccount")
+	public String updateAccount(
+			@RequestParam("accountId") Long accountId,
+			@RequestParam("accountname") String accountname,
 			@RequestParam("password") String password,
 			@RequestParam("nativeLangId") String nativeLangId,
 			@RequestParam("learnedLangId") Set<String> learnedLangId,
-			@ModelAttribute("user") User dict,
+			@ModelAttribute("account") Account dict,
 			Errors errors
 	) {
 		this.learnedLangId = learnedLangId;
 		try {
-			userService.updateUser(userId, username, password, nativeLangId, learnedLangId);
+			accountService.updateAccount(accountId, accountname, password, nativeLangId, learnedLangId);
 			return "redirect:/dict";
 		} catch (Exception e) {
 			errors.reject("error.reading.file");
@@ -114,10 +114,10 @@ public class UserController  extends AbstractController  {
 	}
 
 	@RequestMapping("/preferences")
-	public String viewUser(Map<String, Object> map) {
+	public String viewAccount(Map<String, Object> map) {
 		map.put("langs", langService.list());
-		map.put("user", userService.findUser(getCurrentUser()));
-		return "viewUser";
+		map.put("account", accountService.findAccount(getCurrentAccount()));
+		return "viewAccount";
 	}
 
 }

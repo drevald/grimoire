@@ -9,35 +9,35 @@
 
 <h2><spring:message code="title" /></h2>
 
-<form:form method="post" action="add" commandName="user">
+<form:form method="post" action="add" commandName="account">
 <table>
 	<tr>
-		<td><spring:message code="username" /></td>
+		<td><spring:message code="accountname" /></td>
 		<td><form:input path="name" /></td>
 	</tr>
 	<tr>
 	<td colspan="2">
-		<input type="submit" value="<spring:message code="adduser"/>" />
+		<input type="submit" value="<spring:message code="addaccount"/>" />
 	</td>
 	</tr>
 </table>
 </form:form>
 
-<h3><spring:message code="users" /></h3>
+<h3><spring:message code="accounts" /></h3>
 
-<c:if test="${empty userList}">
-User list is empty
+<c:if test="${empty accountList}">
+Account list is empty
 </c:if>
-<c:if test="${!empty userList}">
+<c:if test="${!empty accountList}">
 	<table class="data">
 		<tr>
-			<th><spring:message code="username" /></th>
+			<th><spring:message code="accountname" /></th>
 			<th>&nbsp;</th>
 		</tr>
-		<c:forEach items="${userList}" var="user">
+		<c:forEach items="${accountList}" var="account">
 			<tr>
-				<td>${user.name}</td>
-				<td><a href="delete/${user.id}"><spring:message code="delete" /></a></td>
+				<td>${account.name}</td>
+				<td><a href="delete/${account.id}"><spring:message code="delete" /></a></td>
 			</tr>
 		</c:forEach>
 	</table>
