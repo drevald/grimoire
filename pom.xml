@@ -167,7 +167,6 @@
             </build>
         </profile>
     </profiles>
-
     <build>
         <finalName>grimoire</finalName>
         <filters>

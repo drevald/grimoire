@@ -28,31 +28,21 @@
         <remember-me />
     </http>
 
-    <authentication-manager>
-        <authentication-provider>
-            <jdbc-user-service data-source-ref="dataSource"
-            users-by-username-query="SELECT accountname, password, 'true' FROM account WHERE accountname = ?"
-            authorities-by-username-query="SELECT accountname, 'ROLE_USER' FROM account WHERE accountname = ?"/>
-        </authentication-provider>
-    </authentication-manager>
+<!--    <authentication-manager>-->
+<!--        <authentication-provider>-->
+<!--            <jdbc-user-service data-source-ref="dataSource"-->
+<!--            users-by-username-query="SELECT accountname, password, 'true' FROM account WHERE accountname = ?"-->
+<!--            authorities-by-username-query="SELECT accountname, 'ROLE_USER' FROM account WHERE accountname = ?"/>-->
+<!--        </authentication-provider>-->
+<!--    </authentication-manager>-->
 
-    <!-- <authentication-manager alias="authenticationManager">
+    <authentication-manager alias="authenticationManager">
 		<authentication-provider>
 			<jdbc-user-service data-source-ref="dataSource"
- 
-                users-by-username-query="
-                    SELECT USERNAME, PASSWORD, CASE ENABLED WHEN 1 THEN 'true' ELSE 'true' END as &quot;ENABLED&quot;
-                    FROM tbl_users 
-                    WHERE USERNAME=?;"
-    
-                authorities-by-username-query="
-                    SELECT u.USERNAME, r.ROLENAME 
-                    FROM tbl_users u, tbl_user_role r
-                    WHERE u.ID = r.USERID
-                    AND u.USERNAME=?;"
-            
+                users-by-username-query="SELECT accountname, password, enabled FROM account WHERE accountname=?;"
+                authorities-by-username-query="SELECT accountname, 'ROLE_USER' FROM account WHERE accountname = ?"
             />
 		</authentication-provider>
-	</authentication-manager> -->
+	</authentication-manager>
 
 </beans:beans>

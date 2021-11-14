@@ -24,8 +24,8 @@ public class Dict {
 	};
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@GeneratedValue
 	private Long id;
     
     @Column(name = "account_id")

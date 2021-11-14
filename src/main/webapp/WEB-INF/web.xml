@@ -9,16 +9,16 @@
         <param-value>/WEB-INF/log4j.properties</param-value>
     </context-param>
 
-    <servlet>
-        <servlet-name>myServlet</servlet-name>
-        <servlet-class>org.helico.MyServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
+<!--    <servlet>-->
+<!--        <servlet-name>myServlet</servlet-name>-->
+<!--        <servlet-class>org.helico.MyServlet</servlet-class>-->
+<!--        <load-on-startup>1</load-on-startup>-->
+<!--    </servlet>-->
 
-    <servlet-mapping>
-        <servlet-name>myServlet</servlet-name>
-        <url-pattern>/123</url-pattern>
-    </servlet-mapping>
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>myServlet</servlet-name>-->
+<!--        <url-pattern>/*</url-pattern>-->
+<!--    </servlet-mapping>-->
 
     <context-param>
       <param-name>localStorage</param-name>

@@ -9,11 +9,11 @@
 <table>
 	<tr>
 		<td align="right"><spring:message code="accountname" /></td>
-		<td><input type="text" name="j_accountname" value="account"/></td>
+		<td><input type="text" name="j_username"/></td>
 	</tr>
 	<tr>
 		<td align="right"><spring:message code="password" /></td>
-		<td><input type="password" name="j_password" value="pass"/></td>
+		<td><input type="password" name="j_password"/></td>
 	</tr>
 	<tr>
 		<td align="right"><spring:message code="remember" /></td>

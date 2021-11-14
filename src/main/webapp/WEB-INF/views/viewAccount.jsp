@@ -10,11 +10,11 @@
 <table>
 	<tr>
 		<td align="right"><spring:message code="login" /></td>
-		<td><input type="text" name="accountname" value="account"/></td>
+		<td><input type="text" name="accountname" value="${account.name}"/></td>
 	</tr>
 	<tr>
 		<td align="right"><spring:message code="password" /></td>
-		<td><input type="password" name="password" value="pass"/></td>
+		<td><input type="password" name="password"  value="${account.password}"/></td>
 	</tr>
 	<tr>
 		<td align="right"><spring:message code="register.lang.native" /></td>
