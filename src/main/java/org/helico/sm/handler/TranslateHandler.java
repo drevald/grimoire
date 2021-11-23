@@ -1,7 +1,9 @@
 package org.helico.sm.handler;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.log4j.Logger;
 import org.helico.domain.*;
 import org.helico.service.DictWordService;
@@ -68,20 +70,40 @@ public class TranslateHandler extends AbstractHandler {
 
     }
 
-    private String fetchTranslation(String text, TranslatorProvider provider, String srcLangId, String destLangId) {
+    protected String fetchTranslation(String text, TranslatorProvider provider, String srcLangId, String destLangId) {
         String result = null;
         try {
             if (httpClient == null) {
                 httpClient = new HttpClient();
             }
-            GetMethod getMethod = new GetMethod(resFormat.format(new String[] {URLEncoder.encode(text,"utf-8"), srcLangId, destLangId}));
-            httpClient.executeMethod(getMethod);
-            String output = getMethod.getResponseBodyAsString();
+            PostMethod postMethod = new PostMethod("https://api.cognitive.microsofttranslator.com/translate?api-version=3.0\n");
+            postMethod.setRequestBody("[\n" +
+                    "    {\"Text\":\"I would really like to drive your car around the block a few times.\"}\n" +
+                    "]");
+            httpClient.executeMethod(postMethod);
+            String output = postMethod.getResponseBodyAsString();
             result = (String)reqFormat.parse(output)[0];
         } catch (Exception e) {
             LOG.error("Can not get translation", e);
         }
         return result;
     }
+
+
+//    private String fetchTranslation(String text, TranslatorProvider provider, String srcLangId, String destLangId) {
+//        String result = null;
+//        try {
+//            if (httpClient == null) {
+//                httpClient = new HttpClient();
+//            }
+//            GetMethod getMethod = new GetMethod(resFormat.format(new String[] {URLEncoder.encode(text,"utf-8"), srcLangId, destLangId}));
+//            httpClient.executeMethod(getMethod);
+//            String output = getMethod.getResponseBodyAsString();
+//            result = (String)reqFormat.parse(output)[0];
+//        } catch (Exception e) {
+//            LOG.error("Can not get translation", e);
+//        }
+//        return result;
+//    }
 
 }
