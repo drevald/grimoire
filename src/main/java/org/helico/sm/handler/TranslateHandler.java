@@ -70,40 +70,20 @@ public class TranslateHandler extends AbstractHandler {
 
     }
 
-    protected String fetchTranslation(String text, TranslatorProvider provider, String srcLangId, String destLangId) {
+    private String fetchTranslation(String text, TranslatorProvider provider, String srcLangId, String destLangId) {
         String result = null;
         try {
             if (httpClient == null) {
                 httpClient = new HttpClient();
             }
-            PostMethod postMethod = new PostMethod("https://api.cognitive.microsofttranslator.com/translate?api-version=3.0\n");
-            postMethod.setRequestBody("[\n" +
-                    "    {\"Text\":\"I would really like to drive your car around the block a few times.\"}\n" +
-                    "]");
-            httpClient.executeMethod(postMethod);
-            String output = postMethod.getResponseBodyAsString();
+            GetMethod getMethod = new GetMethod(resFormat.format(new String[] {URLEncoder.encode(text,"utf-8"), srcLangId, destLangId}));
+            httpClient.executeMethod(getMethod);
+            String output = getMethod.getResponseBodyAsString();
             result = (String)reqFormat.parse(output)[0];
         } catch (Exception e) {
             LOG.error("Can not get translation", e);
         }
         return result;
     }
-
-
-//    private String fetchTranslation(String text, TranslatorProvider provider, String srcLangId, String destLangId) {
-//        String result = null;
-//        try {
-//            if (httpClient == null) {
-//                httpClient = new HttpClient();
-//            }
-//            GetMethod getMethod = new GetMethod(resFormat.format(new String[] {URLEncoder.encode(text,"utf-8"), srcLangId, destLangId}));
-//            httpClient.executeMethod(getMethod);
-//            String output = getMethod.getResponseBodyAsString();
-//            result = (String)reqFormat.parse(output)[0];
-//        } catch (Exception e) {
-//            LOG.error("Can not get translation", e);
-//        }
-//        return result;
-//    }
 
 }
