@@ -9,17 +9,6 @@
         <param-value>/WEB-INF/log4j.properties</param-value>
     </context-param>
 
-<!--    <servlet>-->
-<!--        <servlet-name>myServlet</servlet-name>-->
-<!--        <servlet-class>org.helico.MyServlet</servlet-class>-->
-<!--        <load-on-startup>1</load-on-startup>-->
-<!--    </servlet>-->
-
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>myServlet</servlet-name>-->
-<!--        <url-pattern>/*</url-pattern>-->
-<!--    </servlet-mapping>-->
-
     <context-param>
       <param-name>localStorage</param-name>
       <param-value>@storage.location@</param-value>
@@ -30,9 +19,9 @@
     <param-value>BUILDTIME</param-value>
   </context-param>
 
-  <listener>
-    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-  </listener>
+<!--  <listener>-->
+<!--    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>-->
+<!--  </listener>-->
 
   <context-param>
     <param-name>contextConfigLocation</param-name>
