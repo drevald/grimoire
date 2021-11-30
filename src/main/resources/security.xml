@@ -8,7 +8,10 @@
          http://www.springframework.org/schema/security
          https://www.springframework.org/schema/security/spring-security.xsd">
 
-    <http />
+    <http>
+        <form-login default-target-url="/dict"/>
+        <logout logout-success-url="/login"/>
+    </http>
 
 <!--    <b:bean id="bCryptPasswordEncoder"-->
 <!--          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"-->

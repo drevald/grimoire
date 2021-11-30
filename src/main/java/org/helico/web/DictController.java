@@ -94,7 +94,6 @@ public class DictController extends AbstractController {
         }
     }
 
-
     @RequestMapping(value = "/dict/edit/save", method = RequestMethod.POST)
     public String addDict(
             @RequestParam("id") Long id,
@@ -106,8 +105,6 @@ public class DictController extends AbstractController {
         dictService.saveDict(dict);
         return "redirect:/dict/edit/" + dict.getId() + "?langId=" + langId;
     }
-
-
 
     /**
      * Stores uploaded text after preview
@@ -130,7 +127,6 @@ public class DictController extends AbstractController {
         dictService.storeDict(dict);
         return "redirect:/dict";
     }
-
 
     @RequestMapping("/")
     public String home() {

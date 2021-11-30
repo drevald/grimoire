@@ -5,7 +5,7 @@
 	: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} </div>
 </c:if>
 
-<form method="POST" action="<c:url value="/updateAccount" />">
+<form method="POST" action="<c:url value="updateAccount" />">
 <input type="hidden" name="accountId" value="${account.id}"/>
 <table>
 	<tr>
