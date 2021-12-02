@@ -8,8 +8,14 @@
          http://www.springframework.org/schema/security
          https://www.springframework.org/schema/security/spring-security.xsd">
 
-    <http>
-        <form-login default-target-url="/dict"/>
+    <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/*" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/dict*" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/upload*" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/dict/upload*" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/dict/words*" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/dict/view*" access="hasRole('ROLE_USER')"/>
+        <form-login default-target-url="/dict" authentication-failure-url="/login"/>
         <logout logout-success-url="/login"/>
     </http>
 

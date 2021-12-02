@@ -3,6 +3,7 @@
     <h3><spring:message code="dict.upload"/></h3>
 
     <form method="post" action="dict/upload" enctype="multipart/form-data">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" name="account" value="${currAccount}"/>
         <input type="file" name="file"/>&nbsp;
         <spring:message code='dict.text.language'/>

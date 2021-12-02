@@ -8,12 +8,15 @@
 
 	<annotation-driven />
 
-	<resources mapping="/resources/**" location="/resources/" />
- 
-	<beans:bean id="multipartResolver" 
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<beans:bean id="filterMultipartResolver"
+				class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<beans:property name="maxUploadSize" value="1000000000"/>
 	</beans:bean>
+
+<!--	<beans:bean id="multipartResolver" -->
+<!--		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
+<!--		<beans:property name="maxUploadSize" value="1000000000"/>-->
+<!--	</beans:bean>-->
  
 	<beans:bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
