@@ -6,6 +6,7 @@
 </c:if>
 
 <form method="POST" action="<c:url value="/registerAccount" />">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 <table>
 	<tr>
 		<td align="right"><spring:message code="login" /></td>

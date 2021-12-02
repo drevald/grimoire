@@ -4,6 +4,7 @@
 
 	<table>
 	<form method="post" action="save">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<input type="hidden" name="id" value="${dict.id}"/>
 	<input type="hidden" name="accountId" value="${dict.accountId}"/>
 	<input type="hidden" name="langId" value="${langId}"/>

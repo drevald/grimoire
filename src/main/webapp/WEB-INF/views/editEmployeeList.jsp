@@ -10,7 +10,6 @@
 <h2>Employee Management Screen</h2>
  <h6><a href="<c:url value='j_spring_security_logout'/>">Click here to logout</a></h6>
 <form:form method="post" action="add" commandName="employee">
- 
     <table>
     <tr>
         <td><form:label path="firstname"><spring:message code="label.firstname"/></form:label></td>
