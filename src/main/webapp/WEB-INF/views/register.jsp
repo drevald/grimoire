@@ -1,5 +1,7 @@
 <%@include file="/WEB-INF/loginHeader.jsp"%>
 
+<div class="col-sm-8 p-5">
+
 <c:if test="${not empty param.error}">
 	<div color="red"> <spring:message code="loginerror" />
 	: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} </div>
@@ -43,5 +45,6 @@
 	</tr>
 </table>
 </form>
+</div>
 </body>
 </html>

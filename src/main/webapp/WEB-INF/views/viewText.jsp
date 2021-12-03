@@ -1,5 +1,7 @@
 <%@ include file = "/WEB-INF/dictHeader.jsp"%>
 
+<div class="col-sm-8 p-5">
+
     <script>
 
         var currSelectionId = 0;
@@ -125,5 +127,7 @@
 </table>
 
 <script>highlight(0);</script>
+
+</div>
 
 <%@ include file = "/WEB-INF/footer.jsp"%>

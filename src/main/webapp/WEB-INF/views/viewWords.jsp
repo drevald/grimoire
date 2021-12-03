@@ -2,59 +2,60 @@
 <%@ page import="java.util.List" %>
 <%@ include file="/WEB-INF/dictHeader.jsp" %>
 
+<div class="col-sm-6 p-5">
+
 <h3>${dict.name}</h3>
-<div style="float:left;width:100%">
-    <div style="float:left;margin-right:20px">
-        <table>
+
+        <table class="table table-condensed table-sm">
             <tr>
-                <td><b><spring:message code="word.original"/></b></td>
-                <td>&nbsp;</td>
-                <td><b><spring:message code="word.occurrence"/></b></td>
-                <td>&nbsp;</td>
-                <td><b><spring:message code="word.translation"/></b></td>
+                <th><spring:message code="word.original"/></th>
+                <th><spring:message code="word.occurrence"/></th>
+                <th><spring:message code="word.translation"/></th>
+                <th width="100%">&nbsp;</th>
             </tr>
             <c:forEach items="${words}" var="word">
                 <tr>
                     <td>${word.word.value}</td>
-                    <td>&nbsp;</td>
                     <td>${word.counter}</td>
-                    <td>&nbsp;</td>
                     <td>
-
                     <c:forEach items="${word.word.translations}" var="translation">
-                        ${translation.value}(${translation.translatorId})
+                        ${translation.value}
                     </c:forEach>
                     </td>
+                    <td width="100%">&nbsp;</td>
                 </tr>
             </c:forEach>
         </table>
-        <br>
-        <a href="?offset=0"><spring:message code="pager.first"/></a>&nbsp;
-        <c:if test="${offset>size}">
-            <a href="?offset=${offset-size}"><spring:message code="pager.previous"/></a>&nbsp;
+
+        <div>
+            <a href="?offset=0" class="btn"><spring:message code="pager.first"/></a>
+            <c:if test="${offset>size}">
+                <a href="?offset=${offset-size}" class="btn"><spring:message code="pager.previous"/></a>
+            </c:if>
+            Current page ${currPage} of ${totalPage}
+            <c:if test="${maxOffset>offset+size}">
+                <a href="?offset=${offset+size}" class="btn"><spring:message code="pager.next"/></a>
+            </c:if>
+            <a href="?offset=${maxOffset}" class="btn"><spring:message code="pager.last"/></a>
+        </div>
+
+        <c:if test="${dict.status eq 'PARSED' || dict.status eq 'TRANSLATED'}">
+            <div>
+                <form action="translate" method="post">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <input type="hidden" name="dictId" value="${dict.id}"/>
+                    <spring:message code="words.not.translated"/>
+                    <input type="submit" value="Translate" class="btn btn-info"/>
+                    <spring:message code="using"/>
+                    <select name="translatorId">
+                        <c:forEach items="${translators}" var="translator">
+                                <option value="${translator.id}">${translator.provider.title}</option>
+                        </c:forEach>
+                    </select>
+                </form>
+            </div>
         </c:if>
-        &nbsp;Current page ${currPage} of ${totalPage}&nbsp;
-        <c:if test="${maxOffset>offset+size}">
-            <a href="?offset=${offset+size}"><spring:message code="pager.next"/></a>&nbsp;
-        </c:if>
-        <a href="?offset=${maxOffset}"><spring:message code="pager.last"/></a>&nbsp;
-        <br>
-    </div>
+
 </div>
-</div>
-<c:if test="${dict.status eq 'PARSED' || dict.status eq 'TRANSLATED'}">
-<hr>
-<form action="translate" method="post">
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    <input type="hidden" name="dictId" value="${dict.id}"/>
-    <spring:message code="words.not.translated"/>
-    <input type="submit" value="Translate"/>
-    <spring:message code="using"/>
-    <select name="translatorId">
-        <c:forEach items="${translators}" var="translator">
-                <option value="${translator.id}">${translator.provider.title}</option>
-        </c:forEach>
-    </select>
-</form>
-</c:if>
+
 <%@ include file="/WEB-INF/footer.jsp" %>

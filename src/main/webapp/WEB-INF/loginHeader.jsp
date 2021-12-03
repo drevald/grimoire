@@ -4,4 +4,3 @@
         <spring:message code="register" />
     </a>
 
-	<hr/>

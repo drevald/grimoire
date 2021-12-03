@@ -1,5 +1,7 @@
 <%@ include file = "/WEB-INF/accountHeader.jsp"%>
 
+<div class="col-sm-8 p-5">
+
     <h3><spring:message code="dict.list" /></h3>
 
     <c:if test="${empty helperList}">
@@ -7,7 +9,7 @@
     </c:if>
 
     <c:if test="${!empty helperList}">
-    <table>
+        <table class="table table-condensed table-sm">
         <c:forEach items="${helperList}" var="helper">
         <tr>
 	       	<td>${helper.dict.id}</td>
@@ -35,5 +37,5 @@
 	</table>
 	</c:if>
 	<a href="upload"><spring:message code="dict.create" /></a>
-
+</div>
 <%@ include file="/WEB-INF/footer.jsp"%>

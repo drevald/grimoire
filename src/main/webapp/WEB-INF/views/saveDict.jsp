@@ -1,5 +1,7 @@
 <%@ include file = "/WEB-INF/accountHeader.jsp"%>
 
+    <div class="col-sm-8 p-5">
+
 	<h3><spring:message code="dict.edit.properties" /></h3>
 
 	<table>
@@ -39,5 +41,7 @@
 		</tr>		
 	</form>
 	</table>
+
+    </div>
 
 <%@ include file = "/WEB-INF/footer.jsp"%>

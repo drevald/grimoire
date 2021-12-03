@@ -206,6 +206,15 @@
                 </filters>
             </build>
         </profile>
+        <profile>
+            <id>heroku</id>
+            <build>
+                <finalName>grimoire</finalName>
+                <filters>
+                    <filter>heroku.properties</filter>
+                </filters>
+            </build>
+        </profile>
     </profiles>
     <build>
         <finalName>grimoire</finalName>

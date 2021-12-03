@@ -1,4 +1,4 @@
- <hr/>
-<%=application.getInitParameter("buildTime")%>
+</div>
+</div>
 </body>
 </html>

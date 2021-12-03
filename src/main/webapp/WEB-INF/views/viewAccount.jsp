@@ -1,4 +1,6 @@
-<%@include file="/WEB-INF/dictHeader.jsp"%>
+<%@include file="/WEB-INF/accountHeader.jsp"%>
+
+<div class="col-sm-8 p-5">
 
 <c:if test="${not empty param.error}">
 	<div color="red"> <spring:message code="loginerror" />
@@ -57,5 +59,6 @@
 	</tr>
 </table>
 </form>
+<div class="col-sm-8 p-5">
 </body>
 </html>

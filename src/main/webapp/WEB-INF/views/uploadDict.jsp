@@ -1,5 +1,7 @@
 <%@ include file = "/WEB-INF/accountHeader.jsp"%>
 
+<div class="col-sm-8 p-5">
+
     <h3><spring:message code="dict.upload"/></h3>
 
     <form method="post" action="dict/upload" enctype="multipart/form-data">
@@ -14,5 +16,7 @@
         </select>
 	    <input type="submit" value="<spring:message code='upload'/>"/>
     </form>
+
+</dict>
 
 <%@ include file = "/WEB-INF/footer.jsp"%>
