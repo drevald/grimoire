@@ -3,7 +3,6 @@
 <%@ include file="/WEB-INF/dictHeader.jsp" %>
 
 <h3>${dict.name}</h3>
-
 <div style="float:left;width:100%">
     <div style="float:left;margin-right:20px">
         <table>
@@ -46,6 +45,7 @@
 <c:if test="${dict.status eq 'PARSED' || dict.status eq 'TRANSLATED'}">
 <hr>
 <form action="translate" method="post">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <input type="hidden" name="dictId" value="${dict.id}"/>
     <spring:message code="words.not.translated"/>
     <input type="submit" value="Translate"/>

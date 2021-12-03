@@ -7,6 +7,7 @@
 
 <form method="POST" action="<c:url value="updateAccount" />">
 <input type="hidden" name="accountId" value="${account.id}"/>
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 <table>
 	<tr>
 		<td align="right"><spring:message code="login" /></td>

@@ -16,7 +16,6 @@ import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.List;
 
-
 @Component("translateHandler")
 public class TranslateHandler extends AbstractHandler {
 
@@ -57,7 +56,7 @@ public class TranslateHandler extends AbstractHandler {
                     String translation = fetchTranslation(word.getValue(), provider, dict.getLangId(), "ru");
                     if (translation != null) {
 						try {
-	                        transService.storeTranslation(word.getId(), provider.getId(), translation.toLowerCase());
+	                        transService.storeTranslation(word.getId(), translator.getId(), translation.toLowerCase());
 						} catch (Exception e) {
 							LOG.error("Can not save translation for " + word.getValue() + " : " + translation, e);
 						}
