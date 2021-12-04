@@ -28,16 +28,25 @@
 		<property name="defaultEncoding" value="UTF-8"  />
 	</bean>
 
-	<bean id="propertyConfigurer"
+	<!-- <bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-		p:location="/WEB-INF/jdbc.properties" />
+		p:location="/WEB-INF/jdbc.properties" /> -->
+
+	<!-- <context:property-placeholder system-properties-mode="ENVIRONMENT"/> -->
 
 	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		p:driverClassName="org.postgresql.Driver"
+		p:url="#{systemProperties['URL']}"
+		p:username="#{systemProperties['USERNAME']}"
+		p:password="#{systemProperties['PASSWORD']}" />		
+
+	<!-- <bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
 		p:driverClassName="@jdbc.driverClass@"
 		p:url="@jdbc.databaseurl@"
 		p:username="@jdbc.username@"
-		p:password="@jdbc.password@" />
+		p:password="@jdbc.password@" /> -->
 
 <!--	<bean id="dataSource"-->
 <!--		  class="org.springframework.jdbc.datasource.DriverManagerDataSource"-->

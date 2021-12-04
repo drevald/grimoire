@@ -10,5 +10,15 @@ services:
       - data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+  web:
+    build: .
+    environment:
+      - URL=jdbc:postgresql://127.0.0.1:5432/grimoire
+      - USERNAME=denis
+      - PASSWORD=9rommit
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres      
 volumes:
   data:
