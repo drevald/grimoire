@@ -13,7 +13,7 @@ services:
   web:
     build: .
     environment:
-      - URL=jdbc:postgresql://127.0.0.1:5432/grimoire
+      - URL=jdbc:postgresql://postgres:5432/grimoire
       - USERNAME=denis
       - PASSWORD=9rommit
     ports:
