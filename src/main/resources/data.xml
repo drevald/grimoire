@@ -31,9 +31,9 @@
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
 		p:driverClassName="org.postgresql.Driver"
-		p:url="#{systemProperties['URL']}"
-		p:username="#{systemProperties['USERNAME']}"
-		p:password="#{systemProperties['PASSWORD']}" />		
+		p:url="#{systemProperties['JDBC_DATABASE_URL']}"
+		p:username="#{systemProperties['JDBC_DATABASE_USERNAME']}"
+		p:password="#{systemProperties['JDBC_DATABASE_PASSWORD']}" />		
 
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
