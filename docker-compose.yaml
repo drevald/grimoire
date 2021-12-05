@@ -12,10 +12,6 @@ services:
       - 5432:5432
   web:
     build: .
-    environment:
-      - URL=jdbc:postgresql://postgres:5432/grimoire
-      - USERNAME=denis
-      - PASSWORD=9rommit
     ports:
       - "8080:8080"
     depends_on:
