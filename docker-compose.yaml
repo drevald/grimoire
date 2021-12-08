@@ -13,9 +13,10 @@ services:
   web:
     build: .
     environment:
-      - PORT=8080
+      - PORT=9999
+      - DATABASE_URL=postgresql://denis:9rommit@postgres:5432/grimoire
     ports:
-      - "8080:8080"
+      - "8080:9999"
     depends_on:
       - postgres      
 volumes:
