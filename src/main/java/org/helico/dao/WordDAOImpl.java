@@ -24,7 +24,7 @@ public class WordDAOImpl implements WordDAO {
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
             Word result = (Word)session.createQuery("from Word where value=? and langId=?")
-                    .setString(0, value).setString(1, langId).uniqueResult();
+                    .setParameter(0, value).setParameter(1, langId).uniqueResult();
 
         if (result==null) {
             Word word = new Word();
@@ -56,7 +56,7 @@ public class WordDAOImpl implements WordDAO {
 
                 LOG.debug(">>>>saving value:"+word.getValue()+" lang:"+word.getLangId());
                     Word storedWord = (Word)session.createQuery("from Word where value=? and langId=?")
-                            .setString(0, word.getValue()).setString(1, word.getLangId()).uniqueResult();
+                            .setParameter(0, word.getValue()).setParameter(1, word.getLangId()).uniqueResult();
 
                 if (storedWord == null) {
                     Word newWord = new Word();
@@ -72,7 +72,7 @@ public class WordDAOImpl implements WordDAO {
                 }
 
                 DictWord dictWord = (DictWord)session.createQuery("from DictWord where dictId=? and word.id=?")
-                    .setLong(0, dictId).setLong(1, word.getId()).uniqueResult();
+                    .setParameter(0, dictId).setParameter(1, word.getId()).uniqueResult();
 
                 if (dictWord == null) {
                     dictWord = new DictWord();
@@ -99,7 +99,7 @@ public class WordDAOImpl implements WordDAO {
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
         Word result = (Word)session.createQuery("from Word where value=? and langId=?")
-                .setString(0, value).setString(1, langId).uniqueResult();
+                .setParameter(0, value).setParameter(1, langId).uniqueResult();
         return result;
 
     }

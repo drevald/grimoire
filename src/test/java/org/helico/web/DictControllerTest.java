@@ -26,15 +26,15 @@ public class DictControllerTest {
     @Test
     @WithMockUser(username = "admin", password = "admin", roles = "ROLE_USER")
     public void test() throws Exception {
-//        MvcResult mvcResult = this.mockMvc.perform(get("/upload"))
-//                .andExpect(status().isOk())
-//                .andExpect(request().asyncStarted())
-//                .andExpect(request().asyncResult("body"))
-//                .andReturn();
-//
-//        this.mockMvc.perform(asyncDispatch(mvcResult))
-//                .andExpect(status().isOk())
-//                .andExpect(content().string("body"));
+        MvcResult mvcResult = this.mockMvc.perform(get("/upload"))
+                .andExpect(status().isOk())
+                .andExpect(request().asyncStarted())
+                .andExpect(request().asyncResult("body"))
+                .andReturn();
+
+        this.mockMvc.perform(asyncDispatch(mvcResult))
+                .andExpect(status().isOk())
+                .andExpect(content().string("body"));
     }
 
 }
