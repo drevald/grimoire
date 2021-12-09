@@ -1,1 +1,1 @@
-<jsp:forward page="/list"></jsp:forward>
+<jsp:forward page="/dict"></jsp:forward>
