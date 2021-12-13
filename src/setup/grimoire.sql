@@ -54,6 +54,8 @@ CREATE  TABLE IF NOT EXISTS text (
   orig_path varchar(128) NOT NULL ,
   utf8_path varchar(128) NOT NULL ,
   encoding varchar(32) NOT NULL,
+  orig_doc bytea,
+  utf8_text  text,
   PRIMARY KEY(id));
 
 -- -----------------------------------------------------

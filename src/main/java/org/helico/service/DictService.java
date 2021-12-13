@@ -1,6 +1,7 @@
 package org.helico.service;
 
 import org.helico.domain.Dict;
+import org.helico.domain.Text;
 
 import java.io.InputStream;
 import java.util.List;
@@ -28,6 +29,8 @@ public interface DictService {
     public void setPreview(Long id, byte[] data);
 
     public void storeDict(Dict dict);
+
+    public void saveText(Text text);
 
     public void parseText(Long dictId);
 

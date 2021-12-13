@@ -24,6 +24,14 @@ public class Text {
 	@Column(name = "encoding")
 	private String encoding;
 
+    @Column(name = "orig_doc", columnDefinition="LONGBLOB")
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] origDoc;
+
+    @Column(name = "utf8_text", columnDefinition="LONGTEXT")
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] utfText;
+
     public Long getId() {
         return id;
     }
@@ -55,4 +63,22 @@ public class Text {
     public void setEncoding(String encoding) {
         this.encoding = encoding;
     }
+
+
+    public byte[] getOrigDoc() {
+        return origDoc;
+    }
+
+    public void setOrigDoc(byte[] origDoc) {
+        this.origDoc = origDoc;
+    }
+
+    public byte[] getUtfText() {
+        return utfText;
+    }
+
+    public void setUtfText(byte[] utfText) {
+        this.utfText = utfText;
+    }
+
 }

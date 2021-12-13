@@ -4,6 +4,7 @@ import org.apache.commons.io.input.CountingInputStream;
 import org.apache.log4j.Logger;
 import org.helico.domain.Dict;
 import org.helico.domain.Job;
+import org.helico.domain.Text;
 import org.helico.service.JobService;
 import org.helico.service.WordService;
 import org.helico.util.WordReader;
@@ -11,6 +12,7 @@ import org.helico.util.WordReaderResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -38,12 +40,17 @@ public class ParseHandler extends AbstractHandler {
 
     public void process(Object data, Job job) throws Exception {
         Dict dict = dictService.findDict(job.getDictId());
+        Text text = dict.getText();
         LOG.debug("dict="+dict);
-        File utfFile = new File(dict.getText().getUtfPath());
-        CountingInputStream is = new CountingInputStream(
-                new FileInputStream(utfFile));
+//        File utfFile = new File(dict.getText().getUtfPath());
+//        CountingInputStream is = new CountingInputStream(
+//                new FileInputStream(utfFile));
 
-//        InputStreamReader reader = new InputStreamReader(is, "UTF-8");
+        byte[] utfText = text.getUtfText();
+        CountingInputStream is = new CountingInputStream(
+                new ByteArrayInputStream(utfText));
+
+        //        InputStreamReader reader = new InputStreamReader(is, "UTF-8");
 //        StringBuilder sb = new StringBuilder();
 //	    long counter = 0L;
 //        boolean readingWord = false;
@@ -85,20 +92,20 @@ public class ParseHandler extends AbstractHandler {
                 wordService.store(result.getResult().toLowerCase(), dict.getLangId(), dict.getId());
             }
             if (reader.getCounter() % PROGRESS_GRANULARITY == 0) {
-                LOG.debug("is.getByteCount()="+is.getByteCount()+" total=" + utfFile.length());
-                LOG.debug("!!! percentage = "+(int)((is.getByteCount() * 100) / utfFile.length()));
-                jobService.setProgress(job.getId(), (int)((is.getByteCount() * 100) / utfFile.length()));
+                LOG.debug("is.getByteCount()="+is.getByteCount()+" total=" + utfText.length);
+                LOG.debug("!!! percentage = "+(int)((is.getByteCount() * 100) / utfText.length));
+                jobService.setProgress(job.getId(), (int)((is.getByteCount() * 100) / utfText.length));
             }
         }
 
 
-        LOG.debug("is.getByteCount()="+is.getByteCount()+" total=" + utfFile.length());
-        LOG.debug("!!! percentage = "+(int)((is.getByteCount() * 100) / utfFile.length()));
-        jobService.setProgress(job.getId(), (int)((is.getByteCount() * 100) / utfFile.length()));
+        LOG.debug("is.getByteCount()="+is.getByteCount()+" total=" + utfText.length);
+        LOG.debug("!!! percentage = "+(int)((is.getByteCount() * 100) / utfText.length));
+        jobService.setProgress(job.getId(), (int)((is.getByteCount() * 100) / utfText.length));
 //        wordService.batchStore(words, dict.getId());
 //        words.clear();
 
-        LOG.debug("rawUtfBytes.size=" + utfFile.length());
+        LOG.debug("rawUtfBytes.size=" + utfText.length);
 
         reader.close();
 

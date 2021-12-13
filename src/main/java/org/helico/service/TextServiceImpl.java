@@ -3,6 +3,7 @@ package org.helico.service;
 import org.apache.log4j.Logger;
 import org.helico.dao.DictDAO;
 import org.helico.domain.Dict;
+import org.helico.domain.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,12 +36,14 @@ public class TextServiceImpl implements TextService {
     @Transactional
     public Reader getTextReader(Long id, int offset, int len) throws Exception {
         Dict dict = dictDao.findDict(id);
-        String utfPath = dict.getText().getUtfPath();
-        FileInputStream fis = new FileInputStream(utfPath);
-        Reader fr = new InputStreamReader(fis, "UTF-8");
+//        String utfPath = dict.getText().getUtfPath();
+//        FileInputStream fis = new FileInputStream(utfPath);
+//        Reader reader = new InputStreamReader(fis, "UTF-8");
+        Text text = dict.getText();
+        Reader reader = new StringReader(new String(text.getUtfText(), "UTF-8"));
         char[] buffer = new char[len];
-        fr.skip(offset);
-        fr.read(buffer);
+        reader.skip(offset);
+        reader.read(buffer);
         StringReader sr = new StringReader(new String(buffer));
         LOG.trace(String.format("NOT MARKED STRING Dict #%d Offset %d \n ++++++++++ \n %s \n ----------\n"
                 ,dict.getId(), offset, new String(buffer)));

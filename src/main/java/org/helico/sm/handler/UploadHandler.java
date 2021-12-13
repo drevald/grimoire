@@ -17,16 +17,17 @@ public class UploadHandler extends AbstractHandler {
     
     public void process(Object object, Job job) throws Exception {
           jobService.setActive(job.getId(), true);
-          InputStream is = (InputStream)object;
+//          InputStream is = (InputStream)object;
             Long dictId = job.getDictId();
-	        Dict dict = dictService.findDict(dictId);
-            Text text = dict.getText();
-        OutputStream os = new FileOutputStream(new File(text.getOrigPath()));
-          IOUtils.copy(is, os);
-          os.flush();
-          dictService.saveDict(dict);
-          os.close();
-          is.close();
+//	        Dict dict = dictService.findDict(dictId);
+//            Text text = dict.getText();
+//        //OutputStream os = new FileOutputStream(new File(text.getOrigPath()));
+//        OutputStream os = new FileOutputStream(new File(text.getOrigPath()));
+//          IOUtils.copy(is, os);
+//          os.flush();
+//          dictService.saveDict(dict);
+//          os.close();
+//          is.close();
           LOG.info("<<< done dict#" + dictId);
     }
 
