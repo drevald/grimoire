@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Component("storeHandler")
 public class StoreHandler extends AbstractHandler {
@@ -32,12 +35,15 @@ public class StoreHandler extends AbstractHandler {
     protected void process(Object object, Job job) throws Exception {
         Dict dict = dictService.findDict(job.getDictId());
         Text text = dict.getText();
-        ByteArrayInputStream bais = new ByteArrayInputStream(text.getOrigDoc());
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        IOUtils.copyLarge(bais, baos);
-        IOUtils.closeQuietly(bais);
-        IOUtils.closeQuietly(baos);
-        text.setUtfText(baos.toByteArray());
+
+        Reader reader = new InputStreamReader(new ByteArrayInputStream(text.getOrigDoc()), dict.getEncoding());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        Writer writer = new OutputStreamWriter(os, StandardCharsets.UTF_8);
+
+        IOUtils.copyLarge(reader, writer);
+        IOUtils.closeQuietly(reader);
+        IOUtils.closeQuietly(writer);
+        text.setUtfText(os.toByteArray());
         dictService.saveText(text);
         dictService.saveDict(dict);
     }

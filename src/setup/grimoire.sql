@@ -1,4 +1,6 @@
 
+CREATE SEQUENCE hibernate_sequence START 1;
+
 -- -----------------------------------------------------
 -- Table `transition`
 -- -----------------------------------------------------
@@ -55,7 +57,7 @@ CREATE  TABLE IF NOT EXISTS text (
   utf8_path varchar(128) NOT NULL ,
   encoding varchar(32) NOT NULL,
   orig_doc bytea,
-  utf8_text  text,
+  utf8_text  bytea,
   PRIMARY KEY(id));
 
 -- -----------------------------------------------------

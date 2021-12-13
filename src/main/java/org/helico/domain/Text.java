@@ -28,7 +28,7 @@ public class Text {
     @Basic(fetch = FetchType.LAZY)
     private byte[] origDoc;
 
-    @Column(name = "utf8_text", columnDefinition="LONGTEXT")
+    @Column(name = "utf8_text", columnDefinition="LONGBLOB")
     @Basic(fetch = FetchType.LAZY)
     private byte[] utfText;
 
