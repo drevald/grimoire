@@ -7,13 +7,13 @@
                 <spring:message code="home" />
             </a>
         </li>
-        <li class="nav-item text-white">
-            <a class="nav-link" href='<c:url value="/dict/words/${dict.id}?offset=0" />'>
+        <li class="nav-item">
+            <a class="nav-link text-white" href='<c:url value="/dict/words/${dict.id}?offset=0" />'>
                 <spring:message code="dict" />
             </a>
         </li>
-        <li class="nav-item text-white">
-            <a class="nav-link" href='<c:url value="/text/view/${dict.id}?offset=0" />'>
+        <li class="nav-item">
+            <a class="nav-link text-white" href='<c:url value="/text/view/${dict.id}?offset=0" />'>
                 <spring:message code="text" />
             </a>
         </li>

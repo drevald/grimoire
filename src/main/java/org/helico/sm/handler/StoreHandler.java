@@ -35,8 +35,14 @@ public class StoreHandler extends AbstractHandler {
     protected void process(Object object, Job job) throws Exception {
         Dict dict = dictService.findDict(job.getDictId());
         Text text = dict.getText();
+        Reader reader;
 
-        Reader reader = new InputStreamReader(new ByteArrayInputStream(text.getOrigDoc()), dict.getEncoding());
+        if (dict.getEncoding() == null) {
+            reader = new InputStreamReader(new ByteArrayInputStream(text.getOrigDoc()));
+        } else {
+            reader = new InputStreamReader(new ByteArrayInputStream(text.getOrigDoc()), dict.getEncoding());
+        }
+
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         Writer writer = new OutputStreamWriter(os, StandardCharsets.UTF_8);
 

@@ -121,14 +121,18 @@ public class DictServiceImpl implements DictService {
 		text.setEncoding("UTF-8");
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
 		try {
+			IOUtils.copy(pis, baos);
+			IOUtils.closeQuietly(pis);
 			IOUtils.copy(is, baos);
 			IOUtils.closeQuietly(is);
 			IOUtils.closeQuietly(baos);
-			text.setOrigDoc(baos.toByteArray());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		text.setOrigDoc(baos.toByteArray());
 
 		dictDao.saveText(text);
 		dict.setText(text);

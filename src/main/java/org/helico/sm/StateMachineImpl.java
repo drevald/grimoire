@@ -51,7 +51,7 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware, 
             handler.process(data, job.getId());
             LOG.debug("handler called");
         } else {
-            LOG.warn("handler for event = " + event + " and status = " + dict.getStatus() + " is not found");
+            LOG.warn("handler for event = " + event.label + " and status = " + dict.getStatus() + " is not found");
         }
     }
 

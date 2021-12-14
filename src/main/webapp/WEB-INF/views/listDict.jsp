@@ -17,12 +17,12 @@
             <td>${helper.dict.status}</td>
             <td>
             <c:if test="${!empty helper.jobs}">
-                  <c:forEach items="${helper.jobs}" var="job">
-		  <c:if test="${job.active}">
-                    ${job.progress}%
-		  </c:if>
-                    ${job.details}
-                  </c:forEach>
+                <c:forEach items="${helper.jobs}" var="job">
+		            <c:if test="${job.active}">
+                        ${job.progress}%
+		            </c:if>
+                    ${fn:substring(job.details, 0, 16)}
+                </c:forEach>
             </c:if>
             <c:if test="${empty helper.jobs}">
                   EMPTY

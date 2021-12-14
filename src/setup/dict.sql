@@ -66,14 +66,14 @@ INSERT INTO translator_provider(id, title, host, req_pattern, res_pattern)
 
 INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (1, 0, 'fr', 'ru');
 INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (2, 0, 'de', 'ru');
-INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (3, 1, 'en', 'ru');
-INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (4, 1, 'fr', 'ru');
-INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (5, 1, 'de', 'ru');
-INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (6, 1, 'el', 'ru');
-INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (7, 1, 'sv', 'ru');
-INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (8, 1, 'is', 'ru');
-INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (9, 1, 'da', 'ru');
-INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (10, 1, 'pl', 'ru');
+INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (3, 0, 'en', 'ru');
+INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (4, 0, 'fr', 'ru');
+INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (5, 0, 'de', 'ru');
+INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (6, 0, 'el', 'ru');
+INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (7, 0, 'sv', 'ru');
+INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (8, 0, 'is', 'ru');
+INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (9, 0, 'da', 'ru');
+INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (10, 0, 'pl', 'ru');
 
 --
 -- CREATE  TABLE IF NOT EXISTS service (
