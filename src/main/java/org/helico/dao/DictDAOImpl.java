@@ -19,12 +19,11 @@ public class DictDAOImpl implements DictDAO {
     @Autowired
 	private SessionFactory sessionFactory;
 
-	public synchronized long saveText(Text text) {
+	public synchronized void saveText(Text text) {
 	    Session session = sessionFactory.getCurrentSession();
 	    LOG.info("save sess#"+sessionFactory.getCurrentSession().hashCode()+" " + text.toString());
 	    session.saveOrUpdate(text);
 	    session.flush();
-	    return text.getId();
 	}
 
 	public synchronized long saveDict(Dict dict) {

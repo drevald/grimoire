@@ -64,15 +64,6 @@ public class DictServiceImpl implements DictService {
 
 	@Transactional
 	public void removeDict(Long id) {
-		Dict dict = dictDao.findDict(id);
-		if (dict != null && dict.getText() != null) {
-			try {
-				FileUtils.deleteQuietly(new File(dict.getText().getOrigPath()));
-				FileUtils.deleteQuietly(new File(dict.getText().getUtfPath()));
-			} catch (Exception e) {
-				LOG.error("Can not delete text files", e);
-			}
-		}
 		dictDao.removeDict(id);
 	}
 

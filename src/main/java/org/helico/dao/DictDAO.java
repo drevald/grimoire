@@ -13,7 +13,7 @@ public interface DictDAO {
 	
     public long saveDict(Dict dict);
 
-    public long saveText(Text text);
+    public void saveText(Text text);
 
     public List<Dict> listDicts();
 
