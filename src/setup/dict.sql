@@ -48,14 +48,27 @@ INSERT INTO lang(id,"name",encodings) VALUES ('la', 'Latin', 'ISO-8859-1');
 INSERT INTO lang(id,"name",encodings) VALUES ('da', 'Danish', 'ISO-8859-1,UTF-8');
 INSERT INTO lang(id,"name",encodings) VALUES ('pl', 'Polish', 'UTF-8,Windows-1250,ISO-8859-2');
 
-INSERT INTO "account"(accountname, password, role, enabled, native_lang_id) 
-	VALUES ('guest', '', 'GUEST', True, 'en');
-INSERT INTO "account"(accountname, password, role, enabled, native_lang_id) 
-	VALUES ('account', 'pass', 'USER', True, 'en');
-INSERT INTO "account"(accountname, password, role, enabled,native_lang_id) 
-	VALUES ('helicobacter', 'pilory', 'USER', True, 'en');
-INSERT INTO "account"(accountname, password, role, enabled, native_lang_id) 
-	VALUES ('admin', 'admin', 'ADMIN', True, 'en');
+INSERT INTO "account"(accountname, password, role, enabled, native_lang_id) VALUES ('guest', '', 'GUEST', True, 'en');
+INSERT INTO "account"(accountname, password, role, enabled, native_lang_id) VALUES ('account', 'pass', 'USER', True, 'en');
+INSERT INTO "account"(accountname, password, role, enabled,native_lang_id) VALUES ('helicobacter', 'pilory', 'USER', True, 'en');
+INSERT INTO "account"(accountname, password, role, enabled, native_lang_id)	VALUES ('admin', 'admin', 'ADMIN', True, 'en');
+
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (1, 4, 'de');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (2, 4, 'ru');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (3, 4, 'fi');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (4, 4, 'sv');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (5, 4, 'el');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (6, 4, 'en');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (7, 4, 'is');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (8, 4, 'fr');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (9, 4, 'zh');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (10, 4, 'es');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (11, 4, 'ar');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (12, 4, 'la');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (13, 4, 'ja');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (14, 4, 'pl');
+INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (15, 4, 'da');
+
 
 INSERT INTO translator_provider(id, title, host, req_pattern, res_pattern) 
 	VALUES (0, 'Bing', 'api.microsofttranslator.com', '<{1}>{0}</{2}>',
