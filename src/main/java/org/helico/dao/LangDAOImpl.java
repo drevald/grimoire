@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class LangDAOImpl implements LangDAO {
 
-    private static final Logger LOG = Logger.getLogger(LangDAOImpl.class);
+    private static final Logger LOG = Logger.getLogger(LangDAOImpl.class.getName());
 
 	@Autowired
 	private SessionFactory sessionFactory;

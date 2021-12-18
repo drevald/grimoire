@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table(name = "lang")
 public class Lang {
 
-	private static final Logger LOG = Logger.getLogger(Lang.class);
+	private static final Logger LOG = Logger.getLogger(Lang.class.getName());
 	
     @Id
 	@Column(name = "id")

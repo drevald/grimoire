@@ -1,6 +1,5 @@
 package org.helico.dao;
 
-import org.apache.log4j.Logger;
 import org.helico.domain.Translation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -8,11 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import org.apache.log4j.Logger;
 
 @Repository
 public class TranslationDAOImpl implements TranslationDAO {
 
-    private static Logger LOG = Logger.getLogger(TranslationDAOImpl.class);
+    private static Logger LOG = Logger.getLogger(TranslationDAOImpl.class.getName());
 
     @Autowired
     SessionFactory sessionFactory;

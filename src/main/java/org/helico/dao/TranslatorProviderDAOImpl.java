@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
 
-    private static Logger LOG = Logger.getLogger(TranslatorProviderDAOImpl.class);
+    private static Logger LOG = Logger.getLogger(TranslatorProviderDAOImpl.class.getName());
 
     @Autowired
     private SessionFactory sessionFactory;

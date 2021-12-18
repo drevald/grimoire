@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "dict")
 public class Dict {
 
-	private static final Logger LOG = Logger.getLogger(Dict.class);
+	private static final Logger LOG = Logger.getLogger(Dict.class.getName());
 	
 	public enum Status {
 	    PERSISTED,

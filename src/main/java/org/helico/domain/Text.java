@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "text")
 public class Text {
 
-    private static final Logger LOG = Logger.getLogger(Text.class);
+    private static final Logger LOG = Logger.getLogger(Text.class.getName());
 
     @Id
 	@Column(name = "id")
