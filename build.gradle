@@ -31,6 +31,11 @@ dependencies {
 	implementation 'commons-httpclient:commons-httpclient:3.1'
 	implementation 'org.springframework:spring-orm:5.3.14'
 
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:8.5.73'
+	implementation 'org.apache.tomcat:tomcat-util-scan:8.5.72'
+
+//	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
