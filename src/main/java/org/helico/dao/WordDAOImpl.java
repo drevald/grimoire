@@ -23,7 +23,7 @@ public class WordDAOImpl implements WordDAO {
         Session session = sessionFactory.getCurrentSession();
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
-            Word result = (Word)session.createQuery("from Word where value=? and langId=?")
+            Word result = (Word)session.createQuery("from Word where value=?1 and langId=?1")
                     .setParameter(0, value).setParameter(1, langId).uniqueResult();
 
         if (result==null) {
@@ -55,7 +55,7 @@ public class WordDAOImpl implements WordDAO {
             for (Word word : words) {
 
                 LOG.debug(">>>>saving value:"+word.getValue()+" lang:"+word.getLangId());
-                    Word storedWord = (Word)session.createQuery("from Word where value=? and langId=?")
+                    Word storedWord = (Word)session.createQuery("from Word where value=?1 and langId=?1")
                             .setParameter(0, word.getValue()).setParameter(1, word.getLangId()).uniqueResult();
 
                 if (storedWord == null) {
@@ -71,7 +71,7 @@ public class WordDAOImpl implements WordDAO {
                     }
                 }
 
-                DictWord dictWord = (DictWord)session.createQuery("from DictWord where dictId=? and word.id=?")
+                DictWord dictWord = (DictWord)session.createQuery("from DictWord where dictId=?1 and word.id=?1")
                     .setParameter(0, dictId).setParameter(1, word.getId()).uniqueResult();
 
                 if (dictWord == null) {
@@ -98,13 +98,13 @@ public class WordDAOImpl implements WordDAO {
         Session session = sessionFactory.getCurrentSession();
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
-        Word result = (Word)session.createQuery("from Word where value=? and langId=?")
+        Word result = (Word)session.createQuery("from Word where value=?1 and langId=?1")
                 .setParameter(0, value).setParameter(1, langId).uniqueResult();
         return result;
 
     }
 
 //    LOG.debug(">>>>saving value:"+word.getValue()+" lang:"+word.getLangId());
-//    Word storedWord = (Word)session.createQuery("from Word where value=? and langId=?")
+//    Word storedWord = (Word)session.createQuery("from Word where value=?1 and langId=?1")
 
 }

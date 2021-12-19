@@ -44,7 +44,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
         LOG.info(">>>>find translator providers for lang #" + langId);
         List<TranslatorProvider> result = new ArrayList<TranslatorProvider>();
         List objResult = sessionFactory.getCurrentSession().createQuery(
-                "from TranslatorProvider tp inner join tp.translators as translator where translator.srcLangId=?")
+                "from TranslatorProvider tp inner join tp.translators as translator where translator.srcLangId=?1")
                 .setParameter(0, langId)
                 .list();
         for (Object obj : objResult) {
@@ -60,7 +60,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
     public List<Translator> listTranslators(String langId) {
         LOG.info(">>>>find translators for lang #" + langId);
         List<Translator> result = (List<Translator>)sessionFactory.getCurrentSession().createQuery(
-                "from Translator where srcLangId=?")
+                "from Translator where srcLangId=?1")
                 .setParameter(0, langId)
                 .list();
         LOG.info("<<<<find translators for lang #" + langId);

@@ -31,14 +31,14 @@ public class DictServiceImpl implements DictService {
 	@Transactional
 	public void saveDict(Dict dict) {
 		LOG.info(">>>saveDict start");
-		dictDao.saveDict(dict);
+		dictDao.save(dict);
 		LOG.info("<<<saveDict end");
 	}
 
 	@Transactional
 	public void saveText(Text text) {
 		LOG.info(">>>saveDict start");
-		dictDao.saveText(text);
+		//dictDao.save(text);
 		LOG.info("<<<saveDict end");
 	}
 
@@ -50,21 +50,22 @@ public class DictServiceImpl implements DictService {
 
 	@Transactional
 	public List<Dict> listDicts() {
-		List<Dict> result = dictDao.listDicts();
+		List<Dict> result = dictDao.findDict();
 		LOG.info("Number of results is " + result.size());
 		return result;
 	}
 
 	@Transactional
 	public List<Dict> listDicts(Long accountId) {
-		List<Dict> result = dictDao.listDicts(accountId);
+		//List<Dict> result = dictDao.listDicts(accountId);
+		List<Dict> result = dictDao.findDict(accountId);
 		LOG.info("Number of results is " + result.size());
 		return result;
 	}
 
 	@Transactional
 	public void removeDict(Long id) {
-		dictDao.removeDict(id);
+		dictDao.deleteById(id);
 	}
 
 	@Transactional
@@ -78,7 +79,7 @@ public class DictServiceImpl implements DictService {
 	@Transactional
 	public Dict findDict(Long id) {
 		LOG.info(">>>findDict start");
-		Dict dict = dictDao.findDict(id);
+		Dict dict = dictDao.findById(id).get();
 		LOG.info("<<<findDict end");
 		return dict;
 	}
@@ -125,9 +126,9 @@ public class DictServiceImpl implements DictService {
 
 		text.setOrigDoc(baos.toByteArray());
 
-		dictDao.saveText(text);
+		//dictDao.saveText(text); //DD
 		dict.setText(text);
-		dictDao.saveDict(dict);
+		dictDao.save(dict);
 		//stateMachine.sendEvent(StateMachine.Event.LOAD, pis, dict.getId());
 		//textFileLoader.load(dict.getId(), is);
 		LOG.info(">>>loadPreview ends");
@@ -142,42 +143,42 @@ public class DictServiceImpl implements DictService {
 		dict.setName(name);
 		LOG.debug("Status persisted = " + Status.PERSISTED);
 		dict.setStatus("PERSISTED");
-		dictDao.saveDict(dict);
+		dictDao.save(dict);
 		LOG.info("<<<createDict ends");
 		return dict;
 	}
 
 	@Transactional
 	public void setStatus(Long id, Status status) {
-		Dict dict = dictDao.findDict(id);
+		Dict dict = dictDao.findById(id).get();
 		dict.setStatus(status.name());
 		LOG.info("setStatus(" + dict + ")");
-		dictDao.saveDict(dict);
+		dictDao.save(dict);
 	}
 
 	@Transactional
 	public void setPreview(Long id, byte[] data) {
-		Dict dict = dictDao.findDict(id);
+		Dict dict = dictDao.findById(id).get();
 		dict.setPreview(data);
 		LOG.info("setPreview(" + dict + ")");
-		dictDao.saveDict(dict);
+		dictDao.save(dict);
 	}
 
 	public void parseText(Long dictId) {
 //		stateMachine.sendEvent(StateMachine.Event.PARSE, null, dictId);
 	}
 
-	@Transactional
+//	@Transactional
 	public void fixStatus() {
 		List<Dict> parsing = dictDao.findDictByStatus(Status.PARSING.name());
 		for (Dict dict : parsing) {
 			dict.setStatus(Status.STORED.name());
-			dictDao.saveDict(dict);
+			dictDao.save(dict);
 		}
 		List<Dict> translating = dictDao.findDictByStatus(Status.TRANSLATING.name());
 		for (Dict dict : translating) {
 			dict.setStatus(Status.PARSED.name());
-			dictDao.saveDict(dict);
+			dictDao.save(dict);
 		}
 	}
 

@@ -35,7 +35,7 @@ public class JobDAOImpl implements JobDAO {
 	@SuppressWarnings("unchecked") 
     public List<Job> findActive(Long dictId) {
 	Session session = sessionFactory.getCurrentSession();
-    	List<Job> jobs = (List<Job>)session.createQuery("from Job where dictId=? and active=1")
+    	List<Job> jobs = (List<Job>)session.createQuery("from Job where dictId=?1 and active=1")
 	    .setParameter(0,dictId).list();
 		LOG.info("<<<<get active jobs:" + jobs);
 		return jobs;
@@ -45,7 +45,7 @@ public class JobDAOImpl implements JobDAO {
     public Job findLastOrActive(Long dictId) {
 	Session session = sessionFactory.getCurrentSession();
     	List<Job> jobs = (List<Job>)session
-	    .createQuery("from Job where dictId=? order by active desc, id desc")
+	    .createQuery("from Job where dictId=?1 order by active desc, id desc")
 	    .setParameter(0,dictId).list();
 	LOG.debug("<<<<get last jobs:" + jobs);
 	Job job = (jobs==null)?null:jobs.get(0); 
