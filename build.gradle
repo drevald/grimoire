@@ -28,6 +28,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'commons-io:commons-io:2.6'
 	implementation 'commons-httpclient:commons-httpclient:3.1'
+	implementation 'org.springframework:spring-orm:5.3.14'
+
 }
 
 test {
