@@ -30,6 +30,7 @@ dependencies {
 	implementation 'commons-io:commons-io:2.6'
 	implementation 'commons-httpclient:commons-httpclient:3.1'
 	implementation 'org.springframework:spring-orm:5.3.14'
+	implementation 'org.springframework.boot:spring-boot-starter-security:2.6.1'
 
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:8.5.73'
 	implementation 'org.apache.tomcat:tomcat-util-scan:8.5.72'
