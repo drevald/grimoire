@@ -34,19 +34,19 @@ public interface DictDAO extends CrudRepository<Dict, Long> {
 
 //    @Query(value = "SELECT dict FROM Dict WHERE id =?1 AND accountId =?2", nativeQuery = true)
     @Query(value = "SELECT d FROM Dict d")
-    public Dict findDict(Long id, Long accountId);
+    Dict findDict(Long id, Long accountId);
 
 //    @Query
 //    public Dict findDict(Long id);
 
     //@Query(value = "SELECT dict FROM Dict WHERE status =?1", nativeQuery = true)
     @Query(value = "SELECT d FROM Dict d")
-    public List<Dict> findDictByStatus(String status);
+    List<Dict> findDictByStatus(String status);
 
     @Query(value = "SELECT d FROM Dict d")
-    public List<Dict> findDict(Long accountId);
+    List<Dict> findDict(Long accountId);
 
     @Query(value = "SELECT d FROM Dict d")
-    public List<Dict> findDict();
+    List<Dict> findDict();
 
 }

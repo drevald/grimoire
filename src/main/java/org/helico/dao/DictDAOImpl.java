@@ -43,7 +43,7 @@
 //
 //	@SuppressWarnings("unchecked")
 //	public List<Dict> listDicts(Long accountId) {
-//	    return sessionFactory.getCurrentSession().createQuery("from Dict where accountId=?1").setParameter(0, accountId).list();
+//	    return sessionFactory.getCurrentSession().createQuery("from Dict where accountId=?1").setParameter(1, accountId).list();
 //	}
 //
 //	public void removeDict(Long id) {
@@ -56,7 +56,7 @@
 //    public synchronized Dict findDict(Long id, Long accountId) {
 //	Session session = sessionFactory.getCurrentSession();
 //    	Dict dict = (Dict)session.createQuery("from Dict where id=?1 and accountId=?1")
-//	    .setParameter(0,id).setParameter(1,accountId).uniqueResult();
+//	    .setParameter(1,id).setParameter(1,accountId).uniqueResult();
 //		LOG.info("get sess#"+sessionFactory.getCurrentSession().hashCode()+" =  " + dict);
 //		return dict;
 //    }
@@ -64,7 +64,7 @@
 //    public synchronized Dict findDict(Long id) {
 //	Session session = sessionFactory.getCurrentSession();
 //    	Dict dict = (Dict)session.createQuery("from Dict where id=?1")
-//	    .setParameter(0,id).uniqueResult();
+//	    .setParameter(1,id).uniqueResult();
 //		LOG.info("get sess#"+sessionFactory.getCurrentSession().hashCode()+" =  " + dict);
 //		return dict;
 //    }

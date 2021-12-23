@@ -30,7 +30,7 @@ public class AccountDAOImpl implements AccountDAO {
 	
 	public Account findAccount(String name) {
 		return (Account)sessionFactory.getCurrentSession().createQuery("from Account where name=?1")
-		.setParameter(0,name).uniqueResult();
+		.setParameter(1,name).uniqueResult();
 	}
 
 	public void removeAccount(Long id) {
