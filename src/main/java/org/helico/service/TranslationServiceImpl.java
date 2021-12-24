@@ -1,7 +1,9 @@
 package org.helico.service;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.helico.dao.TranslationDAO;
+import org.helico.dao.TranslatorDAO;
 import org.helico.dao.TranslatorProviderDAO;
 import org.helico.domain.Translation;
 import org.helico.domain.Translator;
@@ -16,7 +18,7 @@ import java.util.List;
 @Service
 public class TranslationServiceImpl implements TranslationService {
 
-    private static final Logger LOG = Logger.getLogger(TranslationServiceImpl.class);
+    protected static final Logger LOG = LogManager.getLogger(TranslationServiceImpl.class);
 
     @Autowired
 	private StateMachine stateMachine;
@@ -25,12 +27,15 @@ public class TranslationServiceImpl implements TranslationService {
     TranslationDAO translationDao;
 
     @Autowired
+    TranslatorDAO translatorDAO;
+
+    @Autowired
     TranslatorProviderDAO translatorProviderDAO;
 
     @Transactional
     public boolean isTranslated(Long wordId, Long translationServiceId) {
-        boolean result = translationDao.isTranslated(wordId, translationServiceId);
-        return result;
+        List<Translation> result = translationDao.find(wordId, translationServiceId);
+        return !result.isEmpty();
     }
 
     @Transactional
@@ -39,7 +44,7 @@ public class TranslationServiceImpl implements TranslationService {
         translation.setTranslatorId(translatorId);
         translation.setValue(value);
         translation.setWordId(wordId);
-        translationDao.saveOrUpdate(translation);
+        translationDao.save(translation);
     }
 
     @Transactional
@@ -54,17 +59,17 @@ public class TranslationServiceImpl implements TranslationService {
 
     @Transactional
     public List<Translator> listTranslators(String langId) {
-        return translatorProviderDAO.listTranslators(langId);
+        return translatorDAO.listTranslators(langId);
     }
 
     @Transactional
     public TranslatorProvider getProvider(Long transProvId) {
-        return translatorProviderDAO.getProvider(transProvId);
+        return translatorProviderDAO.findById(transProvId).get();
     }
 
     @Transactional
     public Translator getTranslator(Long transId) {
-        return translatorProviderDAO.getTranslator(transId);
+        return translatorDAO.findById(transId).get();
     }
 
     public void translateText(Long dictId, Long translatorId) {

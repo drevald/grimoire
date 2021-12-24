@@ -1,7 +1,8 @@
 package org.helico.sm.handler;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.domain.Text;
@@ -20,7 +21,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Component("storeHandler")
 public class StoreHandler extends AbstractHandler {
 
-    private static final Logger LOG = Logger.getLogger(StoreHandler.class);
+    protected static final Logger LOG = LogManager.getLogger(StoreHandler.class);
 
     @Autowired
     DictService dictService;

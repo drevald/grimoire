@@ -1,6 +1,7 @@
 package org.helico.domain;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import javax.persistence.*;
 
@@ -8,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "dict")
 public class Dict {
 
-	private static final Logger LOG = Logger.getLogger(Dict.class.getName());
+	protected static final Logger LOG = LogManager.getLogger(Dict.class.getName());
 	
 	public enum Status {
 	    PERSISTED,

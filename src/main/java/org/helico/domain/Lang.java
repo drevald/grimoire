@@ -1,6 +1,8 @@
 package org.helico.domain;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,8 +13,8 @@ import javax.persistence.Table;
 @Table(name = "lang")
 public class Lang {
 
-	private static final Logger LOG = Logger.getLogger(Lang.class.getName());
-	
+    protected static final Logger LOG = LogManager.getLogger();
+
     @Id
 	@Column(name = "id")
 	private String id;

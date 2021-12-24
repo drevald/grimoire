@@ -2,7 +2,8 @@
 //
 //import java.util.List;
 //
-//import org.apache.log4j.Logger;
+//import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 //import org.helico.domain.Job;
 //import org.hibernate.SessionFactory;
 //import org.hibernate.Session;

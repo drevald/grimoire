@@ -25,7 +25,9 @@ public class WordServiceImpl implements WordService {
         Word newWord = wordDAO.store(word, langId);
 
         if(newWord != null) {
-            dictWordDAO.addWord(newWord, dictId);
+            DictWord dictWord = new DictWord(newWord, dictId);
+            dictWord.setCounter(dictWord.getCounter() + 1);
+            dictWordDAO.save(dictWord);
         }
 
     }

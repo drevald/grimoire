@@ -1,6 +1,7 @@
 package org.helico.service;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.helico.dao.LangDAO;
 import org.helico.dao.AccountDAO;
 import org.helico.domain.Lang;
@@ -17,7 +18,7 @@ import java.util.Set;
 @Service
 public class AccountServiceImpl implements AccountService {
 	
-	private static final Logger LOG = Logger.getLogger(AccountServiceImpl.class);
+	protected static final Logger LOG = LogManager.getLogger(AccountServiceImpl.class);
 	
 	@Autowired
 	private AccountDAO accountDao;

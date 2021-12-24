@@ -1,6 +1,7 @@
 package org.helico.web;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class AbstractController implements ApplicationContextAware {
 
-    private static final Logger LOG = Logger.getLogger(AbstractController.class);
+    protected static final Logger LOG = LogManager.getLogger(AbstractController.class);
 
     private ApplicationContext appContext;
 

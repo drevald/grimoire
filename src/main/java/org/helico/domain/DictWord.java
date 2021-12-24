@@ -6,6 +6,14 @@ import javax.persistence.*;
 @Table(name = "dict_word")
 public class DictWord {
 
+    public DictWord() {
+    }
+
+    public DictWord(Word word, Long dictId) {
+        this.dictId = dictId;
+        this.word = word;
+    }
+
     @Id
 	@Column(name = "id")
 	@GeneratedValue

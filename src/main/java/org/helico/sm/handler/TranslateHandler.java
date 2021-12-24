@@ -4,7 +4,8 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.helico.domain.*;
 import org.helico.service.DictWordService;
 import org.helico.service.JobService;
@@ -19,7 +20,7 @@ import java.util.List;
 @Component("translateHandler")
 public class TranslateHandler extends AbstractHandler {
 
-    private static final Logger LOG = Logger.getLogger(TranslateHandler.class);
+    protected static final Logger LOG = LogManager.getLogger(TranslateHandler.class);
 
     private MessageFormat reqFormat;
 

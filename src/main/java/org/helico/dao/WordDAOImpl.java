@@ -1,6 +1,7 @@
 package org.helico.dao;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.helico.domain.DictWord;
 import org.helico.domain.Word;
 import org.hibernate.Session;
@@ -13,7 +14,7 @@ import java.util.List;
 @Repository
 public class WordDAOImpl implements WordDAO {
 
-    private static final Logger LOG = Logger.getLogger(WordDAOImpl.class);
+    protected static final Logger LOG = LogManager.getLogger(WordDAOImpl.class);
 
     @Autowired
     SessionFactory sessionFactory;

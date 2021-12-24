@@ -2,7 +2,8 @@ package org.helico.service;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.helico.dao.DictDAO;
 import org.helico.domain.Dict;
 import org.helico.domain.Dict.Status;
@@ -18,7 +19,7 @@ import java.util.List;
 @Service
 public class DictServiceImpl implements DictService {
 
-	private static final Logger LOG = Logger.getLogger(DictServiceImpl.class);
+	protected static final Logger LOG = LogManager.getLogger(DictServiceImpl.class);
 
 	private static final int PREVIEW_SIZE = 1000;
 

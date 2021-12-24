@@ -30,7 +30,7 @@ public class DictWordServiceImpl implements DictWordService {
 
     @Transactional
     public Long countWords(Long dictId) {
-	    return dictWordDao.countWords(dictId);
+	    return (long)dictWordDao.getWords(dictId).size();
     }
 
 }

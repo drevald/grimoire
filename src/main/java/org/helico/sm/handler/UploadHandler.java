@@ -1,7 +1,8 @@
 package org.helico.sm.handler;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.domain.Text;
@@ -13,7 +14,7 @@ import java.io.*;
 @Component("uploadHandler")
 public class UploadHandler extends AbstractHandler {
 
-    private static final Logger LOG = Logger.getLogger(UploadHandler.class);
+    protected static final Logger LOG = LogManager.getLogger(UploadHandler.class);
     
     public void process(Object object, Job job) throws Exception {
           jobService.setActive(job.getId(), true);

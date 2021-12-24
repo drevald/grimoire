@@ -7,12 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 @Service
 public class JobServiceImpl implements JobService {
 
-    private static final Logger LOG = Logger.getLogger(JobServiceImpl.class);
+    protected static final Logger LOG = LogManager.getLogger(JobServiceImpl.class);
 
     @Autowired
     JobDAO jobDao;

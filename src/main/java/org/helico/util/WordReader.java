@@ -1,6 +1,7 @@
 package org.helico.util;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.*;
 
@@ -13,7 +14,7 @@ import java.io.*;
  */
 public class WordReader extends Reader {
 
-    private static final Logger LOG = Logger.getLogger(WordReader.class);
+    protected static final Logger LOG = LogManager.getLogger(WordReader.class);
 
     private Reader reader;
 

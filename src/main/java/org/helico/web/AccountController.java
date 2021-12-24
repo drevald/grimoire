@@ -1,6 +1,7 @@
 package org.helico.web;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.helico.domain.Account;
 import org.helico.service.LangService;
 import org.helico.service.AccountService;
@@ -17,7 +18,7 @@ import java.util.Set;
 @Controller
 public class AccountController  extends AbstractController  {
 
-	private static final Logger LOG = Logger.getLogger(AccountController.class);
+	protected static final Logger LOG = LogManager.getLogger(AccountController.class);
 
 	@Autowired
 	private AccountService accountService;

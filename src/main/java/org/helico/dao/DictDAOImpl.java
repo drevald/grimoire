@@ -1,6 +1,7 @@
 //package org.helico.dao;
 //
-//import org.apache.log4j.Logger;
+//import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 //import org.helico.domain.Dict;
 //import org.helico.domain.Text;
 //import org.hibernate.LockMode;
@@ -16,7 +17,7 @@
 //@Repository
 //public class DictDAOImpl implements DictDAO {
 //
-//    private static final Logger LOG = Logger.getLogger(DictDAOImpl.class);
+//    protected static final Logger LOG = LogManager.getLogger(DictDAOImpl.class);
 //
 //    @Autowired
 //	private SessionFactory sessionFactory;

@@ -1,6 +1,7 @@
 package org.helico.service;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.helico.dao.DictDAO;
 import org.helico.domain.Dict;
 import org.helico.domain.Text;
@@ -20,7 +21,7 @@ import java.io.*;
 @Service
 public class TextServiceImpl implements TextService {
 
-    private static final Logger LOG = Logger.getLogger(TextServiceImpl.class);
+    protected static final Logger LOG = LogManager.getLogger(TextServiceImpl.class);
 
     @Autowired
     private DictDAO dictDao;

@@ -1,6 +1,7 @@
 package org.helico.web;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.helico.domain.*;
 import org.helico.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.Map;
 @Controller
 public class DictController extends AbstractController {
 
-    private static final Logger LOG = Logger.getLogger(DictController.class);
+    protected static final Logger LOG = LogManager.getLogger(DictController.class);
 
     private ApplicationContext appContext;
 

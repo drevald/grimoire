@@ -1,6 +1,7 @@
 package org.helico.web;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.helico.domain.Dict;
 import org.helico.domain.Account;
 import org.helico.domain.Word;
@@ -28,7 +29,7 @@ import java.util.Map;
 @Controller
 public class TextController  extends AbstractController {
 
-    private static final Logger LOG = Logger.getLogger(TextController.class);
+    protected static final Logger LOG = LogManager.getLogger(TextController.class);
 
     private static final int TEXT_SIZE = 1000;
 
