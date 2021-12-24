@@ -1,6 +1,6 @@
 <%@ page import="org.helico.domain.TranslatorProvider" %>
 <%@ page import="java.util.List" %>
-<%@ include file="/WEB-INF/dictHeader.jsp" %>
+<%@ include file = "dictHeader.jsp" %>
 
 <div class="col-sm-6 p-5">
 
@@ -58,4 +58,4 @@
 
 </div>
 
-<%@ include file="/WEB-INF/footer.jsp" %>
+<%@ include file = "footer.jsp" %>

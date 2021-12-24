@@ -1,4 +1,4 @@
-<%@ include file = "/WEB-INF/adminHeader.jsp"%>
+<%@ include file = "adminHeader.jsp"%>
 
     <h3>Transitions</h3>
 
@@ -16,4 +16,4 @@
     </table>
 
 
-<%@ include file="/WEB-INF/footer.jsp"%>
+<%@ include file = "footer.jsp"%>

@@ -1,4 +1,4 @@
-<%@ include file = "/WEB-INF/accountHeader.jsp"%>
+<%@ include file = "accountHeader.jsp"%>
 
 <div class="col-sm-8 p-5">
 
@@ -38,4 +38,4 @@
 	</c:if>
 	<a href="upload"><spring:message code="dict.create" /></a>
 </div>
-<%@ include file="/WEB-INF/footer.jsp"%>
+<%@ include file = "footer.jsp"%>

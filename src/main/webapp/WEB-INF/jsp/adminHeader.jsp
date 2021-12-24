@@ -1,4 +1,4 @@
-<%@ include file = "/WEB-INF/header.jsp"%>
+<%@ include file = "header.jsp"%>
 
     <div style="float:left">
         <a href="<c:url value="/dict" />">

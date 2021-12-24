@@ -1,4 +1,4 @@
-<%@include file="/WEB-INF/accountHeader.jsp"%>
+<%@include file = "accountHeader.jsp"%>
 
 <div class="col-sm-8 p-5">
 
