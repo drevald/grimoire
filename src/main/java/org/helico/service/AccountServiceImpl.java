@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,20 +29,21 @@ public class AccountServiceImpl implements AccountService {
 	public void addAccount(Account account) {
 		LOG.info("Starting counter from thread #" +  Thread.currentThread().toString());
 		LOG.info("Count finished from thread #" +  Thread.currentThread().toString());
-		accountDao.addAccount(account);
+		accountDao.save(account);
 		LOG.info("Business method done in thread #" +  Thread.currentThread().toString());
 	}
 
 	@Transactional
 	public List<Account> listAccounts() {
-	    List<Account> result = accountDao.listAccounts();
+		List<Account> result = new ArrayList<Account>();
+		accountDao.findAll().forEach(result::add);
 	    LOG.info("Number of results is " + result.size());
 	    return result;
 	}
 
 	@Transactional
 	public void removeAccount(Long id) {
-		accountDao.removeAccount(id);
+		accountDao.deleteById(id);
 	}
 
 	@Transactional
@@ -53,21 +55,21 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public Long registerAccount(String accountname, String password) {
         Account account = new Account(accountname, password);
-        Long accountId = accountDao.addAccount(account);
+        Long accountId = accountDao.save(account).getId();
         return accountId;
     }
 
 	@Transactional
 	public Long registerAccount(String accountname, String password, String nativeLangId, Set<String> accountLangIds) {
 		Account account = new Account(accountname, password);
-		Long accountId = accountDao.addAccount(account);
+		Long accountId = accountDao.save(account).getId();
 		Set<Lang> accountLangs = new HashSet<Lang>();
 		for (String langId : accountLangIds) {
 			accountLangs.add(langDao.find(langId));
 		}
 		account.setAccountLangs(accountLangs);
 		account.setNativeLangId(nativeLangId);
-		accountDao.saveAccount(account);
+		accountDao.save(account);
 		return accountId;
 	}
 
@@ -81,7 +83,7 @@ public class AccountServiceImpl implements AccountService {
 		account.setAccountLangs(accountLangs);
 		account.setNativeLangId(nativeLangId);
 		account.setPassword(password);
-		accountDao.saveAccount(account);
+		accountDao.save(account);
 		return accountId;
 	}
 

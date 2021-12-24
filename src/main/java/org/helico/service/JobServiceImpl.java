@@ -24,42 +24,42 @@ public class JobServiceImpl implements JobService {
         job.setActive(false);
 	job.setProgress(0);
         job.setDictId(dictId);
-        jobDao.saveOrUpdate(job);
+        jobDao.save(job);
 	return job;
     }
 
     @Transactional
     public void save(Job job) {
 	LOG.debug("saving " + job);
-        jobDao.saveOrUpdate(job);
+        jobDao.save(job);
     }
 
     @Transactional
     public synchronized void setProgress(Long id, Integer progress) {
-        Job job = jobDao.find(id);
+        Job job = jobDao.findById(id).get();
 	LOG.debug(">>>setting progress for job"+job+":"+progress);
         job.setProgress(progress);
 	LOG.debug(">>>setting progress for job"+job+":"+progress);
-        jobDao.saveOrUpdate(job);
+        jobDao.save(job);
     }
 
     @Transactional
     public void setActive(Long id, Boolean active) {
-        Job job = jobDao.find(id);
+        Job job = jobDao.findById(id).get();
         job.setActive(active);
-        jobDao.saveOrUpdate(job);
+        jobDao.save(job);
     }
 
     @Transactional
     public void setDetails(Long id, String details) {
-        Job job = jobDao.find(id);
+        Job job = jobDao.findById(id).get();
         job.setDetails(details);
-        jobDao.saveOrUpdate(job);
+        jobDao.save(job);
     }
 
     @Transactional
     public Job find(Long id) {
-        return jobDao.find(id);
+        return jobDao.findById(id).get();
     }
 
     @Transactional
@@ -69,7 +69,8 @@ public class JobServiceImpl implements JobService {
     
     @Transactional
     public Job getLastOrActive(Long dictId) {
-	return jobDao.findLastOrActive(dictId);
+        return jobDao.findAll().iterator().next();
+	    //return jobDao.findActive(dictId).get(1);
     }
 
 }
