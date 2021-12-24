@@ -41,11 +41,11 @@ public class DictController extends AbstractController {
 
     @Autowired
     private TranslationService translationService;
-
-    @RequestMapping("/hello")
-    public String hello() {
-        return "welcome";
-    }
+//
+//    @RequestMapping("/error")
+//    public String error() {
+//        return "error";
+//    }
 
     @RequestMapping("/dict")
     public String listDicts(Map<String, Object> map) {
@@ -66,6 +66,7 @@ public class DictController extends AbstractController {
         map.put("helperList", helperList);
         map.put("langs", langService.list());
         return "listDict";
+//        return "welcome";
     }
 
     @RequestMapping(value = "/dict/upload", method = RequestMethod.POST)
