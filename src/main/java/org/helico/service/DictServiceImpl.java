@@ -25,9 +25,9 @@ public class DictServiceImpl implements DictService {
 
 	@Autowired
 	private DictDAO dictDao;
-//
-//	@Autowired
-//	private StateMachine stateMachine;
+
+	@Autowired
+	private StateMachine stateMachine;
 
 	@Transactional
 	public void saveDict(Dict dict) {
@@ -45,7 +45,7 @@ public class DictServiceImpl implements DictService {
 
 	public void storeDict(Dict dict) {
 		LOG.info(">>>storeDict start");
-		//stateMachine.sendEvent(StateMachine.Event.STORE, null, dict.getId());
+		stateMachine.sendEvent(StateMachine.Event.STORE, null, dict.getId());
 		LOG.info("<<<storeDict end");
 	}
 
@@ -118,8 +118,12 @@ public class DictServiceImpl implements DictService {
 		try {
 			IOUtils.copy(pis, baos);
 			IOUtils.closeQuietly(pis);
-			IOUtils.copy(is, baos);
-			IOUtils.closeQuietly(is);
+			try {
+				IOUtils.copy(is, baos);
+				IOUtils.closeQuietly(is);
+			} catch (Exception ee) {
+				;
+			}
 			IOUtils.closeQuietly(baos);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,8 +134,8 @@ public class DictServiceImpl implements DictService {
 		//dictDao.saveText(text); //DD
 		dict.setText(text);
 		dictDao.save(dict);
-		//stateMachine.sendEvent(StateMachine.Event.LOAD, pis, dict.getId());
-		//textFileLoader.load(dict.getId(), is);
+		stateMachine.sendEvent(StateMachine.Event.LOAD, pis, dict.getId());
+//		textFileLoader.load(dict.getId(), is);
 		LOG.info(">>>loadPreview ends");
 		return dict;
 	}
@@ -166,7 +170,7 @@ public class DictServiceImpl implements DictService {
 	}
 
 	public void parseText(Long dictId) {
-//		stateMachine.sendEvent(StateMachine.Event.PARSE, null, dictId);
+		stateMachine.sendEvent(StateMachine.Event.PARSE, null, dictId);
 	}
 
 //	@Transactional

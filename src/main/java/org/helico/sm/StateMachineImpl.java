@@ -1,5 +1,6 @@
 package org.helico.sm;
 
+import org.helico.dao.DictDAO;
 import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.domain.Transition;
@@ -19,6 +20,8 @@ import org.helico.service.TransitionService;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import java.util.List;
+
 @Component
 public class StateMachineImpl implements StateMachine, ApplicationContextAware, ApplicationListener {
 
@@ -30,14 +33,14 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware, 
     private TransitionService transitionService;
 
     @Autowired
-    private DictService dictService;
+    private JobService jobService;
 
     @Autowired
-    private JobService jobService;
+    private DictDAO dictDao;
 
     public void sendEvent(Event event, Object data, Long dictId) {
         LOG.debug("processing event..");
-        Dict dict = dictService.findDict(dictId);
+        Dict dict = dictDao.findById(dictId).get();
         Transition transition = transitionService.find(event.toString(), dict.getStatus());
         if (transition != null) {
             LOG.debug("handler found: " +  transition);
@@ -48,7 +51,7 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware, 
             jobService.save(job);
             Handler handler = (Handler)appContext.getBean(transition.getHandlerName());
             dict.setStatus(transition.getDestStatus());
-            dictService.saveDict(dict);
+            dictDao.save(dict);
             handler.process(data, job.getId());
             LOG.debug("handler called");
         } else {
@@ -64,7 +67,17 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware, 
     public void onApplicationEvent(ApplicationEvent applicationEvent) {
         LOG.info("Event received: " + applicationEvent);
         if (applicationEvent instanceof ContextRefreshedEvent) {
-            dictService.fixStatus();
+            List<Dict> parsing = dictDao.findDictByStatus(Dict.Status.PARSING.name());
+            for (Dict dict : parsing) {
+                dict.setStatus(Dict.Status.STORED.name());
+                dictDao.save(dict);
+            }
+            List<Dict> translating = dictDao.findDictByStatus(Dict.Status.TRANSLATING.name());
+            for (Dict dict : translating) {
+                dict.setStatus(Dict.Status.PARSED.name());
+                dictDao.save(dict);
+            }
         }
     }
+
 }

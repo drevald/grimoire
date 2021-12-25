@@ -20,21 +20,35 @@ public class WordServiceImpl implements WordService {
     DictWordDAO dictWordDAO;
 
     @Transactional
-	public void store(String word, String langId, Long dictId) {
+	public void store(String value, String langId, Long dictId) {
 
-        Word newWord = wordDAO.store(word, langId);
-
-        if(newWord != null) {
-            DictWord dictWord = new DictWord(newWord, dictId);
-            dictWord.setCounter(dictWord.getCounter() + 1);
-            dictWordDAO.save(dictWord);
+        Word word;
+        List<Word> words = wordDAO.get(langId, value);
+        DictWord dictWord = null;
+        if (words.isEmpty()) {
+            word = new Word(value, langId);
+            System.out.print("storing word " + value);
+            wordDAO.save(word);
+        } else {
+            word = words.get(0);
+            dictWord = dictWordDAO.findFirstByDictIdWord(dictId, word.getId());
         }
+
+        if(dictWord == null) {
+            dictWord = new DictWord(word, dictId);
+        }
+
+        dictWord.setCounter(dictWord.getCounter() + 1);
+        dictWordDAO.save(dictWord);
 
     }
 
     @Transactional
     public void batchStore(List<Word> words, Long dictId) {
-        wordDAO.batchStore(words, dictId);
+        //todo add transaction
+        for (Word word : words) {
+            wordDAO.save(word);
+        }
     }
 
     @Transactional
@@ -44,7 +58,9 @@ public class WordServiceImpl implements WordService {
 
     @Transactional
     public Word getWord(String langId, String word) {
-        return wordDAO.get(langId, word);
+        //todo get unique
+        List<Word> words = wordDAO.get(langId, word);
+        return words.get(1);
     }
 
 }

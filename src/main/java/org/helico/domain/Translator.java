@@ -6,17 +6,6 @@ import javax.persistence.*;
 @Table(name = "translator")
 public class Translator {
 
-//CREATE TABLE translator (
-//  id BIGINT NOT NULL AUTO_INCREMENT,
-//  service_id BIGINT NOT NULL,
-//  dest_lang_id VARCHAR(2) NOT NULL,
-//  src_lang_id VARCHAR(2) NOT NULL,
-//  PRIMARY KEY(id, service_id),
-//  INDEX lang_translator_FKIndex1(src_lang_id),
-//  INDEX lang_translator_FKIndex2(dest_lang_id),
-//  INDEX lang_translators_FKIndex3(service_id)
-//);
-
     @Id
     @Column(name = "id")
     @GeneratedValue
@@ -63,9 +52,5 @@ public class Translator {
     public void setProvider(TranslatorProvider provider) {
         this.provider = provider;
     }
-
-//    public String toString() {
-//        return String.format("id=%s,srcLangId=%s,dstlangId=%s,providerId=%s,providerName=%s",id,srcLangId,destLangId,provider.getId(),provider.getTitle());
-//    }
 
 }

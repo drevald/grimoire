@@ -4,8 +4,10 @@ import org.helico.dao.DictWordDAO;
 import org.helico.dao.WordDAO;
 import org.helico.domain.DictWord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,7 +27,8 @@ public class DictWordServiceImpl implements DictWordService {
 
     @Transactional
 	public List<DictWord> getWords(Long dictId, Integer offset, Integer num) {
-	    return dictWordDao.getWords(dictId, offset, num);
+        Pageable page = PageRequest.of(offset, num);
+	    return dictWordDao.getAllByDictId(dictId, page);
     }
 
     @Transactional

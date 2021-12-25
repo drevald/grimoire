@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TranslatorDAO extends CrudRepository<Translator, Long> {
 
-    @Query("FROM Translator WHERE langId=?1")
+    @Query("FROM Translator WHERE srcLangId=?1")
     List<Translator> listTranslators(String langId);
 
 }

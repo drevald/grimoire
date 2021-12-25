@@ -56,7 +56,7 @@ public class Dict {
     @Column(name = "lang_id")
     private String langId;
 
-    @OneToOne(fetch=FetchType.EAGER)
+    @OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinColumn(name="text_id")
     private Text text;
 
