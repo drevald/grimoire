@@ -15,12 +15,12 @@ public class LangServiceImpl implements LangService {
     @Autowired
     LangDAO langDao;
 
-    @Transactional
+    
 	public List<Lang> list() {
 	    return langDao.list();
     }
 
-    @Transactional
+    
     public String[] getEncodings(String id) {
         Lang lang = langDao.find(id);
         String str = lang.getEncodings();

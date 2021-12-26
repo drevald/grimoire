@@ -29,14 +29,14 @@ public class DictServiceImpl implements DictService {
 	@Autowired
 	private StateMachine stateMachine;
 
-	@Transactional
+	
 	public void saveDict(Dict dict) {
 		LOG.info(">>>saveDict start");
 		dictDao.save(dict);
 		LOG.info("<<<saveDict end");
 	}
 
-	@Transactional
+	
 	public void saveText(Text text) {
 		LOG.info(">>>saveDict start");
 		//dictDao.save(text);
@@ -49,14 +49,14 @@ public class DictServiceImpl implements DictService {
 		LOG.info("<<<storeDict end");
 	}
 
-	@Transactional
+	
 	public List<Dict> listDicts() {
 		List<Dict> result = dictDao.findDict();
 		LOG.info("Number of results is " + result.size());
 		return result;
 	}
 
-	@Transactional
+	
 	public List<Dict> listDicts(Long accountId) {
 		//List<Dict> result = dictDao.listDicts(accountId);
 		List<Dict> result = dictDao.findDict(accountId);
@@ -64,12 +64,12 @@ public class DictServiceImpl implements DictService {
 		return result;
 	}
 
-	@Transactional
+	
 	public void removeDict(Long id) {
 		dictDao.deleteById(id);
 	}
 
-	@Transactional
+	
 	public Dict findDict(Long id, Long accountId) {
 		LOG.info(">>>findDict start");
 		Dict dict = dictDao.findDict(id, accountId);
@@ -77,7 +77,7 @@ public class DictServiceImpl implements DictService {
 		return dict;
 	}
 
-	@Transactional
+	
 	public Dict findDict(Long id) {
 		LOG.info(">>>findDict start");
 		Dict dict = dictDao.findById(id).get();
@@ -85,12 +85,12 @@ public class DictServiceImpl implements DictService {
 		return dict;
 	}
 
-	@Transactional
+	
 	public void loadFile() {
 
 	}
 
-	@Transactional
+	
 	public Dict loadPreviewFile(Long accountId, String langId, InputStream is, String name, String storage) {
 		LOG.info(">>>loadPreview start");
 		PushbackInputStream pis = new PushbackInputStream(is, PREVIEW_SIZE);
@@ -140,7 +140,7 @@ public class DictServiceImpl implements DictService {
 		return dict;
 	}
 
-	@Transactional
+	
 	public Dict createDict(Long accountId, String name) {
 		LOG.info(">>>createDict start");
 		Dict dict = new Dict();
@@ -153,7 +153,7 @@ public class DictServiceImpl implements DictService {
 		return dict;
 	}
 
-	@Transactional
+	
 	public void setStatus(Long id, Status status) {
 		Dict dict = dictDao.findById(id).get();
 		dict.setStatus(status.name());
@@ -161,7 +161,7 @@ public class DictServiceImpl implements DictService {
 		dictDao.save(dict);
 	}
 
-	@Transactional
+	
 	public void setPreview(Long id, byte[] data) {
 		Dict dict = dictDao.findById(id).get();
 		dict.setPreview(data);
@@ -173,7 +173,7 @@ public class DictServiceImpl implements DictService {
 		stateMachine.sendEvent(StateMachine.Event.PARSE, null, dictId);
 	}
 
-//	@Transactional
+//	
 	public void fixStatus() {
 		List<Dict> parsing = dictDao.findDictByStatus(Status.PARSING.name());
 		for (Dict dict : parsing) {

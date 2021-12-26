@@ -18,7 +18,7 @@ public class JobServiceImpl implements JobService {
     @Autowired
     JobDAO jobDao;
 
-    @Transactional
+    
     public Job createJob(Long transId, Long dictId) {
 	Job job = new Job();
 	job.setTransId(transId);
@@ -29,13 +29,13 @@ public class JobServiceImpl implements JobService {
 	return job;
     }
 
-    @Transactional
+    
     public void save(Job job) {
 	LOG.debug("saving " + job);
-        jobDao.save(job);
+        jobDao.saveAndFlush(job);
     }
 
-    @Transactional
+    
     public synchronized void setProgress(Long id, Integer progress) {
         Job job = jobDao.findById(id).get();
 	LOG.debug(">>>setting progress for job"+job+":"+progress);
@@ -44,32 +44,34 @@ public class JobServiceImpl implements JobService {
         jobDao.save(job);
     }
 
-    @Transactional
+    
     public void setActive(Long id, Boolean active) {
         Job job = jobDao.findById(id).get();
         job.setActive(active);
         jobDao.save(job);
     }
 
-    @Transactional
+    
     public void setDetails(Long id, String details) {
         Job job = jobDao.findById(id).get();
         job.setDetails(details);
         jobDao.save(job);
     }
 
-    @Transactional
+    
     public Job find(Long id) {
         return jobDao.findById(id).get();
     }
 
-    @Transactional
+    
     public List<Job> getActiveJobs(Long dictId) {
 	return jobDao.findActive(dictId);
     }
     
-    @Transactional
+    
     public Job getLastOrActive(Long dictId) {
+        if (jobDao.findAll().isEmpty())
+            return null;
         return jobDao.findAll().iterator().next();
 	    //return jobDao.findActive(dictId).get(1);
     }

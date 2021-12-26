@@ -26,7 +26,7 @@ public class AccountServiceImpl implements AccountService {
 	@Autowired
 	private LangDAO langDao;
 
-	@Transactional
+	
 	public void addAccount(Account account) {
 		LOG.info("Starting counter from thread #" +  Thread.currentThread().toString());
 		LOG.info("Count finished from thread #" +  Thread.currentThread().toString());
@@ -34,7 +34,7 @@ public class AccountServiceImpl implements AccountService {
 		LOG.info("Business method done in thread #" +  Thread.currentThread().toString());
 	}
 
-	@Transactional
+	
 	public List<Account> listAccounts() {
 		List<Account> result = new ArrayList<Account>();
 		accountDao.findAll().forEach(result::add);
@@ -42,25 +42,25 @@ public class AccountServiceImpl implements AccountService {
 	    return result;
 	}
 
-	@Transactional
+	
 	public void removeAccount(Long id) {
 		accountDao.deleteById(id);
 	}
 
-	@Transactional
+	
 	public Account findAccount(String name) {
 		Account account = accountDao.findAccount(name);
 		return account;
 	}
 
-    @Transactional
+    
     public Long registerAccount(String accountname, String password) {
         Account account = new Account(accountname, password);
         Long accountId = accountDao.save(account).getId();
         return accountId;
     }
 
-	@Transactional
+	
 	public Long registerAccount(String accountname, String password, String nativeLangId, Set<String> accountLangIds) {
 		Account account = new Account(accountname, password);
 		Long accountId = accountDao.save(account).getId();
@@ -74,7 +74,7 @@ public class AccountServiceImpl implements AccountService {
 		return accountId;
 	}
 
-	@Transactional
+	
 	public Long updateAccount(Long accountId, String accountname, String password, String nativeLangId, Set<String> accountLangIds) {
 		Account account = accountDao.findAccount(accountname);
 		Set<Lang> accountLangs = new HashSet<Lang>();

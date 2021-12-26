@@ -20,18 +20,18 @@ public class DictWordServiceImpl implements DictWordService {
     @Autowired
     DictWordDAO dictWordDao;
 
-    @Transactional
+    
     public List<DictWord> getWords(Long dictId) {
 	    return dictWordDao.getWords(dictId);
     }
 
-    @Transactional
+    
 	public List<DictWord> getWords(Long dictId, Integer offset, Integer num) {
         Pageable page = PageRequest.of(offset, num);
 	    return dictWordDao.getAllByDictId(dictId, page);
     }
 
-    @Transactional
+    
     public Long countWords(Long dictId) {
 	    return (long)dictWordDao.getWords(dictId).size();
     }

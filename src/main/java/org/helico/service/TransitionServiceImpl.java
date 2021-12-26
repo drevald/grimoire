@@ -19,17 +19,17 @@ public class TransitionServiceImpl implements TransitionService {
     @Autowired
     TransitionDAO transitionDao;
 
-    @Transactional
+    
     public String getHandlerName(String event, String status) {
 	    return transitionDao.getHandlerName(event, status);
     }
 
-    @Transactional
+    
     public Transition find(String event, String status) {
         return transitionDao.find(event, status);
     }
 
-    @Transactional
+    
     public List<Transition> list() {
         return transitionDao.list();
     }

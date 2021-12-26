@@ -18,7 +18,7 @@ public class TranslatorProviderServiceImpl implements TranslatorProviderService 
     @Autowired
 	private TranslatorProviderDAO translatorProdiverDAO;
 
-    @Transactional
+    
     public List<TranslatorProvider> listProviders() {
         return translatorProdiverDAO.listProviders();
     }

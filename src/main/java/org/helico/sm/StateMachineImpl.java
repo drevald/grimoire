@@ -19,7 +19,9 @@ import org.helico.service.TransitionService;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Component
@@ -44,11 +46,7 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware, 
         Transition transition = transitionService.find(event.toString(), dict.getStatus());
         if (transition != null) {
             LOG.debug("handler found: " +  transition);
-            Job job = new Job();
-            job.setTransId(transition.getId());
-            job.setActive(false);
-            job.setDictId(dictId);
-            jobService.save(job);
+            Job job = getJob(transition, dictId);
             Handler handler = (Handler)appContext.getBean(transition.getHandlerName());
             dict.setStatus(transition.getDestStatus());
             dictDao.save(dict);
@@ -57,6 +55,15 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware, 
         } else {
             LOG.warn("handler for event = " + event.label + " and status = " + dict.getStatus() + " is not found");
         }
+    }
+
+    private Job getJob(Transition transition, Long dictId) {
+        Job job = new Job();
+        job.setTransId(transition.getId());
+        job.setActive(false);
+        job.setDictId(dictId);
+        jobService.save(job);
+        return job;
     }
 
     public void setApplicationContext(ApplicationContext appContext) {

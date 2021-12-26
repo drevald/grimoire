@@ -19,7 +19,7 @@ public class WordServiceImpl implements WordService {
     @Autowired
     DictWordDAO dictWordDAO;
 
-    @Transactional
+    
 	public void store(String value, String langId, Long dictId) {
 
         Word word;
@@ -43,7 +43,7 @@ public class WordServiceImpl implements WordService {
 
     }
 
-    @Transactional
+    
     public void batchStore(List<Word> words, Long dictId) {
         //todo add transaction
         for (Word word : words) {
@@ -51,12 +51,12 @@ public class WordServiceImpl implements WordService {
         }
     }
 
-    @Transactional
+    
     public List<DictWord> getWords(Long dictId) {
         return dictWordDAO.getWords(dictId);
     }
 
-    @Transactional
+    
     public Word getWord(String langId, String word) {
         //todo get unique
         List<Word> words = wordDAO.get(langId, word);

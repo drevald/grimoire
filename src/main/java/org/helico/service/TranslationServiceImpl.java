@@ -32,13 +32,13 @@ public class TranslationServiceImpl implements TranslationService {
     @Autowired
     TranslatorProviderDAO translatorProviderDAO;
 
-    @Transactional
+    
     public boolean isTranslated(Long wordId, Long translationServiceId) {
         List<Translation> result = translationDao.find(wordId, translationServiceId);
         return !result.isEmpty();
     }
 
-    @Transactional
+    
     public void storeTranslation(Long wordId, Long translatorId, String value) {
         Translation translation = new Translation();
         translation.setTranslatorId(translatorId);
@@ -47,27 +47,27 @@ public class TranslationServiceImpl implements TranslationService {
         translationDao.save(translation);
     }
 
-    @Transactional
+    
     public List<TranslatorProvider> listProviders() {
         return translatorProviderDAO.listProviders();
     }
 
-    @Transactional
+    
     public List<TranslatorProvider> listProviders(String langId) {
         return translatorProviderDAO.listProviders(langId);
     }
 
-    @Transactional
+    
     public List<Translator> listTranslators(String langId) {
         return translatorDAO.listTranslators(langId);
     }
 
-    @Transactional
+    
     public TranslatorProvider getProvider(Long transProvId) {
         return translatorProviderDAO.findById(transProvId).get();
     }
 
-    @Transactional
+    
     public Translator getTranslator(Long transId) {
         return translatorDAO.findById(transId).get();
     }

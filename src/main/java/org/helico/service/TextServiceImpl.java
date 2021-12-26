@@ -26,7 +26,7 @@ public class TextServiceImpl implements TextService {
     @Autowired
     private DictDAO dictDao;
 
-    @Transactional
+    
     public Reader getTextReader(Long id) throws Exception {
         Dict dict = dictDao.findById(id).get();
         String utfPath = dict.getText().getUtfPath();
@@ -34,7 +34,7 @@ public class TextServiceImpl implements TextService {
         return fr;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    @Transactional
+    
     public Reader getTextReader(Long id, int offset, int len) throws Exception {
         Dict dict = dictDao.findById(id).get();
 //        String utfPath = dict.getText().getUtfPath();
