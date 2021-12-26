@@ -21,10 +21,10 @@ public interface DictWordDAO extends PagingAndSortingRepository<DictWord, Long> 
 
     List<DictWord> getAllByDictId(Long dictId, Pageable pageable);
 
-//    @Query("SELECT dw FROM DictWord as dw WHERE dw.dictId=?1 AND dw.word.id=?2")
+    @Query("SELECT dw FROM DictWord as dw WHERE dw.dictId=?1 AND dw.word.id=?2")
 //    @Query(value="SELECT * FROM DictWord dw INNER JOIN Word w ON w.id=dw.word_id WHERE dw.dictId=?1 AND word.id=?2",
 //            nativeQuery = true)
-    @Query("FROM DictWord WHERE dictId=?1 AND dictId=?2")
+//    @Query("FROM DictWord WHERE dictId=?1 AND dictId=?2")
     DictWord findFirstByDictIdWord(Long dictId, Long wordId);
 
 }

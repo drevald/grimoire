@@ -27,8 +27,9 @@ public class WordServiceImpl implements WordService {
         DictWord dictWord = null;
         if (words.isEmpty()) {
             word = new Word(value, langId);
-            System.out.print("storing word " + value);
+            System.out.println("storing word " + value);
             wordDAO.save(word);
+            System.out.println("word " + value + " is new in dictionary " + dictId);
         } else {
             word = words.get(0);
             dictWord = dictWordDAO.findFirstByDictIdWord(dictId, word.getId());
@@ -36,14 +37,21 @@ public class WordServiceImpl implements WordService {
 
         if(dictWord == null) {
             dictWord = new DictWord(word, dictId);
+            System.out.println("word " + value + " is not found in dictionary " + dictId);
         }
 
+        System.out.println("word " + value + " has " + dictWord.getCounter() + " occurances in dictionary " + dictId);
         dictWord.setCounter(dictWord.getCounter() + 1);
         dictWordDAO.save(dictWord);
+        dictWord = dictWordDAO.findFirstByDictIdWord(dictId, word.getId());
+        if (dictWord == null) {
+            System.out.println("word " + value + " still not found in dictionary " + dictId);
+        } else {
+            System.out.println("stored word " + value + " has " + dictWord.getCounter() + " occurances in dictionary " + dictId);
+        }
 
     }
 
-    
     public void batchStore(List<Word> words, Long dictId) {
         //todo add transaction
         for (Word word : words) {
