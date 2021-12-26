@@ -22,11 +22,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/hello").permitAll()
             .antMatchers("/login").permitAll()
             .antMatchers("/*").access("hasRole('USER')")
-//            .antMatchers("/*").permitAll()
             .and()
             .formLogin()
             .loginProcessingUrl("/login")
-            .successForwardUrl("/dict");
+            .successForwardUrl("/");
     };
 
     @Override

@@ -15,6 +15,7 @@
 	       	<td>${helper.dict.id}</td>
             <td>${helper.dict.name}</td>
             <td>${helper.dict.status}</td>
+
             <td>
             <c:if test="${!empty helper.jobs}">
                 <c:forEach items="${helper.jobs}" var="job">

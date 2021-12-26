@@ -19,7 +19,6 @@ public class WordServiceImpl implements WordService {
     @Autowired
     DictWordDAO dictWordDAO;
 
-    
 	public void store(String value, String langId, Long dictId) {
 
         Word word;
@@ -27,9 +26,7 @@ public class WordServiceImpl implements WordService {
         DictWord dictWord = null;
         if (words.isEmpty()) {
             word = new Word(value, langId);
-            System.out.println("storing word " + value);
             wordDAO.save(word);
-            System.out.println("word " + value + " is new in dictionary " + dictId);
         } else {
             word = words.get(0);
             dictWord = dictWordDAO.findFirstByDictIdWord(dictId, word.getId());
@@ -37,19 +34,10 @@ public class WordServiceImpl implements WordService {
 
         if(dictWord == null) {
             dictWord = new DictWord(word, dictId);
-            System.out.println("word " + value + " is not found in dictionary " + dictId);
         }
 
-        System.out.println("word " + value + " has " + dictWord.getCounter() + " occurances in dictionary " + dictId);
         dictWord.setCounter(dictWord.getCounter() + 1);
         dictWordDAO.save(dictWord);
-        dictWord = dictWordDAO.findFirstByDictIdWord(dictId, word.getId());
-        if (dictWord == null) {
-            System.out.println("word " + value + " still not found in dictionary " + dictId);
-        } else {
-            System.out.println("stored word " + value + " has " + dictWord.getCounter() + " occurances in dictionary " + dictId);
-        }
-
     }
 
     public void batchStore(List<Word> words, Long dictId) {
@@ -59,16 +47,14 @@ public class WordServiceImpl implements WordService {
         }
     }
 
-    
     public List<DictWord> getWords(Long dictId) {
         return dictWordDAO.getWords(dictId);
     }
 
-    
     public Word getWord(String langId, String word) {
         //todo get unique
         List<Word> words = wordDAO.get(langId, word);
-        return words.get(1);
+        return words.get(0);
     }
 
 }

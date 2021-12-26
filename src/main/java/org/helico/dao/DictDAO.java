@@ -16,22 +16,6 @@ import java.util.List;
 @Repository
 public interface DictDAO extends CrudRepository<Dict, Long> {
 
-//    @Query
-//    public long saveDict(Dict dict);
-
-//    @Query
-//    public void saveText(Text text);
-
-//    @Query
-//    public List<Dict> listDicts();
-
-    //@Query(value = "SELECT dict FROM Dict WHERE accountId =?1", nativeQuery = true)
-//    @Query(value = "SELECT d FROM Dict d")
-//    public List<Dict> listDicts(Long accountId);
-
-//    @Query
-//    public void removeDict(Long id);
-
     @Query("FROM Dict WHERE id =?1 AND accountId =?2")
     Dict findDict(Long id, Long accountId);
 

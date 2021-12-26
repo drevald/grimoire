@@ -70,9 +70,12 @@ public class JobServiceImpl implements JobService {
     
     
     public Job getLastOrActive(Long dictId) {
-        if (jobDao.findAll().isEmpty())
-            return null;
-        return jobDao.findAll().iterator().next();
+
+        return jobDao.findFirstByDictIdOrderByIdDesc(dictId);
+
+//        if (jobDao.findAll().isEmpty())
+//            return null;
+//        return jobDao.findAll().iterator().next();
 	    //return jobDao.findActive(dictId).get(1);
     }
 

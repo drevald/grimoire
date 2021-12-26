@@ -66,7 +66,6 @@ public class DictController extends AbstractController {
         map.put("helperList", helperList);
         map.put("langs", langService.list());
         return "listDict";
-//        return "welcome";
     }
 
     @RequestMapping(value = "/dict/upload", method = RequestMethod.POST)
