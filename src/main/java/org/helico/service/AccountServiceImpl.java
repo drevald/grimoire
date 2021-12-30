@@ -7,6 +7,8 @@ import org.helico.dao.AccountDAO;
 import org.helico.domain.Lang;
 import org.helico.domain.Account;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +28,12 @@ public class AccountServiceImpl implements AccountService {
 	@Autowired
 	private LangDAO langDao;
 
-	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Account account = accountDao.findAccount(username);
+		return account;
+	}
+
 	public void addAccount(Account account) {
 		LOG.info("Starting counter from thread #" +  Thread.currentThread().toString());
 		LOG.info("Count finished from thread #" +  Thread.currentThread().toString());

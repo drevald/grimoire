@@ -5,7 +5,7 @@ import org.helico.domain.Account;
 import java.util.List;
 import java.util.Set;
 
-public interface AccountService {
+public interface AccountService extends org.springframework.security.core.userdetails.UserDetailsService {
 
 	public void addAccount(Account account);
 	

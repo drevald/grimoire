@@ -1,6 +1,7 @@
 package org.helico.domain;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -13,14 +14,8 @@ import java.util.Set;
 @Table(name = "account")
 public class Account implements UserDetails {
 
-    private static final GrantedAuthority USER_AUTHORITY = new GrantedAuthority() {
-        @Override
-        public String getAuthority() {
-            return "USER";
-        }
-    };
-
-    private static final Collection<GrantedAuthority> AUTHORITIES = Arrays.asList(USER_AUTHORITY);
+    private static final Collection<SimpleGrantedAuthority> AUTHORITIES =
+            Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
 
 	@Id
 	@Column(name = "id")
