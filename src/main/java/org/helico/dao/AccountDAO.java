@@ -13,4 +13,5 @@ public interface AccountDAO extends CrudRepository<Account, Long> {
 	
 	@Query(value = "FROM Account WHERE accountname=?1")
 	Account findAccount(String name);
+
 }

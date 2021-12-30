@@ -1,11 +1,26 @@
 package org.helico.domain;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "account")
-public class Account {
+public class Account implements UserDetails {
+
+    private static final GrantedAuthority USER_AUTHORITY = new GrantedAuthority() {
+        @Override
+        public String getAuthority() {
+            return "USER";
+        }
+    };
+
+    private static final Collection<GrantedAuthority> AUTHORITIES = Arrays.asList(USER_AUTHORITY);
 
 	@Id
 	@Column(name = "id")
@@ -78,5 +93,34 @@ public class Account {
 
     public void setAccountLangs(Set<Lang> accountLangs) {this.accountLangs = accountLangs;}
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return AUTHORITIES;
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
 
