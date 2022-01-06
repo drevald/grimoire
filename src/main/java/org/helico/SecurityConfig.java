@@ -18,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .createDelegatingPasswordEncoder();
         BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
         delPasswordEncoder.setDefaultPasswordEncoderForMatches(bcryptPasswordEncoder);
+        System.out.println("!!!!!admin=" + delPasswordEncoder.encode("admin"));
         return delPasswordEncoder;
     }
 
