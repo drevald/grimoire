@@ -54,6 +54,8 @@ public class WordServiceImpl implements WordService {
     public Word getWord(String langId, String word) {
         //todo get unique
         List<Word> words = wordDAO.get(langId, word);
+        if (words.isEmpty())
+            return null;
         return words.get(0);
     }
 
