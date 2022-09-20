@@ -3,14 +3,14 @@ package org.helico;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WeburerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class  extends WeburerAdapter {
 
     @Bean(name = "myPasswordEncoder")
     public PasswordEncoder getPasswordEncoder() {
@@ -18,7 +18,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .createDelegatingPasswordEncoder();
         BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
         delPasswordEncoder.setDefaultPasswordEncoderForMatches(bcryptPasswordEncoder);
-        System.out.println("admin=" + bcryptPasswordEncoder.encode("admin"));
         return delPasswordEncoder;
     }
 
