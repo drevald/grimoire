@@ -41,7 +41,7 @@ public class DictDAOImpl implements DictDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Dict> listDicts(Long accountId) {
-	    return sessionFactory.getCurrentSession().createQuery("from Dict where accountId=?").setParameter(0, accountId).list();
+	    return sessionFactory.getCurrentSession().createQuery("from Dict where accountId=?1").setParameter(1, accountId).list();
 	}
 
 	public void removeDict(Long id) {
@@ -53,22 +53,22 @@ public class DictDAOImpl implements DictDAO {
 
     public synchronized Dict findDict(Long id, Long accountId) {
 	Session session = sessionFactory.getCurrentSession();
-    	Dict dict = (Dict)session.createQuery("from Dict where id=? and accountId=?")
-	    .setParameter(0,id).setParameter(1,accountId).uniqueResult();
+    	Dict dict = (Dict)session.createQuery("from Dict where id=?1 and accountId=?1")
+	    .setParameter(1,id).setParameter(1,accountId).uniqueResult();
 		LOG.info("get sess#"+sessionFactory.getCurrentSession().hashCode()+" =  " + dict);
 		return dict;
     }
 
     public synchronized Dict findDict(Long id) {
 	Session session = sessionFactory.getCurrentSession();
-    	Dict dict = (Dict)session.createQuery("from Dict where id=?")
-	    .setParameter(0,id).uniqueResult();
+    	Dict dict = (Dict)session.createQuery("from Dict where id=?1")
+	    .setParameter(1,id).uniqueResult();
 		LOG.info("get sess#"+sessionFactory.getCurrentSession().hashCode()+" =  " + dict);
 		return dict;
     }
 
     @SuppressWarnings("unchecked")
 	public List<Dict> findDictByStatus(String status) {
-	    return sessionFactory.getCurrentSession().createQuery("from Dict where status=?").setParameter(0, status).list();
+	    return sessionFactory.getCurrentSession().createQuery("from Dict where status=?1").setParameter(1, status).list();
 	}
 }

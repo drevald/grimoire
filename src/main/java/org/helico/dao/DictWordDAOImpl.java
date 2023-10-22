@@ -19,7 +19,7 @@ public class DictWordDAOImpl implements DictWordDAO {
 
         Session session = sessionFactory.getCurrentSession();
 
-        DictWord dictWord = (DictWord)session.createQuery("from DictWord where dictId=? and word.id=?")
+        DictWord dictWord = (DictWord)session.createQuery("from DictWord where dictId=?1 and word.id=?1")
                 .setParameter(0, dictId).setParameter(1, word.getId()).uniqueResult();
 
         if (dictWord == null) {
@@ -42,7 +42,7 @@ public class DictWordDAOImpl implements DictWordDAO {
     public List<DictWord> getWords(Long dictId, Integer offset, Integer num) {
         Session session = sessionFactory.getCurrentSession();
             List<DictWord> words = (List<DictWord>)session
-            .createQuery("from DictWord where dictId=? order by counter desc")
+            .createQuery("from DictWord where dictId=?1 order by counter desc")
                 .setParameter(0, dictId)
             .setFirstResult(offset)
             .setMaxResults(num)
@@ -53,7 +53,7 @@ public class DictWordDAOImpl implements DictWordDAO {
     public Long countWords(Long dictId) {
         Session session = sessionFactory.getCurrentSession();
             Long count = (Long)session
-            .createQuery("select count(*) from DictWord where dictId=?")
+            .createQuery("select count(*) from DictWord where dictId=?1")
                 .setParameter(0, dictId)
             .uniqueResult();
         return count;

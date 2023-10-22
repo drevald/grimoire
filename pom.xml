@@ -8,7 +8,7 @@
     <name>grimoire</name>
     <url>http://maven.apache.org</url>
     <properties>
-        <spring.version>5.3.13</spring.version>
+        <spring.version>5.3.19</spring.version>
         <spring.security.version>5.6.0</spring.security.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.2.2.Final</version>
+            <version>5.3.20.Final</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -166,7 +166,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.0</version>
+            <version>42.3.8</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -198,21 +198,70 @@
     </dependencies>
     <profiles>
         <profile>
-            <id>local</id>
+            <id>local tomcat 10</id>
             <build>
                 <finalName>grimoire</finalName>
                 <filters>
                     <filter>postgresql.properties</filter>
                 </filters>
+                <plugins>
+                <plugin><!-- don't pack the war  -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <outputDirectory>/usr/local/Cellar/tomcat/10.0.20/libexec/webapps</outputDirectory>
+                </configuration>
+                </plugin>
+                </plugins>
             </build>
         </profile>
         <profile>
-            <id>heroku</id>
+            <id>local tomcat 8</id>
             <build>
                 <finalName>grimoire</finalName>
                 <filters>
-                    <filter>heroku.properties</filter>
+                    <filter>postgresql.properties</filter>
                 </filters>
+                <plugins>
+                    <plugin><!-- don't pack the war  -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <outputDirectory>/usr/local/Cellar/tomcat@8/8.5.78/libexec/webapps</outputDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>exploded</id>
+            <build>
+                <finalName>exploded</finalName>
+                <filters>
+                    <filter>postgresql.properties</filter>
+                </filters>
+                <plugins>
+                    <plugin><!-- don't pack the war  -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <outputDirectory>/usr/local/Cellar/tomcat/10.0.20/libexec/webapps/${project.artifactId}</outputDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>default-war</id>
+                                <phase>none</phase>
+                            </execution>
+                            <execution>
+                                <id>war-exploded</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exploded</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
             </build>
         </profile>
     </profiles>

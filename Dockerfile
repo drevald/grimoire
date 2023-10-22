@@ -1,8 +1,9 @@
 FROM maven AS build
 WORKDIR /app
 COPY . .
-RUN mvn -P local clean package
-FROM tomcat:8.5-jre11-slim AS final
+RUN mvn -P local clean package -DskipTests
+#FROM tomcat:8.5-jre11-slim AS final
+FROM tomcat:9-jre11 AS final
 WORKDIR /app
 COPY --from=build /app/target/grimoire.war /usr/local/tomcat/webapps/
 RUN apt-get update

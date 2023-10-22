@@ -29,14 +29,15 @@
 	</bean>
 
 	<bean class="java.net.URI" id="dbUrl">
-		 <constructor-arg value="#{systemEnvironment['DATABASE_URL']}"/>
+		 <constructor-arg value="jdbc:postgresql://192.168.0.198:5434/grimoire"/>
 	</bean>
 
 	<bean id="dataSource" 
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		p:url="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"
-		p:username="#{ @dbUrl.getUserInfo().split(':')[0] }"
-		p:password="#{ @dbUrl.getUserInfo().split(':')[1] }" />
+		  p:driverClassName="org.postgresql.Driver"
+		p:url="jdbc:postgresql://192.168.0.198:5434/grimoire"
+		p:username="denis"
+		p:password="9rommit" />
 
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">

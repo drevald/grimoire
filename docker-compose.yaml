@@ -9,12 +9,13 @@ services:
     volumes:
       - data:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 5434:5434
+    command: -p 5434
   web:
     build: .
     environment:
       - PORT=9999
-      - DATABASE_URL=postgresql://denis:9rommit@postgres:5432/grimoire
+      - DATABASE_URL=postgresql://denis:9rommit@postgres:5434/grimoire
     ports:
       - "8080:9999"
     depends_on:
