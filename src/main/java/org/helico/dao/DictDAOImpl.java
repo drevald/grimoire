@@ -53,8 +53,8 @@ public class DictDAOImpl implements DictDAO {
 
     public synchronized Dict findDict(Long id, Long accountId) {
 	Session session = sessionFactory.getCurrentSession();
-    	Dict dict = (Dict)session.createQuery("from Dict where id=?1 and accountId=?1")
-	    .setParameter(1,id).setParameter(1,accountId).uniqueResult();
+    	Dict dict = (Dict)session.createQuery("from Dict where id=?1 and accountId=?2")
+	    .setParameter(1,id).setParameter(2,accountId).uniqueResult();
 		LOG.info("get sess#"+sessionFactory.getCurrentSession().hashCode()+" =  " + dict);
 		return dict;
     }

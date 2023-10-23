@@ -27,9 +27,9 @@ public class TranslationDAOImpl implements TranslationDAO {
 
     public boolean isTranslated(Long wordId, Long translatorId) {
         Session session = sessionFactory.getCurrentSession();
-    	List result = session.createQuery("from Translation where wordId=?1 and translatorId=?1")
-        .setParameter(0, wordId)
-	    .setParameter(1, translatorId)
+    	List result = session.createQuery("from Translation where wordId=?1 and translatorId=?2")
+        .setParameter(1, wordId)
+	    .setParameter(2, translatorId)
         .list();
 		return result != null && result.size() > 0;
     }

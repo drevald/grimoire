@@ -23,8 +23,8 @@ public class WordDAOImpl implements WordDAO {
         Session session = sessionFactory.getCurrentSession();
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
-            Word result = (Word)session.createQuery("from Word where value=?1 and langId=?1")
-                    .setParameter(0, value).setParameter(1, langId).uniqueResult();
+            Word result = (Word)session.createQuery("from Word where value=?1 and langId=?2")
+                    .setParameter(1, value).setParameter(2, langId).uniqueResult();
 
         if (result==null) {
             Word word = new Word();
@@ -55,8 +55,8 @@ public class WordDAOImpl implements WordDAO {
             for (Word word : words) {
 
                 LOG.debug(">>>>saving value:"+word.getValue()+" lang:"+word.getLangId());
-                    Word storedWord = (Word)session.createQuery("from Word where value=?1 and langId=?1")
-                            .setParameter(0, word.getValue()).setParameter(1, word.getLangId()).uniqueResult();
+                    Word storedWord = (Word)session.createQuery("from Word where value=?1 and langId=?2")
+                            .setParameter(1, word.getValue()).setParameter(2, word.getLangId()).uniqueResult();
 
                 if (storedWord == null) {
                     Word newWord = new Word();
@@ -71,8 +71,8 @@ public class WordDAOImpl implements WordDAO {
                     }
                 }
 
-                DictWord dictWord = (DictWord)session.createQuery("from DictWord where dictId=?1 and word.id=?1")
-                    .setParameter(0, dictId).setParameter(1, word.getId()).uniqueResult();
+                DictWord dictWord = (DictWord)session.createQuery("from DictWord where dictId=?1 and word.id=?2")
+                    .setParameter(1, dictId).setParameter(2, word.getId()).uniqueResult();
 
                 if (dictWord == null) {
                     dictWord = new DictWord();
@@ -98,8 +98,8 @@ public class WordDAOImpl implements WordDAO {
         Session session = sessionFactory.getCurrentSession();
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
-        Word result = (Word)session.createQuery("from Word where value=?1 and langId=?1")
-                .setParameter(0, value).setParameter(1, langId).uniqueResult();
+        Word result = (Word)session.createQuery("from Word where value=?1 and langId=?2")
+                .setParameter(1, value).setParameter(2, langId).uniqueResult();
         return result;
 
     }
