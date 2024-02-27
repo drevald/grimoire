@@ -1,13 +1,16 @@
 version: '3.3'
 services:
   postgres:
-    image: postgres:12-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.db
     environment:
       - POSTGRES_USER=denis
       - POSTGRES_PASSWORD=9rommit
       - POSTGRES_DB=grimoire
     volumes:
       - data:/var/lib/postgresql/data
+      - ./src/setup:/docker-entrypoint-initdb.d
     ports:
       - 5434:5434
     command: -p 5434
