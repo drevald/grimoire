@@ -1,0 +1,2 @@
+FROM postgres:12-alpine
+COPY src/setup/* /docker-entrypoint-initdb.d/
