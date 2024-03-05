@@ -1,8 +1,6 @@
 package org.helico;
 
 import org.apache.log4j.Logger;
-import org.helico.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -14,9 +12,6 @@ import java.security.Principal;
 public class InspectionFilter implements Filter {
 
     private static final Logger LOG = Logger.getLogger(InspectionFilter.class);
-
-    @Autowired
-    private AccountService accountService;
 
     public void	destroy() {
         LOG.debug("Destroying InspectionFilter");

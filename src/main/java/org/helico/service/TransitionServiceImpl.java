@@ -13,8 +13,6 @@ import java.util.List;
 @Service
 public class TransitionServiceImpl implements TransitionService {
 
-    private static final Logger LOG = Logger.getLogger(TransitionServiceImpl.class);
-
     @Autowired
     TransitionDAO transitionDao;
 

@@ -39,7 +39,6 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
         return sessionFactory.getCurrentSession().createQuery("from TranslatorProvider").list();
     }
 
-    @SuppressWarnings("unchecked") 
     public List<TranslatorProvider> listProviders(String langId) {
         LOG.info(">>>>find translator providers for lang #" + langId);
         List<TranslatorProvider> result = new ArrayList<TranslatorProvider>();

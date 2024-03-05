@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextStartedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.helico.service.DictService;

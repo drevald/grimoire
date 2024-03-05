@@ -56,9 +56,9 @@ public class TextController  extends AbstractController {
         Account account = accountService.findAccount(getCurrentAccount());
         Dict dict = dictService.findDict(dictId, account.getId());
         StringBuilder sb = new StringBuilder();
-        try {
+        try (
             Reader reader = textService.getTextReader(dictId, offset, TEXT_SIZE);
-            WordReader wordReader = new WordReader(reader);
+            WordReader wordReader = new WordReader(reader);) {
             int counter = 0;
             while (wordReader.ready()) {
                 WordReaderResult result = wordReader.readWord();

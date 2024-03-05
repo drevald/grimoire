@@ -1,6 +1,5 @@
 package org.helico.service;
 
-import java.io.InputStream;
 import java.io.Reader;
 
 /**

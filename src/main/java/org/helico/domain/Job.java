@@ -15,8 +15,6 @@ import javax.persistence.Table;
 @Table(name = "job")
 public class Job {
 
-	private static final Logger LOG = Logger.getLogger(Job.class);
-	
     @Id
 	@Column(name = "id")
 	@GeneratedValue

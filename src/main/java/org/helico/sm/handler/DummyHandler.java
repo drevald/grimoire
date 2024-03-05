@@ -1,7 +1,6 @@
 package org.helico.sm.handler;
 
 import org.helico.sm.Handler;
-import org.helico.domain.Job;
 import org.helico.service.JobService;
 
 import org.springframework.stereotype.Component;

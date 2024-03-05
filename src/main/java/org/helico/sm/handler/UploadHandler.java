@@ -1,14 +1,8 @@
 package org.helico.sm.handler;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.helico.domain.Dict;
 import org.helico.domain.Job;
-import org.helico.domain.Text;
 import org.springframework.stereotype.Component;
-
-import java.io.*;
-
 
 @Component("uploadHandler")
 public class UploadHandler extends AbstractHandler {

@@ -198,7 +198,6 @@ public class DictController extends AbstractController {
             List<DictWord> words = dictWordService.getWords(dictId, offset, size);
             Long wordsNum = dictWordService.countWords(dictId);
             List<Translator> translators = translationService.listTranslators(dict.getLangId());
-            List<TranslatorProvider> providers = translationService.listProviders();
             map.put("dict", dictService.findDict(dictId, account.getId()));
             map.put("wordsNum", wordsNum);
             map.put("words", words);

@@ -196,8 +196,9 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <profiles>
-        <profile>
+    <!-- <profile>
             <id>local tomcat 10</id>
             <build>
                 <finalName>grimoire</finalName>
@@ -205,7 +206,7 @@
                     <filter>postgresql.properties</filter>
                 </filters>
                 <plugins>
-                <plugin><!-- don't pack the war  -->
+                <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
@@ -214,8 +215,9 @@
                 </plugin>
                 </plugins>
             </build>
-        </profile>
-        <profile>
+        </profile> -->
+
+        <!-- <profile>
             <id>local tomcat 8</id>
             <build>
                 <finalName>grimoire</finalName>
@@ -223,7 +225,7 @@
                     <filter>postgresql.properties</filter>
                 </filters>
                 <plugins>
-                    <plugin><!-- don't pack the war  -->
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
@@ -232,7 +234,8 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
+        </profile> -->
+
         <profile>
             <id>exploded</id>
             <build>
@@ -266,7 +269,7 @@
         </profile>
     </profiles>
     <build>
-        <finalName>grimoire</finalName>
+        <finalName>ROOT</finalName>
         <filters>
             <filter>postgresql.properties</filter>
         </filters>

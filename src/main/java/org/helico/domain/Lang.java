@@ -3,7 +3,6 @@ package org.helico.domain;
 import org.apache.log4j.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,8 +10,6 @@ import javax.persistence.Table;
 @Table(name = "lang")
 public class Lang {
 
-	private static final Logger LOG = Logger.getLogger(Lang.class);
-	
     @Id
 	@Column(name = "id")
 	private String id;

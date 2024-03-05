@@ -1,6 +1,5 @@
 package org.helico.service;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.helico.dao.DictDAO;

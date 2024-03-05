@@ -1,9 +1,7 @@
 package org.helico.sm.handler;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.log4j.Logger;
 import org.helico.domain.*;
 import org.helico.service.DictWordService;
