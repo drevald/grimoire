@@ -198,9 +198,6 @@
     </dependencies>
     <build>
     <finalName>ROOT</finalName>
-        <filters>
-            <filter>postgresql.properties</filter>
-        </filters>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

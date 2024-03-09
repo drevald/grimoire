@@ -11,11 +11,6 @@
     </context-param>
 
     <context-param>
-        <param-name>localStorage</param-name>
-        <param-value>@storage.location@</param-value>
-    </context-param>
-
-    <context-param>
         <param-name>buildTime</param-name>
         <param-value>BUILDTIME</param-value>
     </context-param>
@@ -38,7 +33,6 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
         <multipart-config>
-<!--            <location>/tmp</location>-->
             <max-file-size>20848820</max-file-size>
             <max-request-size>418018841</max-request-size>
             <file-size-threshold>1048576</file-size-threshold>

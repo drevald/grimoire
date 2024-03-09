@@ -13,9 +13,13 @@
         http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
         http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<context:property-placeholder />
 
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
@@ -29,15 +33,15 @@
 	</bean>
 
 	<bean class="java.net.URI" id="dbUrl">
-		 <constructor-arg value="jdbc:postgresql://192.168.0.198:5434/grimoire"/>
+		 <constructor-arg value="${DATABASE_JNDI}"/>		                            
 	</bean>
 
 	<bean id="dataSource" 
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
 		  p:driverClassName="org.postgresql.Driver"
-		p:url="jdbc:postgresql://192.168.0.198:5434/grimoire"
-		p:username="denis"
-		p:password="9rommit" />
+		p:url="${DATABASE_JNDI}"
+		p:username="${DATABASE_USER}"
+		p:password="${DATABASE_PASSWORD}" />
 
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">

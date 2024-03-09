@@ -17,7 +17,10 @@ services:
     build: .
     environment:
       - PORT=9999
-      - DATABASE_URL=postgresql://denis:9rommit@postgres:5434/grimoire
+      - DATABASE_JNDI=jdbc:postgresql://postgres:5434/grimoire
+      - DATABASE_USER=denis
+      - DATABASE_PASSWORD=9rommit
+      - LOCAL_STORAGE=~/GRIM
     ports:
       - "9999:9999"
     depends_on:
