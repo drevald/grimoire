@@ -215,20 +215,22 @@
                 <version>3.3.2</version>
                 <configuration>
                     <webResources>
-                        <resource>
-                            <filtering>true</filtering>
+                        <!-- <resource>
+                            <filtering>false</filtering>
                             <directory>src/main/webapp</directory>
                             <includes>
                                 <include>**/web.xml</include>
+                                <exclude>favicon.ico</exclude>
                             </includes>
-                        </resource>
+                        </resource> -->
                         <resource>
                             <directory>src/main/webapp</directory>
                             <filtering>true</filtering>
+                            <exclude>favicon.ico</exclude>
                         </resource>
                     </webResources>
-                    <warSourceDirectory>src/main/webapp/</warSourceDirectory>
-                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+                    <!-- <warSourceDirectory>src/main/webapp/</warSourceDirectory> -->
+                    <!-- <webXml>src/main/webapp/WEB-INF/web.xml</webXml> -->
                 </configuration>
             </plugin>                     
         </plugins>
