@@ -5,22 +5,22 @@
     <h3><spring:message code="dict.list" /></h3>
 
     <c:if test="${empty helperList}">
-    	  <spring:message code="dict.list.empty"/>
+          <spring:message code="dict.list.empty"/>
     </c:if>
 
     <c:if test="${!empty helperList}">
         <table class="table table-condensed table-sm">
         <c:forEach items="${helperList}" var="helper">
         <tr>
-	       	<td>${helper.dict.id}</td>
+               <td>${helper.dict.id}</td>
             <td>${helper.dict.name}</td>
             <td>${helper.dict.status}</td>
             <td>
             <c:if test="${!empty helper.jobs}">
                 <c:forEach items="${helper.jobs}" var="job">
-		            <c:if test="${job.active}">
+                    <c:if test="${job.active}">
                         ${job.progress}%
-		            </c:if>
+                    </c:if>
                     ${fn:substring(job.details, 0, 16)}
                 </c:forEach>
             </c:if>
@@ -33,9 +33,9 @@
             <td><a href="dict/view/${helper.dict.id}"><spring:message code="dict.preview" /></a></td>
             <td><a href="text/view/${helper.dict.id}?offset=0"><spring:message code="text" /></a></td>
         </tr>
-		</c:forEach>
-	</table>
-	</c:if>
-	<a href="upload"><spring:message code="dict.create" /></a>
+        </c:forEach>
+    </table>
+    </c:if>
+    <a href="upload"><spring:message code="dict.create" /></a>
 </div>
 <%@ include file="/WEB-INF/footer.jsp"%>

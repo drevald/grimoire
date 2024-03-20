@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 public class UploadHandler extends AbstractHandler {
 
     private static final Logger LOG = Logger.getLogger(UploadHandler.class);
-    
+
     public void process(Object object, Job job) throws Exception {
           jobService.setActive(job.getId(), true);
 //          InputStream is = (InputStream)object;
             Long dictId = job.getDictId();
-//	        Dict dict = dictService.findDict(dictId);
+//            Dict dict = dictService.findDict(dictId);
 //            Text text = dict.getText();
 //        //OutputStream os = new FileOutputStream(new File(text.getOrigPath()));
 //        OutputStream os = new FileOutputStream(new File(text.getOrigPath()));

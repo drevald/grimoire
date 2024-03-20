@@ -11,15 +11,15 @@ public class Word {
     private static final String NOT_TRANSLATED = "Not translated yet";
 
     @Id
-	@Column(name = "id")
-	@GeneratedValue
-	private Long id;
+    @Column(name = "id")
+    @GeneratedValue
+    private Long id;
 
     @Column(name = "lang_id")
-	private String langId;
+    private String langId;
 
     @Column(name = "value")
-	private String value;
+    private String value;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "word")
     private Set<Translation> translations;

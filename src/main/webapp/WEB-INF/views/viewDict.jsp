@@ -2,9 +2,9 @@
 
 <div class="col-sm-8 p-5">
 
-	<h3>${dict.name}</h3>
+    <h3>${dict.name}</h3>
 
-	${preview}
+    ${preview}
 
 </div>
 

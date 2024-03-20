@@ -10,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class DummyHandler implements Handler {
 
     @Autowired
-	JobService jobService;
+    JobService jobService;
 
 
     public void process(Object data, Long id) {
-	jobService.setDetails(id, (String)data);
+    jobService.setDetails(id, (String)data);
         return;
     }
 

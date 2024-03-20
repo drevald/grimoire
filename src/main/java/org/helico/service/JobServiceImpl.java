@@ -19,27 +19,27 @@ public class JobServiceImpl implements JobService {
 
     @Transactional
     public Job createJob(Long transId, Long dictId) {
-	Job job = new Job();
-	job.setTransId(transId);
+    Job job = new Job();
+    job.setTransId(transId);
         job.setActive(false);
-	job.setProgress(0);
+    job.setProgress(0);
         job.setDictId(dictId);
         jobDao.saveOrUpdate(job);
-	return job;
+    return job;
     }
 
     @Transactional
     public void save(Job job) {
-	LOG.debug("saving " + job);
+    LOG.debug("saving " + job);
         jobDao.saveOrUpdate(job);
     }
 
     @Transactional
     public synchronized void setProgress(Long id, Integer progress) {
         Job job = jobDao.find(id);
-	LOG.debug(">>>setting progress for job"+job+":"+progress);
+    LOG.debug(">>>setting progress for job"+job+":"+progress);
         job.setProgress(progress);
-	LOG.debug(">>>setting progress for job"+job+":"+progress);
+    LOG.debug(">>>setting progress for job"+job+":"+progress);
         jobDao.saveOrUpdate(job);
     }
 
@@ -64,12 +64,12 @@ public class JobServiceImpl implements JobService {
 
     @Transactional
     public List<Job> getActiveJobs(Long dictId) {
-	return jobDao.findActive(dictId);
+    return jobDao.findActive(dictId);
     }
-    
+
     @Transactional
     public Job getLastOrActive(Long dictId) {
-	return jobDao.findLastOrActive(dictId);
+    return jobDao.findLastOrActive(dictId);
     }
 
 }

@@ -15,7 +15,7 @@ public class TranslatorProviderServiceImpl implements TranslatorProviderService 
     private static final Logger LOG = Logger.getLogger(TranslatorProviderServiceImpl.class);
 
     @Autowired
-	private TranslatorProviderDAO translatorProdiverDAO;
+    private TranslatorProviderDAO translatorProdiverDAO;
 
     @Transactional
     public List<TranslatorProvider> listProviders() {

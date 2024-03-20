@@ -16,8 +16,8 @@ public class LangServiceImpl implements LangService {
     LangDAO langDao;
 
     @Transactional
-	public List<Lang> list() {
-	    return langDao.list();
+    public List<Lang> list() {
+        return langDao.list();
     }
 
     @Transactional

@@ -11,17 +11,17 @@ import javax.persistence.Table;
 @Table(name = "lang")
 public class Lang {
 
-	private static final Logger LOG = Logger.getLogger(Lang.class);
-	
+    private static final Logger LOG = Logger.getLogger(Lang.class);
+
     @Id
-	@Column(name = "id")
-	private String id;
-    
+    @Column(name = "id")
+    private String id;
+
     @Column(name = "name")
-	private String name;
+    private String name;
 
     @Column(name = "encodings")
-	private String encodings;
+    private String encodings;
 
     public String getId() {
         return id;

@@ -21,14 +21,14 @@ public class AdminController {
     private TranslatorProviderService providerService;
 
     @RequestMapping(value = "/admin/transitions")
-	public String listTransitions(Map<String, Object> map) {
+    public String listTransitions(Map<String, Object> map) {
         List<Transition> transitions = transitionService.list();
         map.put("transitions", transitions);
         return "transList";
     }
 
     @RequestMapping(value = "/admin/providers")
-	public String listProviders(Map<String, Object> map) {
+    public String listProviders(Map<String, Object> map) {
         List<TranslatorProvider> providers = providerService.listProviders();
         map.put("providers", providers);
         return "providerList";

@@ -5,7 +5,7 @@
         <a href="<c:url value="/dict" />">
             <spring:message code="home" />
         </a>
-	</div>
+    </div>
     &nbsp;
     <div style="float:left">
         <a href="<c:url value="/admin/transitions" />">
@@ -23,7 +23,7 @@
         <a href="<c:url value="/logout" />">
             <spring:message code="logout" />
         </a>
-	</div>
+    </div>
 
     <br/>
 

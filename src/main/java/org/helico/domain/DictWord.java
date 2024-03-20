@@ -7,15 +7,15 @@ import javax.persistence.*;
 public class DictWord {
 
     @Id
-	@Column(name = "id")
-	@GeneratedValue
-	private Long id;
+    @Column(name = "id")
+    @GeneratedValue
+    private Long id;
 
     @Column(name = "dict_id")
-	private Long dictId;
+    private Long dictId;
 
     @Column(name = "counter")
-	private Long counter = 0L;
+    private Long counter = 0L;
 
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="word_id")
@@ -39,7 +39,7 @@ public class DictWord {
 
 
     public Word getWord() {
-	    return word;
+        return word;
     }
 
     public void setWord(Word word) {

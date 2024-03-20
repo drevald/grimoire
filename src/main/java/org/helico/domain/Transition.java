@@ -14,47 +14,47 @@ public class Transition {
     private Long id;
 
     @Column(name = "event")
-	private String event;
+    private String event;
 
     @Column(name = "src_status")
-	private String sourceStatus;
+    private String sourceStatus;
 
     @Column(name = "dest_status")
-	private String destStatus;
+    private String destStatus;
 
     @Column(name = "handler_name")
-	private String handlerName;
+    private String handlerName;
 
     public String getEvent() {
-	return event;
+    return event;
     }
 
     public void setEvent(String event) {
-	this.event = event;
+    this.event = event;
     }
 
     public String getSourceStatus() {
-	return sourceStatus;
+    return sourceStatus;
     }
 
     public void setSourceStatus(String sourceStatus) {
-	this.sourceStatus = sourceStatus;
+    this.sourceStatus = sourceStatus;
     }
 
     public String getDestStatus() {
-	return destStatus;
+    return destStatus;
     }
 
     public void setDestStatus(String destStatus) {
-	this.destStatus = destStatus;
+    this.destStatus = destStatus;
     }
 
     public String getHandlerName() {
-	return handlerName;
+    return handlerName;
     }
 
     public void setHandlerName(String handlerName) {
-	this.handlerName = handlerName;
+    this.handlerName = handlerName;
     }
 
     public String toString() {

@@ -18,37 +18,37 @@ public class JobDAOImpl implements JobDAO {
     SessionFactory sessionFactory;
 
     public Job find(Long id) {
-	LOG.info(">>>>find job#" + id);
-    	Job job = (Job)sessionFactory.getCurrentSession().get(Job.class, id);
-	LOG.info("<<<<found job#" + id);
+    LOG.info(">>>>find job#" + id);
+        Job job = (Job)sessionFactory.getCurrentSession().get(Job.class, id);
+    LOG.info("<<<<found job#" + id);
         return job;
     }
 
     public void saveOrUpdate(Job job) {
-	    LOG.info(">>>>save job sess#"+sessionFactory.getCurrentSession().hashCode()+" " + job.toString());
-		sessionFactory.getCurrentSession().saveOrUpdate(job);
-	    LOG.info("<<<<saved job sess#"+sessionFactory.getCurrentSession().hashCode()+" " + job.toString());
+        LOG.info(">>>>save job sess#"+sessionFactory.getCurrentSession().hashCode()+" " + job.toString());
+        sessionFactory.getCurrentSession().saveOrUpdate(job);
+        LOG.info("<<<<saved job sess#"+sessionFactory.getCurrentSession().hashCode()+" " + job.toString());
     }
 
-	@SuppressWarnings("unchecked") 
+    @SuppressWarnings("unchecked")
     public List<Job> findActive(Long dictId) {
-	Session session = sessionFactory.getCurrentSession();
-    	List<Job> jobs = (List<Job>)session.createQuery("from Job where dictId=?1 and active=1")
-	    .setParameter(1,dictId).list();
-		LOG.info("<<<<get active jobs:" + jobs);
-		return jobs;
+    Session session = sessionFactory.getCurrentSession();
+        List<Job> jobs = (List<Job>)session.createQuery("from Job where dictId=?1 and active=1")
+        .setParameter(1,dictId).list();
+        LOG.info("<<<<get active jobs:" + jobs);
+        return jobs;
     }
 
-	@SuppressWarnings("unchecked") 
+    @SuppressWarnings("unchecked")
     public Job findLastOrActive(Long dictId) {
-	Session session = sessionFactory.getCurrentSession();
-    	List<Job> jobs = (List<Job>)session
-	    .createQuery("from Job where dictId=?1 order by active desc, id desc")
-	    .setParameter(1,dictId).list();
-	LOG.debug("<<<<get last jobs:" + jobs);
-	Job job = (jobs==null)?null:jobs.get(0); 
-	LOG.debug("<<<<last job:" + job);
-	return job;
+    Session session = sessionFactory.getCurrentSession();
+        List<Job> jobs = (List<Job>)session
+        .createQuery("from Job where dictId=?1 order by active desc, id desc")
+        .setParameter(1,dictId).list();
+    LOG.debug("<<<<get last jobs:" + jobs);
+    Job job = (jobs==null)?null:jobs.get(0);
+    LOG.debug("<<<<last job:" + job);
+    return job;
     }
 
 }

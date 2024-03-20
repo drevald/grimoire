@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class LangDAOImpl implements LangDAO {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+    @Autowired
+    private SessionFactory sessionFactory;
 
     @SuppressWarnings("unchecked")
     public List<Lang> list() {

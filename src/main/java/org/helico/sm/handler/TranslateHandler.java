@@ -53,11 +53,11 @@ public class TranslateHandler extends AbstractHandler {
                 if (!transService.isTranslated(word.getId(), provider.getId())) {
                     String translation = fetchTranslation(word.getValue(), provider, dict.getLangId(), "ru");
                     if (translation != null) {
-						try {
-	                        transService.storeTranslation(word.getId(), translator.getId(), translation.toLowerCase());
-						} catch (Exception e) {
-							LOG.error("Can not save translation for " + word.getValue() + " : " + translation, e);
-						}
+                        try {
+                            transService.storeTranslation(word.getId(), translator.getId(), translation.toLowerCase());
+                        } catch (Exception e) {
+                            LOG.error("Can not save translation for " + word.getValue() + " : " + translation, e);
+                        }
                     }
                 }
             }

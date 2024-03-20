@@ -19,7 +19,7 @@ public class TranslationServiceImpl implements TranslationService {
     private static final Logger LOG = Logger.getLogger(TranslationServiceImpl.class);
 
     @Autowired
-	private StateMachine stateMachine;
+    private StateMachine stateMachine;
 
     @Autowired
     TranslationDAO translationDao;

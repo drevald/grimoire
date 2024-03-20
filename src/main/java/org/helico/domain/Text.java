@@ -11,18 +11,18 @@ public class Text {
     private static final Logger LOG = Logger.getLogger(Text.class);
 
     @Id
-	@Column(name = "id")
-	@GeneratedValue
-	private Long id;
+    @Column(name = "id")
+    @GeneratedValue
+    private Long id;
 
-	@Column(name = "orig_path")
-	private String origPath;
+    @Column(name = "orig_path")
+    private String origPath;
 
-	@Column(name = "utf8_path")
-	private String utfPath;
+    @Column(name = "utf8_path")
+    private String utfPath;
 
-	@Column(name = "encoding")
-	private String encoding;
+    @Column(name = "encoding")
+    private String encoding;
 
     @Column(name = "orig_doc", columnDefinition="LONGBLOB")
     @Basic(fetch = FetchType.LAZY)

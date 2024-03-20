@@ -1,35 +1,35 @@
 INSERT INTO transition(event, src_status, dest_status, handler_name)
-	VALUES ('LOAD', 'PERSISTED', 'LOADING', 'uploadHandler');
+    VALUES ('LOAD', 'PERSISTED', 'LOADING', 'uploadHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('OK', 'LOADING', 'STORING', 'storeHandler');
+    VALUES ('OK', 'LOADING', 'STORING', 'storeHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('FAIL', 'LOADING', 'PERSISTED', 'dummyHandler');
+    VALUES ('FAIL', 'LOADING', 'PERSISTED', 'dummyHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('STORE', 'LOADED', 'STORING', 'storeHandler');
+    VALUES ('STORE', 'LOADED', 'STORING', 'storeHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('STORE', 'STORED', 'STORING', 'storeHandler');
+    VALUES ('STORE', 'STORED', 'STORING', 'storeHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name)
-	VALUES ('FAIL', 'STORING', 'LOADED', 'dummyHandler');
+    VALUES ('FAIL', 'STORING', 'LOADED', 'dummyHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('WAIT', 'STORING', 'LOADED', 'storeHandler');
+    VALUES ('WAIT', 'STORING', 'LOADED', 'storeHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('OK', 'STORING', 'PARSING', 'parseHandler');
+    VALUES ('OK', 'STORING', 'PARSING', 'parseHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('PARSE', 'STORED', 'PARSING', 'parseHandler');
+    VALUES ('PARSE', 'STORED', 'PARSING', 'parseHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('PARSE', 'PARSED', 'PARSING', 'parseHandler');
+    VALUES ('PARSE', 'PARSED', 'PARSING', 'parseHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('OK', 'PARSING', 'PARSED', 'dummyHandler');
+    VALUES ('OK', 'PARSING', 'PARSED', 'dummyHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('FAIL', 'PARSING', 'STORED', 'dummyHandler');
+    VALUES ('FAIL', 'PARSING', 'STORED', 'dummyHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('TRANSLATE', 'PARSED', 'TRANSLATING', 'translateHandler');
+    VALUES ('TRANSLATE', 'PARSED', 'TRANSLATING', 'translateHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('TRANSLATE', 'TRANSLATED', 'TRANSLATING', 'translateHandler');
+    VALUES ('TRANSLATE', 'TRANSLATED', 'TRANSLATING', 'translateHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('OK', 'TRANSLATING', 'TRANSLATED', 'dummyHandler');
+    VALUES ('OK', 'TRANSLATING', 'TRANSLATED', 'dummyHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
-	VALUES ('FAIL', 'TRANSLATING', 'PARSED', 'dummyHandler');
+    VALUES ('FAIL', 'TRANSLATING', 'PARSED', 'dummyHandler');
 
 
 INSERT INTO lang(id,"name",encodings) VALUES ('ru', 'Russian', 'Windows-1251,KOI8-R,Cp866,UTF-8');
@@ -51,7 +51,7 @@ INSERT INTO lang(id,"name",encodings) VALUES ('pl', 'Polish', 'UTF-8,Windows-125
 INSERT INTO "account"(accountname, password, role, enabled, native_lang_id) VALUES ('guest', '', 'GUEST', True, 'en');
 INSERT INTO "account"(accountname, password, role, enabled, native_lang_id) VALUES ('account', 'pass', 'USER', True, 'en');
 INSERT INTO "account"(accountname, password, role, enabled,native_lang_id) VALUES ('helicobacter', 'pilory', 'USER', True, 'en');
-INSERT INTO "account"(accountname, password, role, enabled, native_lang_id)	VALUES ('admin', 'admin', 'ADMIN', True, 'en');
+INSERT INTO "account"(accountname, password, role, enabled, native_lang_id)    VALUES ('admin', 'admin', 'ADMIN', True, 'en');
 
 INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (1, 4, 'de');
 INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (2, 4, 'ru');
@@ -71,10 +71,10 @@ INSERT INTO "account_lang"(id, account_id, lang_id) VALUES (15, 4, 'da');
 
 
 INSERT INTO translator_provider(id, title, host, req_pattern, res_pattern) 
-	VALUES (0, 'Bing', 'api.microsofttranslator.com', '<{1}>{0}</{2}>',
+    VALUES (0, 'Bing', 'api.microsofttranslator.com', '<{1}>{0}</{2}>',
 'http://api.microsofttranslator.com/V2/Http.svc/Translate?appId=CDCB8BFFDD9E4C3054316BC629E82D1E39CA585C&text={0}&from={1}&to={2}');
 INSERT INTO translator_provider(id, title, host, req_pattern, res_pattern) 
-	VALUES (1,'Google','',
+    VALUES (1,'Google','',
 '{1}<span id=result_box class=\"short_text\"><span {2}>{0}</span>{3}','http://translate.google.com/?sl={1}&tl={2}&text={0}');
 
 INSERT INTO translator(id,service_id,src_lang_id,dest_lang_id) VALUES (1, 0, 'fr', 'ru');

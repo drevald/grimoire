@@ -24,6 +24,6 @@ services:
     ports:
       - "9999:9999"
     depends_on:
-      - postgres      
+      - postgres
 volumes:
   data:

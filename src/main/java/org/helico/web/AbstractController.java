@@ -15,8 +15,6 @@ public class AbstractController implements ApplicationContextAware {
 
     private static final Logger LOG = Logger.getLogger(AbstractController.class);
 
-    private ApplicationContext appContext;
-
     protected String getCurrentAccount() {
         Object principal = SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
@@ -26,29 +24,12 @@ public class AbstractController implements ApplicationContextAware {
         } else {
             accountName = principal.toString();
         }
-
-//        Account account = accountService.findAccount(accountName);
-//
-//        if (account == null) {
-//            try {
-//                request.getRequestDispatcher("login.jsp").forward(request, response);
-//            } catch (Exception e) {
-//                LOG.error("Could not redirect to login", e);
-//            }
-//
-//        } else {
-//
-//        }
-
         return accountName;
-
-
     }
 
 
     public void setApplicationContext(ApplicationContext appContext) {
         LOG.debug("setting application context: " + appContext);
-        this.appContext = appContext;
     }
 
 }

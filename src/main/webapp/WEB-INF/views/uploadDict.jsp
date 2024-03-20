@@ -14,7 +14,7 @@
                     <option value="${lang.id}">${lang.name}</option>
             </c:forEach>
         </select>
-	    <input type="submit" value="<spring:message code='upload'/>"/>
+        <input type="submit" value="<spring:message code='upload'/>"/>
     </form>
 
 </dict>

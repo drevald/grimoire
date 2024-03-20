@@ -15,39 +15,39 @@ import javax.persistence.Table;
 @Table(name = "job")
 public class Job {
 
-	private static final Logger LOG = Logger.getLogger(Job.class);
-	
+    private static final Logger LOG = Logger.getLogger(Job.class);
+
     @Id
-	@Column(name = "id")
-	@GeneratedValue
-	private Long id;
-    
+    @Column(name = "id")
+    @GeneratedValue
+    private Long id;
+
     @Column(name = "transition_id")
-	private Long transId;
+    private Long transId;
 
     @Column(name = "dict_id")
-	private Long dictId;
+    private Long dictId;
 
     @Column(name = "progress")
-	private Integer progress = 0;
+    private Integer progress = 0;
 
     @Column(name = "active")
-	private Boolean active = false;
+    private Boolean active = false;
 
     @Column(name = "details")
-	private String details;
+    private String details;
 
 
     public Long getId() {
-	return id;
+    return id;
     }
 
     public Integer getProgress() {
-	return progress;
+    return progress;
     }
 
     public void setProgress(Integer progress) {
-	this.progress = progress;
+    this.progress = progress;
     }
 
     public Long getTransId() {
@@ -75,15 +75,15 @@ public class Job {
     }
 
     public String getDetails() {
-	return details;
+    return details;
     }
 
     public void setDetails (String details) {
-	this.details = details;
+    this.details = details;
     }
 
     public String toString() {
-	return "job#" + id + "#"+  this.hashCode() + ", progr:" + progress + ", active:" + active + ", dict:" + dictId;
+    return "job#" + id + "#"+  this.hashCode() + ", progr:" + progress + ", active:" + active + ", dict:" + dictId;
     }
 
 }

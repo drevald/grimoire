@@ -7,19 +7,19 @@ import java.util.Set;
 @Table(name = "account")
 public class Account {
 
-	@Id
-	@Column(name = "id")
-	@GeneratedValue
-	private Long id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue
+    private Long id;
 
-	@Column(name = "accountname")
-	private String name;
+    @Column(name = "accountname")
+    private String name;
 
     @Column(name = "password")
-	private String password;
+    private String password;
 
-	@Column(name = "native_lang_id")
-	private String nativeLangId;
+    @Column(name = "native_lang_id")
+    private String nativeLangId;
 
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "account")
 //    private Set<AccountLang> accountLangs;
@@ -47,20 +47,20 @@ public class Account {
     }
 
     public Long getId() {
-		return id;
-	}
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getPassword() {
         return password;
@@ -70,7 +70,7 @@ public class Account {
         this.password = password;
     }
 
-	public String getNativeLangId() {return nativeLangId;}
+    public String getNativeLangId() {return nativeLangId;}
 
     public void setNativeLangId(String nativeLangId) {this.nativeLangId = nativeLangId;}
 

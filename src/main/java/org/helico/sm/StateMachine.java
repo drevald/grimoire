@@ -6,11 +6,11 @@ public interface StateMachine {
 
         FAIL("FAIL"),
         WAIT("FAIL"),
-	    OK("FAIL"),
-	    LOAD("FAIL"),
-	    STORE("FAIL"),
-	    PARSE("FAIL"),
-	    TRANSLATE("FAIL");
+        OK("FAIL"),
+        LOAD("FAIL"),
+        STORE("FAIL"),
+        PARSE("FAIL"),
+        TRANSLATE("FAIL");
 
         public final String label;
 

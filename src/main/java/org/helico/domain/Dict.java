@@ -8,43 +8,43 @@ import javax.persistence.*;
 @Table(name = "dict")
 public class Dict {
 
-	private static final Logger LOG = Logger.getLogger(Dict.class);
-	
-	public enum Status {
-	    PERSISTED,
-		UPLOADING,
-		UPLOADED,
-		UPLOAD_FAILED,
+    private static final Logger LOG = Logger.getLogger(Dict.class);
+
+    public enum Status {
+        PERSISTED,
+        UPLOADING,
+        UPLOADED,
+        UPLOAD_FAILED,
         STORING,
-		STORED,
-		PARSING,
-		PARSED,
-		TRANSLATING,
-		TRANSLATED
-	};
+        STORED,
+        PARSING,
+        PARSED,
+        TRANSLATING,
+        TRANSLATED
+    };
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
-    
+    @Column(name = "id")
+    private Long id;
+
     @Column(name = "account_id")
-	private Long accountId;
-    
+    private Long accountId;
+
     @Column(name = "name")
-	private String name;
+    private String name;
 
     @Column(name = "orig_doc", columnDefinition="LONGBLOB")
     @Basic(fetch = FetchType.LAZY)
-	private byte[] origDoc;
+    private byte[] origDoc;
 
     @Column(name = "utf8_text", columnDefinition="LONGTEXT")
     @Basic(fetch = FetchType.LAZY)
-	private byte[] utfText;
-    
+    private byte[] utfText;
+
     @Column(name = "status")
     private String status;
-    
+
     @Column(name = "preview", columnDefinition="BLOB")
     @Basic(fetch = FetchType.LAZY)
     private byte[] preview;
@@ -68,75 +68,75 @@ public class Dict {
     }
 
     public String getEncoding() {
-	return encoding;
+    return encoding;
     }
 
     public void setEncoding(String encoding) {
-	this.encoding = encoding;
+    this.encoding = encoding;
     }
  
     public byte[] getPreview() {
-	return preview;
+    return preview;
     }
 
     public void setPreview(byte[] preview) {
-	this.preview = preview;
+    this.preview = preview;
     }
 
     public String getStatus() {
-	return status;
+    return status;
     }
 
     public void setStatus(Status status) {
-	this.status = status.toString();
-    }    
-    
+    this.status = status.toString();
+    }
+
     public void setStatus(String status) {
-	this.status = status;
+    this.status = status;
     }
 
     public Long getId() {
-	return id;
+    return id;
     }
 
     public void setId(Long id) {
-	this.id = id;
+    this.id = id;
     }
 
     @Basic(fetch = FetchType.LAZY)
     public byte[] getUtfText() {
-	return utfText;
+    return utfText;
     }
 
     public Long getAccountId() {
-	return accountId;
+    return accountId;
     }
 
     public void setAccountId(Long accountId) {
-	this.accountId = accountId;
+    this.accountId = accountId;
     }
 
     public String getName() {
-	return name;
+    return name;
     }
 
     public void setName(String name) {
-	this.name = name;
+    this.name = name;
     }
 
     @Basic(fetch = FetchType.LAZY)
     public byte[] getOrigDoc() {
-	return origDoc;
+    return origDoc;
     }
 
     public void setOrigDoc(byte[] origDoc) {
-	this.origDoc = origDoc;
+    this.origDoc = origDoc;
     }
 
     public void setUtfText(byte[] utfText) {
-	this.utfText = utfText;
+    this.utfText = utfText;
     }
-	
+
     public Text getText() {
         return text;
     }
@@ -146,9 +146,9 @@ public class Dict {
     }
 
     public String toString() {
-	return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", utf:" + utfText + ", data:" + origDoc + ", status:" + status +", enc:"+encoding+", lang:"+langId;
+    return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", utf:" + utfText + ", data:" + origDoc + ", status:" + status +", enc:"+encoding+", lang:"+langId;
     }
-	
-	
+
+
 }
 

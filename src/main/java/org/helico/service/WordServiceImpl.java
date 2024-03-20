@@ -20,7 +20,7 @@ public class WordServiceImpl implements WordService {
     DictWordDAO dictWordDAO;
 
     @Transactional
-	public void store(String word, String langId, Long dictId) {
+    public void store(String word, String langId, Long dictId) {
 
         Word newWord = wordDAO.store(word, langId);
 

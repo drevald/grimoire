@@ -3,25 +3,25 @@
 <div class="col-sm-8 p-5">
 
 <c:if test="${not empty param.error}">
-	<div color="red"> <spring:message code="loginerror" />
-	: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} </div>
+    <div color="red"> <spring:message code="loginerror" />
+    : ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} </div>
 </c:if>
 
 <form method="POST" action="<c:url value="updateAccount" />">
 <input type="hidden" name="accountId" value="${account.id}"/>
 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 <table>
-	<tr>
-		<td align="right"><spring:message code="login" /></td>
-		<td><input type="text" name="accountname" value="${account.name}"/></td>
-	</tr>
-	<tr>
-		<td align="right"><spring:message code="password" /></td>
-		<td><input type="password" name="password"  value="${account.password}"/></td>
-	</tr>
-	<tr>
-		<td align="right"><spring:message code="register.lang.native" /></td>
-		<td>
+    <tr>
+        <td align="right"><spring:message code="login" /></td>
+        <td><input type="text" name="accountname" value="${account.name}"/></td>
+    </tr>
+    <tr>
+        <td align="right"><spring:message code="password" /></td>
+        <td><input type="password" name="password"  value="${account.password}"/></td>
+    </tr>
+    <tr>
+        <td align="right"><spring:message code="register.lang.native" /></td>
+        <td>
             <select name="nativeLangId" style="width:100%">
                 <c:forEach items="${langs}" var="lang">
                     <c:if test="${account.nativeLangId==lang.id}">
@@ -32,11 +32,11 @@
                     </c:if>
                 </c:forEach>
             </select>
-		</td>
+        </td>
     </tr>
     <tr>
-		<td align="right" valign="top"><spring:message code="register.lang.learn" /></td>
-		<td>
+        <td align="right" valign="top"><spring:message code="register.lang.learn" /></td>
+        <td>
             <select name="learnedLangId" size="12" style="width:100%" multiple="yes">
             <c:out value="${account}"/>
             <c:out value="${account.accountLangs}"/>
@@ -50,13 +50,13 @@
                     </c:if>
                 </c:forEach>
             </select>
-		</td>
+        </td>
     </tr>
-	<tr>
-	    <td>&nbsp;</td>
-		<td><input type="submit" value="<spring:message code='save' />" />
-		<input type="button" value="<spring:message code='cancel' />"/></td>
-	</tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td><input type="submit" value="<spring:message code='save' />" />
+        <input type="button" value="<spring:message code='cancel' />"/></td>
+    </tr>
 </table>
 </form>
 <div class="col-sm-8 p-5">

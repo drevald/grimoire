@@ -35,10 +35,10 @@ public class DictWordDAOImpl implements DictWordDAO {
     }
 
     public List<DictWord> getWords(Long dictId) {
-	    return getWords(dictId, 0, 32);
+        return getWords(dictId, 0, 32);
     }
-    
-    @SuppressWarnings("unchecked") 
+
+    @SuppressWarnings("unchecked")
     public List<DictWord> getWords(Long dictId, Integer offset, Integer num) {
         Session session = sessionFactory.getCurrentSession();
             List<DictWord> words = (List<DictWord>)session

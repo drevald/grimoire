@@ -20,7 +20,7 @@ public class TransitionServiceImpl implements TransitionService {
 
     @Transactional
     public String getHandlerName(String event, String status) {
-	    return transitionDao.getHandlerName(event, status);
+        return transitionDao.getHandlerName(event, status);
     }
 
     @Transactional

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,20 +64,28 @@ public class DictController extends AbstractController {
     }
 
     @RequestMapping(value = "/dict/upload", method = RequestMethod.POST)
-    public String handleFormUpload(@RequestParam("file") MultipartFile file,
+    public String handleFormUpload(@RequestParam("file") MultipartFile multipartFile,
                                    @RequestParam("langId") String langId,
                                    Map<String, Object> map,
                                    @ModelAttribute("dict") Dict dict,
                                    Errors errors) {
         Account account = accountService.findAccount(getCurrentAccount());
-        if (!file.isEmpty()) {
+        if (!multipartFile.isEmpty()) {
             try {
                 String storagePath = System.getenv("LOCAL_STORAGE");
-                dict = dictService.loadPreviewFile(account.getId(),
-                        langId,
-                        file.getInputStream(),
-                        file.getOriginalFilename(),
-                        storagePath);
+                if (multipartFile.getOriginalFilename().toLowerCase().endsWith("pdf")) {
+                    dict = dictService.loadPreviewPdfFile(account.getId(),
+                            langId,
+                            multipartFile.getInputStream(),
+                            multipartFile.getOriginalFilename(),
+                            storagePath);
+                } else {
+                    dict = dictService.loadPreviewFile(account.getId(),
+                            langId,
+                            multipartFile.getInputStream(),
+                            multipartFile.getOriginalFilename(),
+                            storagePath);
+                }
                 dict.setEncoding("UTF-8");
                 dict.setLangId(langId);
                 map.put("dict", dict);

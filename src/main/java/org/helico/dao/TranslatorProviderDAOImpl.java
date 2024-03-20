@@ -20,7 +20,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
 
     public Translator getTranslator(Long id) {
         LOG.info(">>>>find translator#" + id);
-    	Translator translator = (Translator)sessionFactory.getCurrentSession()
+        Translator translator = (Translator)sessionFactory.getCurrentSession()
                 .get(Translator.class, id);
         LOG.info("<<<<find translator");
         return translator;
@@ -28,18 +28,18 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
 
     public TranslatorProvider getProvider(Long id) {
         LOG.info(">>>>find translator provider#" + id);
-    	TranslatorProvider provider = (TranslatorProvider)sessionFactory.getCurrentSession()
+        TranslatorProvider provider = (TranslatorProvider)sessionFactory.getCurrentSession()
                 .get(TranslatorProvider.class, id);
         LOG.info("<<<<find translator provider");
         return provider;
     }
 
-    @SuppressWarnings("unchecked") 
+    @SuppressWarnings("unchecked")
     public List<TranslatorProvider> listProviders() {
         return sessionFactory.getCurrentSession().createQuery("from TranslatorProvider").list();
     }
 
-    @SuppressWarnings("unchecked") 
+    @SuppressWarnings("unchecked")
     public List<TranslatorProvider> listProviders(String langId) {
         LOG.info(">>>>find translator providers for lang #" + langId);
         List<TranslatorProvider> result = new ArrayList<TranslatorProvider>();
@@ -56,7 +56,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
         return result;
     }
 
-    @SuppressWarnings("unchecked") 
+    @SuppressWarnings("unchecked")
     public List<Translator> listTranslators(String langId) {
         LOG.info(">>>>find translators for lang #" + langId);
         List<Translator> result = (List<Translator>)sessionFactory.getCurrentSession().createQuery(

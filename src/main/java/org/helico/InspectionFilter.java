@@ -13,11 +13,11 @@ public class InspectionFilter implements Filter {
 
     private static final Logger LOG = Logger.getLogger(InspectionFilter.class);
 
-    public void	destroy() {
+    public void    destroy() {
         LOG.debug("Destroying InspectionFilter");
     }
 
-    public void	doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
+    public void    doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
         try {
             LOG.info("Account principal is " + ((HttpServletRequest)request).getUserPrincipal());
 //            if (principal == null) {
@@ -45,7 +45,7 @@ public class InspectionFilter implements Filter {
 //        }
     }
 
-    public void	init(FilterConfig filterConfig) {
+    public void    init(FilterConfig filterConfig) {
         LOG.debug("Initializing InspectionFilter");
     }
 

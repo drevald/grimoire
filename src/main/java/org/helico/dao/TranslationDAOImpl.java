@@ -19,18 +19,18 @@ public class TranslationDAOImpl implements TranslationDAO {
 
     public void saveOrUpdate(Translation translation) {
         Session session = sessionFactory.getCurrentSession();
-	    LOG.info(">>>>save translation sess#" + sessionFactory.getCurrentSession().hashCode() + " " + translation.toString());
-		session.saveOrUpdate(translation);
+        LOG.info(">>>>save translation sess#" + sessionFactory.getCurrentSession().hashCode() + " " + translation.toString());
+        session.saveOrUpdate(translation);
         session.flush();
-	    LOG.info("<<<<saved translation sess#" + sessionFactory.getCurrentSession().hashCode() + " " + translation.toString());
+        LOG.info("<<<<saved translation sess#" + sessionFactory.getCurrentSession().hashCode() + " " + translation.toString());
     }
 
     public boolean isTranslated(Long wordId, Long translatorId) {
         Session session = sessionFactory.getCurrentSession();
-    	List result = session.createQuery("from Translation where wordId=?1 and translatorId=?2")
+        List result = session.createQuery("from Translation where wordId=?1 and translatorId=?2")
         .setParameter(1, wordId)
-	    .setParameter(2, translatorId)
+        .setParameter(2, translatorId)
         .list();
-		return result != null && result.size() > 0;
+        return result != null && result.size() > 0;
     }
 }

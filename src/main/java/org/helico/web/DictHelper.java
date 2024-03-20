@@ -13,19 +13,19 @@ public class DictHelper {
     private Dict dict;
 
     public List<Job> getJobs() {
-	return jobs;
+    return jobs;
     }
 
     public void setJobs(List<Job> jobs) {
-	this.jobs = jobs;
+    this.jobs = jobs;
     }
 
     public Dict getDict() {
-	return dict;
+    return dict;
     }
 
     public void setDict(Dict dict) {
-	this.dict=dict;
+    this.dict=dict;
     }
 
 }
