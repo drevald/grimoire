@@ -97,7 +97,12 @@ public class DictServiceImpl implements DictService {
         LOG.info(">>>loadPreview start");
         try {
 
-            PDDocument document = PDDocument.load(is);
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            IOUtils.copy(is, buffer);
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(buffer);
+
+            PDDocument document = PDDocument.load(buffer.toByteArray());
             PDFTextStripper stripper = new PDFTextStripper();
             String pdfText = stripper.getText(document);
 
@@ -109,29 +114,20 @@ public class DictServiceImpl implements DictService {
             dict.setStatus(Status.PERSISTED);
             Text text = new Text();
             long stamp = System.currentTimeMillis();
-            text.setOrigPath(storage + "/" + name + "." + stamp);
-            text.setUtfPath(storage + "/" + name + ".utf" + "." + stamp);
+            text.setOrigPath(storage + "/" + name);
+            text.setUtfPath(storage + "/" + name + ".utf");
             text.setEncoding("UTF-8");
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-//            InputStream is = Files.newInputStream(file.toPath());
-//            IOUtils.copy(is, baos);
-            IOUtils.closeQuietly(is);
-            IOUtils.closeQuietly(baos);
-
-            text.setOrigDoc(baos.toByteArray());
-
+            text.setOrigDoc(buffer.toByteArray());
+            text.setUtfText(pdfText.getBytes());
             PushbackInputStream pis = new PushbackInputStream(is);
 
             dictDao.saveText(text);
             dict.setText(text);
             dictDao.saveDict(dict);
             stateMachine.sendEvent(StateMachine.Event.LOAD, pis, dict.getId());
-            //textFileLoader.load(dict.getId(), is);
             LOG.info(">>>loadPreview ends");
             return dict;
-
 
         } catch (Exception e) {
             LOG.error(e);

@@ -1,6 +1,8 @@
 package org.helico.sm.handler;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.domain.Text;
@@ -31,7 +33,12 @@ public class StoreHandler extends AbstractHandler {
         Text text = dict.getText();
         Reader reader;
 
-        if (dict.getEncoding() == null) {
+        if (dict.getText().getOrigPath().toLowerCase().endsWith("pdf")) {
+            PDDocument document = PDDocument.load(new ByteArrayInputStream(text.getOrigDoc()));
+            PDFTextStripper stripper = new PDFTextStripper();
+            String pdfText = stripper.getText(document);
+            reader = new StringReader(pdfText);
+        } else if (dict.getEncoding() == null) {
             reader = new InputStreamReader(new ByteArrayInputStream(text.getOrigDoc()));
         } else {
             reader = new InputStreamReader(new ByteArrayInputStream(text.getOrigDoc()), dict.getEncoding());
