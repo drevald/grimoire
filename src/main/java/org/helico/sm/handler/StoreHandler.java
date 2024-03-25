@@ -36,6 +36,7 @@ public class StoreHandler extends AbstractHandler {
         if (dict.getText().getOrigPath().toLowerCase().endsWith("pdf")) {
             PDDocument document = PDDocument.load(new ByteArrayInputStream(text.getOrigDoc()));
             PDFTextStripper stripper = new PDFTextStripper();
+            stripper.setLineSeparator(" ");
             String pdfText = stripper.getText(document);
             reader = new StringReader(pdfText);
         } else if (dict.getEncoding() == null) {
