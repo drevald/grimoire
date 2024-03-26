@@ -1,5 +1,8 @@
 package org.helico.sm.handler;
 
+import java.net.URLEncoder;
+import java.text.MessageFormat;
+import java.util.List;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
@@ -9,10 +12,6 @@ import org.helico.service.JobService;
 import org.helico.service.TranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.net.URLEncoder;
-import java.text.MessageFormat;
-import java.util.List;
 
 @Component("translateHandler")
 public class TranslateHandler extends AbstractHandler {
@@ -40,8 +39,7 @@ public class TranslateHandler extends AbstractHandler {
 //        Long transProviderId = data==null ? 1 : (Long)data;
         Translator translator = transService.getTranslator((Long)data);
         TranslatorProvider provider = translator.getProvider();
-        reqFormat=new MessageFormat(provider.getReqPattern());
-        resFormat=new MessageFormat(provider.getResPattern());
+
         Dict dict = dictService.findDict(job.getDictId());
         LOG.debug("dict=" + dict);
         Long wordsNum = dictWordService.countWords(dict.getId());
@@ -67,7 +65,9 @@ public class TranslateHandler extends AbstractHandler {
 
     }
 
-    private String fetchTranslation(String text, TranslatorProvider provider, String srcLangId, String destLangId) {
+    protected String fetchTranslation(String text, TranslatorProvider provider, String srcLangId, String destLangId) {
+        reqFormat = reqFormat == null ? new MessageFormat(provider.getReqPattern()) : reqFormat;
+        resFormat = resFormat == null ? new MessageFormat(provider.getResPattern()) : resFormat;
         String result = null;
         try {
             if (httpClient == null) {

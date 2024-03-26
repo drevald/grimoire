@@ -1,5 +1,6 @@
 package org.helico.dao;
 
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.helico.domain.Translation;
 import org.hibernate.Session;
@@ -7,8 +8,9 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+/**
+ * Works with translation entity.
+ */
 @Repository
 public class TranslationDAOImpl implements TranslationDAO {
 
