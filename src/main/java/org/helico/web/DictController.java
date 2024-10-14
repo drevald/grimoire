@@ -79,7 +79,7 @@ public class DictController extends AbstractController {
                         multipartFile.getInputStream(),
                         multipartFile.getOriginalFilename(),
                         System.getenv("LOCAL_STORAGE"));
-                return "redirect:/dict/edit/" + dictId + "?langId=" + langId;
+                return "redirect:/dict/preview/" + dictId + "?langId=" + langId;
             } catch (IOException e) {
                 LOG.error(e, e);
                 errors.reject("error.reading.file");
@@ -110,7 +110,7 @@ public class DictController extends AbstractController {
      * @param langId
      * @return
      */
-    @RequestMapping(value = "/dict/edit/store", method = RequestMethod.POST)
+    @RequestMapping(value = "/dict/store", method = RequestMethod.POST)
     public String storeDict(
             @RequestParam("id") Long id,
             @RequestParam("encoding") String encoding,

@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Component("storeHandler")
 public class StoreHandler extends AbstractHandler {
@@ -34,25 +36,25 @@ public class StoreHandler extends AbstractHandler {
         Reader reader;
 
         if (dict.getText().getOrigPath().toLowerCase().endsWith("pdf")) {
-            PDDocument document = PDDocument.load(new ByteArrayInputStream(text.getOrigDoc()));
+            PDDocument document = PDDocument.load(new File(text.getOrigPath()));
             PDFTextStripper stripper = new PDFTextStripper();
             String pdfText = stripper.getText(document);
             reader = new StringReader(pdfText);
         } else if (dict.getEncoding() == null) {
-            reader = new InputStreamReader(new ByteArrayInputStream(text.getOrigDoc()));
+            reader = new FileReader(text.getOrigPath());
         } else {
-            reader = new InputStreamReader(new ByteArrayInputStream(text.getOrigDoc()), dict.getEncoding());
+            reader = new InputStreamReader(Files.newInputStream(Paths.get(text.getOrigPath())), dict.getEncoding());
         }
 
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        Writer writer = new OutputStreamWriter(os, StandardCharsets.UTF_8);
+        Writer writer = new OutputStreamWriter(
+                Files.newOutputStream(Paths.get(text.getUtfPath())), StandardCharsets.UTF_8);
 
         IOUtils.copyLarge(reader, writer);
         IOUtils.closeQuietly(reader);
         IOUtils.closeQuietly(writer);
-        text.setUtfText(os.toByteArray());
-        dictService.saveText(text);
-        dictService.saveDict(dict);
+
+        stateMachine.sendEvent(StateMachine.Event.OK, null, dict.getId());
+
     }
 
 }

@@ -71,4 +71,5 @@ public class DictDAOImpl implements DictDAO {
     public List<Dict> findDictByStatus(String status) {
         return sessionFactory.getCurrentSession().createQuery("from Dict where status=?1").setParameter(1, status).list();
     }
+
 }

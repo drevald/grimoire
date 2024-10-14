@@ -13,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * Reads UTF-8 encoded text and detects words. By words it understands continuous
@@ -38,9 +42,10 @@ public class ParseHandler extends AbstractHandler {
         Text text = dict.getText();
         LOG.debug("dict=" + dict);
 
-        byte[] utfText = text.getUtfText();
+        File utfFile = new File(text.getUtfPath());
+        long textLength = utfFile.length();
         CountingInputStream is = new CountingInputStream(
-                new ByteArrayInputStream(utfText));
+                Files.newInputStream(Paths.get(text.getUtfPath())));
 
         WordReader reader = new WordReader(is);
         while (reader.ready()) {
@@ -49,17 +54,17 @@ public class ParseHandler extends AbstractHandler {
                 wordService.store(result.getResult().toLowerCase(), dict.getLangId(), dict.getId());
             }
             if (reader.getCounter() % PROGRESS_GRANULARITY == 0) {
-                LOG.debug("is.getByteCount()=" + is.getByteCount() + " total=" + utfText.length);
-                LOG.debug("!!! percentage = " + (int) ((is.getByteCount() * 100) / utfText.length));
-                jobService.setProgress(job.getId(), (int) ((is.getByteCount() * 100) / utfText.length));
+                LOG.debug("is.getByteCount()=" + is.getByteCount() + " total=" + textLength);
+                LOG.debug("!!! percentage = " + (int) ((is.getByteCount() * 100) / textLength));
+                jobService.setProgress(job.getId(), (int) ((is.getByteCount() * 100) / textLength));
             }
         }
 
-        LOG.debug("is.getByteCount()=" + is.getByteCount() + " total=" + utfText.length);
-        LOG.debug("!!! percentage = " + (int) ((is.getByteCount() * 100) / utfText.length));
-        jobService.setProgress(job.getId(), (int) ((is.getByteCount() * 100) / utfText.length));
+        LOG.debug("is.getByteCount()=" + is.getByteCount() + " total=" + textLength);
+        LOG.debug("!!! percentage = " + (int) ((is.getByteCount() * 100) / textLength));
+        jobService.setProgress(job.getId(), (int) ((is.getByteCount() * 100) / textLength));
 
-        LOG.debug("rawUtfBytes.size=" + utfText.length);
+        LOG.debug("rawUtfBytes.size=" + textLength);
 
         reader.close();
 
