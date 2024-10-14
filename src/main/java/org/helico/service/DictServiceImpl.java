@@ -2,6 +2,7 @@ package org.helico.service;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -33,6 +34,42 @@ public class DictServiceImpl implements DictService {
     private StateMachine stateMachine;
 
     @Transactional
+    public long saveOriginal(Long accountId, String langId, InputStream is, String name, String storage){
+        LOG.info(">>>saveOriginal start");
+        Dict dict = new Dict();
+        dict.setStatus(Status.PERSISTED);
+        dict.setAccountId(accountId);
+        dict.setLangId(langId);
+        dict.setName(name.substring(0, name.indexOf(".")).toUpperCase());
+        Text text = new Text();
+        long stamp = System.currentTimeMillis();
+        text.setOrigPath(storage + "/" + name + "." + stamp);
+        text.setUtfPath(storage + "/" + name + ".utf" + "." + stamp);
+        dictDao.saveText(text);
+        dict.setText(text);
+        long dictId = dictDao.saveDict(dict);
+        stateMachine.sendEvent(StateMachine.Event.LOAD, is, dict.getId());
+        return dictId;
+    }
+
+    @Transactional
+    public String getPreview(Long id, String encoding) {
+        Dict dict = findDict(id);
+        Text text = dict.getText();
+        String origDocument = text.getOrigPath();
+        try (FileInputStream fis = new FileInputStream(origDocument);) {
+            byte[] sample = new byte[256];
+            int i = fis.read(sample);
+            if (i > 0) {
+                return new String(sample, encoding);
+            }
+        } catch (Exception e) {
+            LOG.error(e);
+        }
+        return null;
+    }
+
+    @Transactional
     public void saveDict(Dict dict) {
         LOG.info(">>>saveDict start");
         dictDao.saveDict(dict);
@@ -61,6 +98,7 @@ public class DictServiceImpl implements DictService {
 
     @Transactional
     public List<Dict> listDicts(Long accountId) {
+
         List<Dict> result = dictDao.listDicts(accountId);
         LOG.info("Number of results is " + result.size());
         return result;
@@ -93,6 +131,7 @@ public class DictServiceImpl implements DictService {
     }
 
     @Transactional
+    @Deprecated
     public Dict loadPreviewPdfFile(Long accountId, String langId, InputStream is, String name, String storage) {
         LOG.info(">>>loadPreview start");
         try {

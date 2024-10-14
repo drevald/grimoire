@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,25 +73,13 @@ public class DictController extends AbstractController {
         Account account = accountService.findAccount(getCurrentAccount());
         if (!multipartFile.isEmpty()) {
             try {
-                String storagePath = System.getenv("LOCAL_STORAGE");
-                if (multipartFile.getOriginalFilename().toLowerCase().endsWith("pdf")) {
-                    dict = dictService.loadPreviewPdfFile(account.getId(),
-                            langId,
-                            multipartFile.getInputStream(),
-                            multipartFile.getOriginalFilename(),
-                            storagePath);
-                } else {
-                    dict = dictService.loadPreviewFile(account.getId(),
-                            langId,
-                            multipartFile.getInputStream(),
-                            multipartFile.getOriginalFilename(),
-                            storagePath);
-                }
-                dict.setEncoding("UTF-8");
-                dict.setLangId(langId);
-                map.put("dict", dict);
-                map.put("preview", new String(dict.getPreview()));
-                return "redirect:/dict/edit/" + dict.getId() + "?langId=" + langId;
+                long dictId = dictService.saveOriginal(
+                        account.getId(),
+                        langId,
+                        multipartFile.getInputStream(),
+                        multipartFile.getOriginalFilename(),
+                        System.getenv("LOCAL_STORAGE"));
+                return "redirect:/dict/edit/" + dictId + "?langId=" + langId;
             } catch (IOException e) {
                 LOG.error(e, e);
                 errors.reject("error.reading.file");
@@ -155,9 +144,29 @@ public class DictController extends AbstractController {
             map.put("preview", new String(dict.getPreview(), enc));
             map.put("encoding", enc);
         } catch (Exception e) {
-            map.put("preview", new String(dict.getPreview()));
+            map.put("preview", new String("preview stub"));
         }
         return "saveDict";
+    }
+
+    @RequestMapping(value = "/dict/preview/{dictId}")
+    public String previewDict(@PathVariable("dictId") Long dictId,
+                           Map<String, Object> map) {
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(dictId, account.getId());
+        String[] encodings = langService.getEncodings(dict.getLangId());
+        Map<String, String> previewMap = new HashMap<>();
+        for (String encoding : encodings) {
+            String previewString  = dictService.getPreview(dictId, encoding);
+            previewMap.put(encoding, previewString);
+        }
+        map.put("dict", dict);
+        map.put("langId", dict.getLangId());
+        map.put("encodings", encodings);
+        map.put("previews", previewMap);
+        map.put("encoding", previewMap.keySet().iterator().next());
+        map.put("preview", previewMap.values().iterator().next());
+        return "previewDict";
     }
 
     @RequestMapping("/dict/view/{dictId}")

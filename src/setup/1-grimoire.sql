@@ -55,7 +55,7 @@ CREATE  TABLE IF NOT EXISTS text (
   id bigserial NOT NULL,
   orig_path varchar(128) NOT NULL ,
   utf8_path varchar(128) NOT NULL ,
-  encoding varchar(32) NOT NULL,
+  encoding varchar(32),
   orig_doc bytea,
   utf8_text  bytea,
   PRIMARY KEY(id));

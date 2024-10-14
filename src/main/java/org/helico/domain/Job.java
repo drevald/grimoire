@@ -46,6 +46,7 @@ public class Job {
     return progress;
     }
 
+    //progress in percents
     public void setProgress(Integer progress) {
     this.progress = progress;
     }

@@ -15,15 +15,27 @@
                 <spring:message code='encoding'/>
             </td>
             <td>
+<%--
                 <c:forEach items="${encodings}" var="c">
                     <c:if test="${c eq encoding}">
                         <input type="radio" name="encoding" value="${c}" checked>${c}&nbsp;
                     </c:if>
                     <c:if test="${c ne encoding}">
                         <input type="radio" name="encoding" value="${c}"
-                               onchange='javascript:alert()';>${c}&nbsp;
+                               onchange='javascript:alert();';>${c}&nbsp;
                     </c:if>
+--%>
                 </c:forEach>
+                    <c:forEach var="entry" items="${previews}">
+                        <tr>
+                            <td>
+                                <input type="radio" name="encoding" value="${entry.key}" checked>${entry.key}&nbsp;
+                            </td>
+                            <td>${entry.key}</td>
+                            <td>${entry.value}</td>
+                        </tr>
+                    </c:forEach>
+
             </td>
         </tr>
         <tr>

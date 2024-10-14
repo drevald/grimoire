@@ -12,7 +12,7 @@
         <table class="table table-condensed table-sm">
         <c:forEach items="${helperList}" var="helper">
         <tr>
-               <td>${helper.dict.id}</td>
+            <td>${helper.dict.id}</td>
             <td>${helper.dict.name}</td>
             <td>${helper.dict.status}</td>
             <td>
@@ -28,9 +28,9 @@
                   EMPTY
             </c:if>
             </td>
+            <td><a href="dict/preview/${helper.dict.id}"><spring:message code="save" /></a></td>
             <td><a href="dict/delete/${helper.dict.id}"><spring:message code="delete" /></a></td>
             <td><a href="dict/words/${helper.dict.id}?offset=0"><spring:message code="words" /></a></td>
-            <td><a href="dict/view/${helper.dict.id}"><spring:message code="dict.preview" /></a></td>
             <td><a href="text/view/${helper.dict.id}?offset=0"><spring:message code="text" /></a></td>
         </tr>
         </c:forEach>
