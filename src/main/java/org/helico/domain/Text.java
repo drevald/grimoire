@@ -64,21 +64,21 @@ public class Text {
         this.encoding = encoding;
     }
 
-
-    public byte[] getOrigDoc() {
-        return origDoc;
-    }
-
-    public void setOrigDoc(byte[] origDoc) {
-        this.origDoc = origDoc;
-    }
-
-    public byte[] getUtfText() {
-        return utfText;
-    }
-
-    public void setUtfText(byte[] utfText) {
-        this.utfText = utfText;
-    }
+//
+//    public byte[] getOrigDoc() {
+//        return origDoc;
+//    }
+//
+//    public void setOrigDoc(byte[] origDoc) {
+//        this.origDoc = origDoc;
+//    }
+//
+//    public byte[] getUtfText() {
+//        return utfText;
+//    }
+//
+//    public void setUtfText(byte[] utfText) {
+//        this.utfText = utfText;
+//    }
 
 }

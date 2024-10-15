@@ -17,9 +17,7 @@
             <c:forEach var="entry" items="${previews}">
             <tr>
                 <td  style="white-space: nowrap;">
-                    <input type="radio" name="encoding" value="${entry.key}"
-                        <c:if test="${!loopStatus.first}">checked</c:if>/>
-                        &nbsp;${entry.key}
+                    <input type="radio" name="encoding" value="${entry.key}"/>&nbsp;${entry.key}
                 </td>
                 <td>${entry.value}</td>
             </tr>

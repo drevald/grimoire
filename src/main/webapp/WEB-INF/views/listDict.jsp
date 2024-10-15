@@ -13,7 +13,7 @@
         <c:forEach items="${helperList}" var="helper">
         <tr>
             <td>${helper.dict.id}</td>
-            <td>${helper.dict.name}</td>
+            <td width="100%">${helper.dict.name}</td>
             <td>${helper.dict.status}</td>
             <td>
             <c:if test="${!empty helper.jobs}">
@@ -36,6 +36,6 @@
         </c:forEach>
     </table>
     </c:if>
-    <a href="upload"><spring:message code="dict.create" /></a>
+    <div><a href="upload" class="btn btn-primary"><spring:message code="dict.create" /></a></div>
 </div>
 <%@ include file="/WEB-INF/footer.jsp"%>

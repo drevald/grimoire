@@ -47,6 +47,10 @@ public class DictDAOImpl implements DictDAO {
     public void removeDict(Long id) {
         Dict dict = (Dict) sessionFactory.getCurrentSession().load(Dict.class, id, LockMode.READ);
         if (null != dict) {
+            Text text = dict.getText();
+            if(text != null) {
+                sessionFactory.getCurrentSession().delete(text);
+            }
             sessionFactory.getCurrentSession().delete(dict);
         }
     }

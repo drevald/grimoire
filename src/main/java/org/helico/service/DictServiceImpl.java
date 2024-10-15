@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.helico.dao.DictDAO;
@@ -25,7 +26,7 @@ public class DictServiceImpl implements DictService {
 
     private static final Logger LOG = Logger.getLogger(DictServiceImpl.class);
 
-    private static final int PREVIEW_SIZE = 1000;
+    private static final int PREVIEW_SIZE = 256;
 
     @Autowired
     private DictDAO dictDao;
@@ -48,17 +49,45 @@ public class DictServiceImpl implements DictService {
         dictDao.saveText(text);
         dict.setText(text);
         long dictId = dictDao.saveDict(dict);
-        stateMachine.sendEvent(StateMachine.Event.LOAD, is, dict.getId());
+        try (OutputStream os = Files.newOutputStream(new File(text.getOrigPath()).toPath())) {
+            IOUtils.copy(is, os);
+            os.flush();
+            os.close();
+            is.close();
+            LOG.info("<<< done dict#" + dictId);
+        } catch (Exception e) {
+            LOG.error(e);
+        }
+        //stateMachine.sendEvent(StateMachine.Event.LOAD, is, dict.getId());
         return dictId;
     }
 
     @Transactional
     public String getPreview(Long id, String encoding) {
-        Dict dict = findDict(id);
-        Text text = dict.getText();
+        Text text = findDict(id).getText();
+        if(text.getUtfPath().contains(".pdf")) {
+            return getPdfPreview(text, encoding);
+        } else {
+            return getTextPreview(text, encoding);
+        }
+    }
+
+    private String getPdfPreview(Text text, String encoding) {
+        try {
+            PDDocument document = Loader.loadPDF(new File(text.getOrigPath()));
+            PDFTextStripper stripper = new PDFTextStripper();
+            String pdfText = stripper.getText(document);
+            return pdfText.substring(0, PREVIEW_SIZE);
+        } catch (Exception e) {
+            LOG.error(e);
+        }
+        return null;
+    }
+
+    private String getTextPreview(Text text, String encoding) {
         String origDocument = text.getOrigPath();
         try (FileInputStream fis = new FileInputStream(origDocument);) {
-            byte[] sample = new byte[256];
+            byte[] sample = new byte[PREVIEW_SIZE];
             int i = fis.read(sample);
             if (i > 0) {
                 return new String(sample, encoding);
@@ -106,6 +135,18 @@ public class DictServiceImpl implements DictService {
 
     @Transactional
     public void removeDict(Long id) {
+        Dict dict = dictDao.findDict(id);
+        Text text = dict.getText();
+        if(text != null && text.getUtfPath() != null && new File(text.getUtfPath()).exists()) {
+            if (new File(text.getUtfPath()).delete()) {
+                LOG.debug("Converted file at " + text.getUtfPath() + " is deleted");
+            }
+        }
+        if(text != null && text.getOrigPath() != null && new File(text.getOrigPath()).exists()) {
+            if (new File(text.getOrigPath()).delete()) {
+                LOG.debug("Original file at " + text.getOrigPath() + " is deleted");
+            }
+        }
         dictDao.removeDict(id);
     }
 
@@ -130,93 +171,93 @@ public class DictServiceImpl implements DictService {
 
     }
 
-    @Transactional
-    @Deprecated
-    public Dict loadPreviewPdfFile(Long accountId, String langId, InputStream is, String name, String storage) {
-        LOG.info(">>>loadPreview start");
-        try {
+//    @Transactional
+//    @Deprecated
+//    public Dict loadPreviewPdfFile(Long accountId, String langId, InputStream is, String name, String storage) {
+//        LOG.info(">>>loadPreview start");
+//        try {
+//
+//            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+//            IOUtils.copy(is, buffer);
+//            IOUtils.closeQuietly(is);
+//            IOUtils.closeQuietly(buffer);
+//
+//            PDDocument document = PDDocument.load(buffer.toByteArray());
+//            PDFTextStripper stripper = new PDFTextStripper();
+//            String pdfText = stripper.getText(document);
+//
+//            Dict dict = new Dict();
+//            dict.setLangId(langId);
+//            dict.setAccountId(accountId);
+//            dict.setPreview(pdfText.substring(0, PREVIEW_SIZE).getBytes());
+//            dict.setName(name.substring(0, name.indexOf(".")).toUpperCase());
+//            dict.setStatus(Status.PERSISTED);
+//            Text text = new Text();
+//            long stamp = System.currentTimeMillis();
+//            text.setOrigPath(storage + "/" + name);
+//            text.setUtfPath(storage + "/" + name + ".utf");
+//            text.setEncoding("UTF-8");
+//
+//            text.setOrigDoc(buffer.toByteArray());
+//            text.setUtfText(pdfText.getBytes());
+//            PushbackInputStream pis = new PushbackInputStream(is);
+//
+//            dictDao.saveText(text);
+//            dict.setText(text);
+//            dictDao.saveDict(dict);
+//            stateMachine.sendEvent(StateMachine.Event.LOAD, pis, dict.getId());
+//            LOG.info(">>>loadPreview ends");
+//            return dict;
+//
+//        } catch (Exception e) {
+//            LOG.error(e);
+//        }
+//
+//        return null;
+//    }
 
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            IOUtils.copy(is, buffer);
-            IOUtils.closeQuietly(is);
-            IOUtils.closeQuietly(buffer);
-
-            PDDocument document = PDDocument.load(buffer.toByteArray());
-            PDFTextStripper stripper = new PDFTextStripper();
-            String pdfText = stripper.getText(document);
-
-            Dict dict = new Dict();
-            dict.setLangId(langId);
-            dict.setAccountId(accountId);
-            dict.setPreview(pdfText.substring(0, PREVIEW_SIZE).getBytes());
-            dict.setName(name.substring(0, name.indexOf(".")).toUpperCase());
-            dict.setStatus(Status.PERSISTED);
-            Text text = new Text();
-            long stamp = System.currentTimeMillis();
-            text.setOrigPath(storage + "/" + name);
-            text.setUtfPath(storage + "/" + name + ".utf");
-            text.setEncoding("UTF-8");
-
-            text.setOrigDoc(buffer.toByteArray());
-            text.setUtfText(pdfText.getBytes());
-            PushbackInputStream pis = new PushbackInputStream(is);
-
-            dictDao.saveText(text);
-            dict.setText(text);
-            dictDao.saveDict(dict);
-            stateMachine.sendEvent(StateMachine.Event.LOAD, pis, dict.getId());
-            LOG.info(">>>loadPreview ends");
-            return dict;
-
-        } catch (Exception e) {
-            LOG.error(e);
-        }
-
-        return null;
-    }
-
-    @Transactional
-    public Dict loadPreviewFile(Long accountId, String langId, InputStream is, String name, String storage)  {
-        LOG.info(">>>loadPreview start");
-        PushbackInputStream pis = null;
-        byte[] data = new byte[PREVIEW_SIZE];
-        try {
-            pis = new PushbackInputStream(is, PREVIEW_SIZE);
-            if(pis.read(data) > 0) {
-                pis.unread(data);
-            }
-            Dict dict = new Dict();
-            dict.setLangId(langId);
-            dict.setAccountId(accountId);
-            dict.setPreview(data);
-            dict.setName(name.substring(0, name.indexOf(".")).toUpperCase());
-            dict.setStatus(Status.PERSISTED);
-            Text text = new Text();
-            long stamp = System.currentTimeMillis();
-            text.setOrigPath(storage + "/" + name + "." + stamp);
-            text.setUtfPath(storage + "/" + name + ".utf" + "." + stamp);
-            text.setEncoding("UTF-8");
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-            IOUtils.copy(pis, baos);
-            IOUtils.closeQuietly(pis);
-            IOUtils.copy(is, baos);
-            IOUtils.closeQuietly(is);
-            IOUtils.closeQuietly(baos);
-
-            text.setOrigDoc(baos.toByteArray());
-            dictDao.saveText(text);
-            dict.setText(text);
-            dictDao.saveDict(dict);
-            stateMachine.sendEvent(StateMachine.Event.LOAD, pis, dict.getId());
-            LOG.info(">>>loadPreview ends");
-            return dict;
-        } catch (Exception e) {
-            LOG.error(e, e);
-        }
-        return null;
-    }
+//    @Transactional
+//    public Dict loadPreviewFile(Long accountId, String langId, InputStream is, String name, String storage)  {
+//        LOG.info(">>>loadPreview start");
+//        PushbackInputStream pis = null;
+//        byte[] data = new byte[PREVIEW_SIZE];
+//        try {
+//            pis = new PushbackInputStream(is, PREVIEW_SIZE);
+//            if(pis.read(data) > 0) {
+//                pis.unread(data);
+//            }
+//            Dict dict = new Dict();
+//            dict.setLangId(langId);
+//            dict.setAccountId(accountId);
+//            dict.setPreview(data);
+//            dict.setName(name.substring(0, name.indexOf(".")).toUpperCase());
+//            dict.setStatus(Status.PERSISTED);
+//            Text text = new Text();
+//            long stamp = System.currentTimeMillis();
+//            text.setOrigPath(storage + "/" + name + "." + stamp);
+//            text.setUtfPath(storage + "/" + name + ".utf" + "." + stamp);
+//            text.setEncoding("UTF-8");
+//
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//
+//            IOUtils.copy(pis, baos);
+//            IOUtils.closeQuietly(pis);
+//            IOUtils.copy(is, baos);
+//            IOUtils.closeQuietly(is);
+//            IOUtils.closeQuietly(baos);
+//
+//            text.setOrigDoc(baos.toByteArray());
+//            dictDao.saveText(text);
+//            dict.setText(text);
+//            dictDao.saveDict(dict);
+//            stateMachine.sendEvent(StateMachine.Event.LOAD, pis, dict.getId());
+//            LOG.info(">>>loadPreview ends");
+//            return dict;
+//        } catch (Exception e) {
+//            LOG.error(e, e);
+//        }
+//        return null;
+//    }
 
     @Transactional
     public Dict createDict(Long accountId, String name) {

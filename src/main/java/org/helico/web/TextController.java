@@ -69,6 +69,8 @@ public class TextController  extends AbstractController {
                         sb.append(String.format(HIGHLIGHTED_WORD, counter, counter, wordString));
                         sb.append("<script>words[" + counter + "] = \"" + word.getTranslation() + "\";</script>");
                         counter++;
+                    } else {
+                        sb.append("<i>" + wordString + "</i> ");
                     }
                 } else if (result != null) {
                     sb.append(result.getResult().replaceAll("\n", "<br>"));

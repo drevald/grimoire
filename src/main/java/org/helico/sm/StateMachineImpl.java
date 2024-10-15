@@ -64,4 +64,5 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
             dictService.fixStatus();
         }
     }
+
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,18 +37,15 @@ public class TextServiceImpl implements TextService {
     @Transactional
     public Reader getTextReader(Long id, int offset, int len) throws Exception {
         Dict dict = dictDao.findDict(id);
-//        String utfPath = dict.getText().getUtfPath();
-//        FileInputStream fis = new FileInputStream(utfPath);
-//        Reader reader = new InputStreamReader(fis, "UTF-8");
         Text text = dict.getText();
-        Reader reader = new StringReader(new String(text.getUtfText(), "UTF-8"));
+        Reader reader = new FileReader(text.getUtfPath(), StandardCharsets.UTF_8);
         char[] buffer = new char[len];
         reader.skip(offset);
         reader.read(buffer);
         StringReader sr = new StringReader(new String(buffer));
         LOG.trace(String.format("NOT MARKED STRING Dict #%d Offset %d \n ++++++++++ \n %s \n ----------\n"
                 ,dict.getId(), offset, new String(buffer)));
-        return sr;  //To change body of implemented methods use File | Settings | File Templates.
+        return sr;
     }
 
 }

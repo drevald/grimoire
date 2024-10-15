@@ -13,13 +13,13 @@ public interface DictService {
 
     public Dict findDict(Long id);
 
-    public Dict loadPreviewFile(Long id, String langId, InputStream is, String name, String storage);
+//    public Dict loadPreviewFile(Long id, String langId, InputStream is, String name, String storage);
 
     public long saveOriginal(Long accountId, String langId, InputStream is, String name, String storage);
 
     public String getPreview(Long id, String encoding);
 
-    public Dict loadPreviewPdfFile(Long id, String langId, InputStream is, String name, String storage);
+//    public Dict loadPreviewPdfFile(Long id, String langId, InputStream is, String name, String storage);
 
     public void saveDict(Dict dict);
 

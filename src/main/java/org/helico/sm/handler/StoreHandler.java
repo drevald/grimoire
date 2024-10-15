@@ -1,7 +1,9 @@
 package org.helico.sm.handler;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.helico.domain.Dict;
 import org.helico.domain.Job;
@@ -35,10 +37,16 @@ public class StoreHandler extends AbstractHandler {
         Text text = dict.getText();
         Reader reader;
 
-        if (dict.getText().getOrigPath().toLowerCase().endsWith("pdf")) {
-            PDDocument document = PDDocument.load(new File(text.getOrigPath()));
+        if (dict.getText().getOrigPath().toLowerCase().contains(".pdf")) {
+            PDDocument document = Loader.loadPDF(new File(text.getOrigPath()));
+            PDPage page = document.getPage(1);
             PDFTextStripper stripper = new PDFTextStripper();
+            //todo - find out why this does not work
+            stripper.setWordSeparator(" ");
+            stripper.setLineSeparator("");
+            stripper.setParagraphEnd("\n");
             String pdfText = stripper.getText(document);
+            pdfText = pdfText.replaceAll("\t", " ");
             reader = new StringReader(pdfText);
         } else if (dict.getEncoding() == null) {
             reader = new FileReader(text.getOrigPath());

@@ -46,7 +46,7 @@ public class JobDAOImpl implements JobDAO {
         .createQuery("from Job where dictId=?1 order by active desc, id desc")
         .setParameter(1,dictId).list();
     LOG.debug("<<<<get last jobs:" + jobs);
-    Job job = (jobs==null)?null:jobs.get(0);
+    Job job = (jobs==null || jobs.isEmpty()) ? null : jobs.get(0);
     LOG.debug("<<<<last job:" + job);
     return job;
     }
