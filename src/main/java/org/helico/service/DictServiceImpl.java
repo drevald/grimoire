@@ -1,6 +1,7 @@
 package org.helico.service;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -58,7 +59,11 @@ public class DictServiceImpl implements DictService {
         } catch (Exception e) {
             LOG.error(e);
         }
-        //stateMachine.sendEvent(StateMachine.Event.LOAD, is, dict.getId());
+        if (text.getOrigPath().contains(".pdf")) {
+            dict.setEncoding(StandardCharsets.UTF_8.name());
+            dictDao.saveDict(dict);
+            stateMachine.sendEvent(StateMachine.Event.STORE, is, dict.getId());
+        }
         return dictId;
     }
 

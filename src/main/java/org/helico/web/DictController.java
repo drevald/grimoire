@@ -79,6 +79,10 @@ public class DictController extends AbstractController {
                         multipartFile.getInputStream(),
                         multipartFile.getOriginalFilename(),
                         System.getenv("LOCAL_STORAGE"));
+                if(multipartFile.getOriginalFilename() != null
+                        && multipartFile.getOriginalFilename().contains(".pdf")) {
+                    return "redirect:/dict";
+                }
                 return "redirect:/dict/preview/" + dictId + "?langId=" + langId;
             } catch (IOException e) {
                 LOG.error(e, e);
