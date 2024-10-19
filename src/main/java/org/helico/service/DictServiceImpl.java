@@ -38,6 +38,12 @@ public class DictServiceImpl implements DictService {
     @Transactional
     public long saveOriginal(Long accountId, String langId, InputStream is, String name, String storage){
         LOG.info(">>>saveOriginal start");
+        LOG.info("System.getenv(\"LOCAL_STORAGE\")=" + System.getenv("LOCAL_STORAGE"));
+        LOG.info("System.getenv(\"LOCAL_STORAGE\")=" + System.getenv("LOCAL_STORAGE"));
+        if (System.getenv("LOCAL_STORAGE") != null) {
+            LOG.info("new File(System.getenv(\"LOCAL_STORAGE\")).exists() = "
+                    + new File(System.getenv("LOCAL_STORAGE")).exists());
+        }
         Dict dict = new Dict();
         dict.setStatus(Status.PERSISTED);
         dict.setAccountId(accountId);
@@ -56,8 +62,9 @@ public class DictServiceImpl implements DictService {
             os.close();
             is.close();
             LOG.info("<<< done dict#" + dictId);
+            LOG.info("new File(text.getOrigPath()).exists() = " + new File(text.getOrigPath()).exists());
         } catch (Exception e) {
-            LOG.error(e);
+            LOG.error("Failed to store original ", e);
         }
         if (text.getOrigPath().contains(".pdf")) {
             dict.setEncoding(StandardCharsets.UTF_8.name());
