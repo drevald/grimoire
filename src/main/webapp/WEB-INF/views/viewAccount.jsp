@@ -2,63 +2,50 @@
 
 <div class="col-sm-8 p-5">
 
-<c:if test="${not empty param.error}">
-    <div color="red"> <spring:message code="loginerror" />
-    : ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} </div>
-</c:if>
+<h3><spring:message code="preferences"/></h3>
 
 <form method="POST" action="<c:url value="updateAccount" />">
-<input type="hidden" name="accountId" value="${account.id}"/>
-<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-<table>
-    <tr>
-        <td align="right"><spring:message code="login" /></td>
-        <td><input type="text" name="accountname" value="${account.name}"/></td>
-    </tr>
-    <tr>
-        <td align="right"><spring:message code="password" /></td>
-        <td><input type="password" name="password"  value="${account.password}"/></td>
-    </tr>
-    <tr>
-        <td align="right"><spring:message code="register.lang.native" /></td>
-        <td>
-            <select name="nativeLangId" style="width:100%">
-                <c:forEach items="${langs}" var="lang">
+    <input type="hidden" name="accountId" value="${account.id}"/>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    <div class="mb-3">
+        <label class="form-label"><spring:message code='username'/></label>
+        <input type="text" name="accountname" value="${account.name}" class="form-control"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-label"><spring:message code='password'/></label>
+        <input type="password" name="password"  value="${account.password}" class="form-control"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-label"><spring:message code='register.lang.native'/></label>
+        <select class="form-select form-select mb-3" name="nativeLangId">
+            <c:forEach items="${langs}" var="lang">
                     <c:if test="${account.nativeLangId==lang.id}">
                         <option value="${lang.id}" selected><spring:message code='${lang.name}' /></option>
                     </c:if>
                     <c:if test="${account.nativeLangId!=lang.id}">
                         <option value="${lang.id}"><spring:message code='${lang.name}' /></option>
                     </c:if>
-                </c:forEach>
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td align="right" valign="top"><spring:message code="register.lang.learn" /></td>
-        <td>
-            <select name="learnedLangId" size="12" style="width:100%" multiple="yes">
-            <c:out value="${account}"/>
-            <c:out value="${account.accountLangs}"/>
-                <c:forEach items="${langs}" var="lang">
-                    <c:out value="${lang}"/>
+            </c:forEach>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label"><spring:message code='register.lang.learn'/></label>
+        <select size="12" multiple="yes" class="form-select form-select mb-3" name="learnedLangId">
+            <c:forEach items="${langs}" var="lang">
                     <c:if test="${fn:contains(account.accountLangs, lang)}">
                         <option value="${lang.id}" selected><spring:message code='${lang.name}' /></option>
                     </c:if>
                     <c:if test="${!fn:contains(account.accountLangs, lang)}">
                         <option value="${lang.id}"><spring:message code='${lang.name}' /></option>
                     </c:if>
-                </c:forEach>
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td>
-        <td><input type="submit" value="<spring:message code='save' />" />
-        <input type="button" value="<spring:message code='cancel' />"/></td>
-    </tr>
-</table>
-</form>
+            </c:forEach>
+        </select>
+    </div>
+    <div class="mb-3">
+        <input class="btn btn-primary" type="submit" value="<spring:message code='save' />" />
+        <input class="btn btn-secondary" type="button" value="<spring:message code='cancel' />"/></td>
+    </div>
+    </form>
 <div class="col-sm-8 p-5">
 </body>
 </html>

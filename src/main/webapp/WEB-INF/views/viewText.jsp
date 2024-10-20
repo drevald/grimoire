@@ -3,12 +3,9 @@
 <div class="col-sm-8 p-5">
 
     <script>
-
         var currSelectionId = 0;
         var words = [];
-
         document.onkeydown = show;
-
         function show(event) {
             var holder;
             if(window.event) {
@@ -20,7 +17,6 @@
         }
 
         function processKey(holder) {
-
             if (holder == 37) {
                 prevWord();
             }
@@ -36,11 +32,10 @@
         }
 
         function highlight(i) {
-
             // restoring state of current selection
+            + document.getElementById(i).innerText);
             element = document.getElementById(currSelectionId);
             element.style.backgroundColor="white";
-
             currSelectionId = i;
 
             element = document.getElementById(currSelectionId);
@@ -72,6 +67,7 @@
         }
 
         function nextWord() {
+            alert("next");
             var newSelectionId = 0;
             if (currSelectionId < words.length-1) {
                 newSelectionId = currSelectionId + 1;
@@ -82,29 +78,22 @@
         }
 
         function prevWord() {
+            alert("prev");
             var newSelectionId = 0;
             if (currSelectionId > 0) {
                 newSelectionId = currSelectionId - 1;
                 highlight(newSelectionId);
-                alert("3");
             } else {
-                alert("4");
                 prevPage();
             }
         }
-
         function nextPage() {
-            //alert("nextPage");
             self.location = "${dict.id}?offset=${offset+size}";
         }
 
         function prevPage() {
-            //alert("prevPage");
             if(${offset} >= ${size}) {
-                //alert("${offset} >= ${size}");
                 self.location = "${dict.id}?offset=${offset-size}";
-            } else {
-                //alert("${offset} < ${size}");
             }
         }
 
@@ -112,19 +101,30 @@
 
 <body>
 
-
-<table width="100%">
-    <tr>
-        <td width="5%" onclick="javascript:prevWord();" ondblclick="javascript:prevWordFast();">&nbsp;</td>
-        <td  width="45%">
+<div class="container" style="height: 100%;">
+    <div class="row">
+        <div class="col-6">
             ${text}
-        </td>
-        <td  width="45%" valign="top" align="center">
-            <h3><div id="result">&nbsp;</div></h3>
-        </td>
-        <td width="5%" onclick="javascript:nextWord();" ondblclick="javascript:nextWordFast();">&nbsp;</td>
-    </tr>
-</table>
+        </div>
+        <div class="col-6 text-center column d-flex flex-column">
+                    <!-- Set parent column to use flexbox -->
+                    <div class="row flex-grow-1">
+                        <!-- This row will fill all available height -->
+                        <div id="result" class="col">
+                            <!-- Content for the row that will take all the available height -->
+                            This row fills all available height of the parent column.
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-right">
+                            <a class="btn btn-primary mb-3">Translate</a>
+                            <a class="btn btn-primary mb-3">Translate</a>
+                            <a class="btn btn-primary mb-3">Translate</a>
+                        </div>
+                    </div>
+                </div>
+    </div>
+</div>
 
 <script>highlight(0);</script>
 

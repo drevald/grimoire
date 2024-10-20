@@ -27,7 +27,7 @@
             </c:forEach>
         </table>
 
-        <div>
+        <div class="mb-3">
             <a href="?offset=0" class="btn"><spring:message code="pager.first"/></a>
             <c:if test="${offset>size}">
                 <a href="?offset=${offset-size}" class="btn"><spring:message code="pager.previous"/></a>
@@ -40,7 +40,7 @@
         </div>
 
         <c:if test="${dict.status eq 'PARSED' || dict.status eq 'TRANSLATED'}">
-            <div>
+            <div class="mb-3">
                 <form action="translate" method="post">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <input type="hidden" name="dictId" value="${dict.id}"/>

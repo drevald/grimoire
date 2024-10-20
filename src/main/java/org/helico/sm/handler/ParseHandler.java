@@ -51,7 +51,12 @@ public class ParseHandler extends AbstractHandler {
         while (reader.ready()) {
             WordReaderResult result = reader.readWord();
             if (result != null && result.isWord()) {
-                wordService.store(result.getResult().toLowerCase(), dict.getLangId(), dict.getId());
+                String word = result.getResult();
+                if (word.length() > 32) {
+                    LOG.warn("The word \"" + word + "\" is too long.");
+                } else {
+                    wordService.store(result.getResult().toLowerCase(), dict.getLangId(), dict.getId());
+                }
             }
             if (reader.getCounter() % PROGRESS_GRANULARITY == 0) {
                 LOG.debug("is.getByteCount()=" + is.getByteCount() + " total=" + textLength);

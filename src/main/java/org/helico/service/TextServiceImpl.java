@@ -36,6 +36,7 @@ public class TextServiceImpl implements TextService {
 
     @Transactional
     public Reader getTextReader(Long id, int offset, int len) throws Exception {
+        LOG.debug("Getting text reader for dict #" + id + " offset:" + offset + " len:" + len);
         Dict dict = dictDao.findDict(id);
         Text text = dict.getText();
         Reader reader = new FileReader(text.getUtfPath(), StandardCharsets.UTF_8);
