@@ -32,19 +32,19 @@
         }
 
         function highlight(i) {
-            // restoring state of current selection
-            + document.getElementById(i).innerText);
-            element = document.getElementById(currSelectionId);
-            element.style.backgroundColor="white";
-            currSelectionId = i;
+            // Restore the state of the current selection
+            let element = document.getElementById(currSelectionId);
+            element.style.backgroundColor = "white"; // Deselect the previous word
+
+            currSelectionId = i; // Update the current selection
 
             element = document.getElementById(currSelectionId);
-            element.style.backgroundColor="yellow";
-            element1 = document.getElementById("result");
+            element.style.backgroundColor = "yellow"; // Highlight the new word
+
+            // Display the selected word in the "result" element
+            let element1 = document.getElementById("result");
             element1.innerText = words[currSelectionId];
         }
-
-
 
         function nextWordFast() {
             var newSelectionId = 0;
@@ -67,7 +67,6 @@
         }
 
         function nextWord() {
-            alert("next");
             var newSelectionId = 0;
             if (currSelectionId < words.length-1) {
                 newSelectionId = currSelectionId + 1;
@@ -78,7 +77,6 @@
         }
 
         function prevWord() {
-            alert("prev");
             var newSelectionId = 0;
             if (currSelectionId > 0) {
                 newSelectionId = currSelectionId - 1;
