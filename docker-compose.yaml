@@ -23,7 +23,11 @@ services:
       - LOCAL_STORAGE=/root/GRIM
     ports:
       - "9999:9999"
+      - "8000:8000"      
     depends_on:
       - postgres
+    volumes:
+      - web_data:/root/GRIM  # Add a volume for LOCAL_STORAGE
 volumes:
   data:
+  web_data:  # Define this new volume
