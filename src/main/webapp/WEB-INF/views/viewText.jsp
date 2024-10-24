@@ -114,10 +114,17 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col text-right">
-                            <a class="btn btn-primary mb-3">Translate</a>
-                            <a class="btn btn-primary mb-3">Translate</a>
-                            <a class="btn btn-primary mb-3">Translate</a>
+                        <div class="col text-right mb-5">
+                            <form action="translate" method="post">
+                                Translate using &nbsp;
+                                <c:forEach var="translator" items="${translators}">
+                                        <input type="radio" name="encoding" value="${translator.id}" checked/>
+                                        &nbsp;${translator.provider.title} &nbsp;
+                                        <input type="radio" name="encoding" value="${translator.id}" checked/>
+                                        &nbsp;${translator.provider.title} &nbsp;
+                                </c:forEach>
+                                <input type="submit" value="Translate" class="btn btn-primary"/>
+                            </form>
                         </div>
                     </div>
                 </div>

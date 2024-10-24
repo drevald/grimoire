@@ -227,27 +227,12 @@
                 <version>1.10.15</version>
                 <configuration>
                     <container>
-                        <containerId>tomcat9x</containerId> <!-- or tomcat10x for Tomcat 10 -->
-                        <type>remote</type>
+                        <containerId>tomcat9x</containerId>
+                        <type>installed</type> <!-- Local container type -->
                     </container>
                     <configuration>
-                        <type>runtime</type>
-                        <properties>
-                            <cargo.remote.username>robot</cargo.remote.username>
-                            <cargo.remote.password>robot</cargo.remote.password>
-                            <cargo.remote.url>http://localhost:8080/manager/text</cargo.remote.url>
-                        </properties>
+                        <home>C:\apache-tomcat-9.0.86</home> <!-- Local Tomcat installation path -->
                     </configuration>
-                    <deployables>
-                        <deployable>
-                            <groupId>org.helico</groupId>
-                            <artifactId>grimoire</artifactId>
-                            <type>war</type>
-                            <properties>
-                                <context>/</context>
-                            </properties>
-                        </deployable>
-                    </deployables>
                 </configuration>
             </plugin>
             <plugin>

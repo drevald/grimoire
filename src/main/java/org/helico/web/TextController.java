@@ -3,6 +3,7 @@ package org.helico.web;
 import org.apache.log4j.Logger;
 import org.helico.domain.Dict;
 import org.helico.domain.Account;
+import org.helico.domain.Translator;
 import org.helico.domain.Word;
 import org.helico.service.*;
 import org.helico.util.WordReader;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.Reader;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,6 +50,9 @@ public class TextController  extends AbstractController {
 
     @Autowired
     private WordService wordService;
+
+    @Autowired
+    private TranslationService translationService;
 
     @RequestMapping("/text/view/{textId}")
     public String viewDict(
@@ -86,10 +91,12 @@ public class TextController  extends AbstractController {
         }
         LOG.trace(String.format("MARKED STRING Dict #%d Offset %d \n ++++++++++ \n %s \n ----------\n"
                 ,dict.getId(), offset, sb.toString()));
+        List<Translator> translators = translationService.listTranslators(dict.getLangId());
         map.put("text", sb.toString());
         map.put("dict", dict);
         map.put("offset", offset);
         map.put("size", TEXT_SIZE);
+        map.put("translators", translators);
         return "viewText";
     }
 
