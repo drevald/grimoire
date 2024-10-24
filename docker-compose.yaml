@@ -23,7 +23,7 @@ services:
       - LOCAL_STORAGE=/root/GRIM
     ports:
       - "9999:9999"
-      - "8000:8000"      
+      - "8787:8000"      
     depends_on:
       - postgres
     volumes:
