@@ -83,7 +83,10 @@ public class DictWordDAOImpl implements DictWordDAO {
                         "    FROM ranked_words\n" +
                         "    GROUP BY CEIL(row_num / 100)\n" +
                         "    ORDER BY bucket\n" +
-                        ")\n" +
+                        "),\n" +
+                        "total_sum AS (" +
+                        "    SELECT SUM(counter) AS overall_total FROM ranked_words" +
+                        ") " +
                         "SELECT \n" +
                         "    bucket,\n" +
                         "    total_occurrences\n" +
