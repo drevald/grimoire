@@ -51,17 +51,16 @@
 
     <div class="mb-5">
         <form action="translate" method="post">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <input type="hidden" name="dictId" value="${dict.id}"/>
             Translate using &nbsp;
             <c:forEach var="translator" items="${translators}">
-                    <input type="radio" name="encoding" value="${translator.id}" checked/>
-                    &nbsp;${translator.provider.title} &nbsp;
-                    <input type="radio" name="encoding" value="${translator.id}" checked/>
+                    <input type="radio" name="translatorId" value="${translator.id}" checked/>
                     &nbsp;${translator.provider.title} &nbsp;
             </c:forEach>
             <input type="submit" value="Translate" class="btn btn-primary"/>
         </form>
     </div>
-
 </div>
 
 <%@ include file="/WEB-INF/footer.jsp" %>

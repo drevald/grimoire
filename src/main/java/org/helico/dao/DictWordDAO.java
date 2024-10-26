@@ -1,6 +1,7 @@
 package org.helico.dao;
 
 import java.util.List;
+import java.util.Map;
 import org.helico.domain.DictWord;
 import org.helico.domain.Word;
 
@@ -20,5 +21,10 @@ public interface DictWordDAO {
     public List<DictWord> getWords(Long dictId, Integer offset, Integer num);
 
     public Long countWords(Long dictId);
+
+    // Returns words distribution per hundreds
+    // First number is a number of hundred in descending sort
+    // Second is number of words from nth hundred in text, etc
+    public Map<Integer, Integer> getHistogram(Long dictId);
 
 }

@@ -2,7 +2,7 @@
 
 <div class="col-sm-8 p-5">
 
-<h3><spring:message code="preferences"/></h3>
+<h3 class="mb-5"><spring:message code="preferences"/></h3>
 
 <form method="POST" action="<c:url value="updateAccount" />">
     <input type="hidden" name="accountId" value="${account.id}"/>

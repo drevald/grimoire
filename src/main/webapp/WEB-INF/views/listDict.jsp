@@ -2,16 +2,16 @@
 
 <div class="col-sm-8 p-5">
 
-    <h3><spring:message code="dict.list" /></h3>
+    <h3 class="mb-5"><spring:message code="dict.list" /></h3>
 
     <c:if test="${empty helperList}">
-        <div class="mb-3">
+        <div class="mb-5">
             <spring:message code="dict.list.empty"/>
         </div>
     </c:if>
 
     <c:if test="${!empty helperList}">
-        <div class="mb-3">
+        <div class="mb-3 mb-5">
             <table class="table table-condensed table-sm">
                 <c:forEach items="${helperList}" var="helper">
                 <tr>
@@ -40,6 +40,6 @@
             </table>
         </div>
     </c:if>
-    <div><a href="upload" class="btn btn-primary"><spring:message code="dict.create" /></a></div>
+    <div class="mb-5"><a href="upload" class="btn btn-primary"><spring:message code="dict.create" /></a></div>
 </div>
 <%@ include file="/WEB-INF/footer.jsp"%>

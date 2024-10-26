@@ -75,8 +75,12 @@ public class TranslateHandler extends AbstractHandler {
             }
             GetMethod getMethod = new GetMethod(resFormat.format(new String[] {URLEncoder.encode(text,"utf-8"), srcLangId, destLangId}));
             httpClient.executeMethod(getMethod);
-            String output = getMethod.getResponseBodyAsString();
-            result = (String)reqFormat.parse(output)[0];
+            if (getMethod.getStatusCode() == 200) {
+                String output = getMethod.getResponseBodyAsString();
+                result = (String) reqFormat.parse(output)[0];
+            } else {
+                throw new Exception(getMethod.getResponseBodyAsString());
+            }
         } catch (Exception e) {
             LOG.error("Can not get translation", e);
         }

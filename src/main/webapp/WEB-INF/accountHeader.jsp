@@ -17,6 +17,13 @@
                 <spring:message code="logout" />
             </a>
         </li>
+        <sec:authorize access="hasRole('ADMIN')">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="<c:url value="/admin/transitions" />">
+                        Admin
+                    </a>
+                </li>
+        </sec:authorize>
     </ul>
 </div>
 

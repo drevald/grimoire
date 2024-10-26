@@ -173,17 +173,14 @@ public class DictController extends AbstractController {
         return "previewDict";
     }
 
-    @RequestMapping("/dict/view/{dictId}")
-    public String viewDict(@PathVariable("dictId") Long dictId, Map<String, Object> map) {
+    @RequestMapping("/dict/histogram/{dictId}")
+    public String viewHistogram(@PathVariable("dictId") Long dictId, Map<String, Object> map) {
         Account account = accountService.findAccount(getCurrentAccount());
         Dict dict = dictService.findDict(dictId, account.getId());
+        Map<Integer, Integer> histogram = dictWordService.getHistogram(dictId);
         map.put("dict", dict);
-        try {
-            map.put("preview", new String(dict.getPreview(), dict.getEncoding()));
-        } catch (Exception e) {
-            LOG.error(e, e);
-        }
-        return "viewDict";
+        map.put("histogram", histogram);
+        return "viewHistogram";
     }
 
     @RequestMapping("/dict/delete/{dictId}")

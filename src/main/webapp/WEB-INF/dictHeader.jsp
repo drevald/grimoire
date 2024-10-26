@@ -17,5 +17,10 @@
                 <spring:message code="text" />
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href='<c:url value="/dict/histogram/${dict.id}" />'>
+                Histogramm
+            </a>
+        </li>
     </ul>
 </div>

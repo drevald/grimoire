@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DictWordServiceImpl implements DictWordService {
@@ -33,4 +34,8 @@ public class DictWordServiceImpl implements DictWordService {
         return dictWordDao.countWords(dictId);
     }
 
+    @Transactional
+    public Map<Integer, Integer> getHistogram(Long dictId) {
+        return dictWordDao.getHistogram(dictId);
+    }
 }

@@ -12,7 +12,13 @@
                 <div class="col-sm-2 bg-danger p-5">
                 </div>
                 <div class="col-sm-8 p-5">
-                    <h1>ERROR 404</h1>
+                    <h1>ERROR 500</h1>
+                    <p><strong>Status Code:</strong> ${requestScope['javax.servlet.error.status_code']}</p>
+                    <p><strong>Error Message:</strong> ${requestScope['javax.servlet.error.message']}</p>
+                    <p><strong>Exception:</strong> ${requestScope['javax.servlet.error.exception']}</p>
+                    <p><strong>Exception Type:</strong> ${requestScope['javax.servlet.error.exception_type']}</p>
+                    <p><strong>Request URI:</strong> ${requestScope['javax.servlet.error.request_uri']}</p>
+                    <p><strong>Servlet Name:</strong> ${requestScope['javax.servlet.error.servlet_name']}</p>
                 </div>
             </div>
         </div>

@@ -101,10 +101,10 @@
 
 <div class="container" style="height: 100%;">
     <div class="row">
-        <div class="col-6">
+        <div class="col-6 mb-5">
             ${text}
         </div>
-        <div class="col-6 text-center column d-flex flex-column">
+        <div class="col-6 text-center column d-flex flex-column mb-5">
                     <!-- Set parent column to use flexbox -->
                     <div class="row flex-grow-1">
                         <!-- This row will fill all available height -->
