@@ -22,7 +22,9 @@ public interface DictWordDAO {
 
     public Long countWords(Long dictId);
 
-    // Returns words distribution per hundreds
+    public Long totalWords(Long dictId);
+
+        // Returns words distribution per hundreds
     // First number is a number of hundred in descending sort
     // Second is number of words from nth hundred in text, etc
     public Map<Integer, Integer> getHistogram(Long dictId);

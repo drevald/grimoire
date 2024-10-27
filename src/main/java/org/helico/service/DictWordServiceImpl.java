@@ -35,6 +35,11 @@ public class DictWordServiceImpl implements DictWordService {
     }
 
     @Transactional
+    public Long totalWords(Long dictId) {
+        return dictWordDao.totalWords(dictId);
+    }
+
+    @Transactional
     public Map<Integer, Integer> getHistogram(Long dictId) {
         return dictWordDao.getHistogram(dictId);
     }

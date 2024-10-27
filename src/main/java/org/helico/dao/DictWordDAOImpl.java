@@ -62,6 +62,15 @@ public class DictWordDAOImpl implements DictWordDAO {
         return count;
     }
 
+    public Long totalWords(Long dictId) {
+        Session session = sessionFactory.getCurrentSession();
+        Long count = (Long)session
+                .createQuery("select sum(counter) from DictWord where dictId=?1")
+                .setParameter(1, dictId)
+                .uniqueResult();
+        return count;
+    }
+
     @Override
     public Map<Integer, Integer> getHistogram(Long dictId) {
         Session session = sessionFactory.getCurrentSession();

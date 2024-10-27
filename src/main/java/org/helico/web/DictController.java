@@ -178,7 +178,7 @@ public class DictController extends AbstractController {
         Account account = accountService.findAccount(getCurrentAccount());
         Dict dict = dictService.findDict(dictId, account.getId());
         Map<Integer, Integer> histogram = dictWordService.getHistogram(dictId);
-        Long total = dictWordService.countWords(dictId);
+        Long total = dictWordService.totalWords(dictId);
         map.put("dict", dict);
         map.put("histogram", histogram);
         map.put("total", total);

@@ -13,6 +13,8 @@ public interface DictWordService {
 
     public Long countWords(Long dictId);
 
+    public Long totalWords(Long dictId);
+
     public Map<Integer, Integer> getHistogram(Long dictId);
 
 }
