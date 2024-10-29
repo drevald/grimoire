@@ -166,18 +166,18 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.8</version>
+            <version>42.7.2</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20180130</version>
+            <version>20231013</version>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
@@ -219,22 +219,8 @@
         </dependency>
     </dependencies>
     <build>
-    <finalName>ROOT</finalName>
+        <finalName>ROOT</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven3-plugin</artifactId>
-                <version>1.10.15</version>
-                <configuration>
-                    <container>
-                        <containerId>tomcat9x</containerId>
-                        <type>installed</type> <!-- Local container type -->
-                    </container>
-                    <configuration>
-                        <home>C:\apache-tomcat-9.0.86</home> <!-- Local Tomcat installation path -->
-                    </configuration>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -252,4 +238,48 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>win</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven3-plugin</artifactId>
+                        <version>1.10.15</version>
+                        <configuration>
+                            <container>
+                                <containerId>tomcat9x</containerId>
+                                <type>installed</type> <!-- Local container type -->
+                            </container>
+                            <configuration>
+                                <home>C:\apache-tomcat-9.0.86</home> <!-- Local Tomcat installation path -->
+                            </configuration>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>mac</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven3-plugin</artifactId>
+                        <version>1.10.15</version>
+                        <configuration>
+                            <container>
+                                <containerId>tomcat10x</containerId>
+                                <type>installed</type> <!-- Local container type -->
+                            </container>
+                            <configuration>
+                                <home>/opt/software/apache-tomcat-10.1.31</home>
+                            </configuration>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
