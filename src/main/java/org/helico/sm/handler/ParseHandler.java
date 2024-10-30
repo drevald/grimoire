@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.domain.Text;
+import org.helico.service.DictService;
 import org.helico.service.JobService;
 import org.helico.service.WordService;
 import org.helico.util.WordReader;
@@ -36,6 +37,9 @@ public class ParseHandler extends AbstractHandler {
 
     @Autowired
     JobService jobService;
+
+    @Autowired
+    DictService dictService;
 
     public void process(Object data, Job job) throws Exception {
         Dict dict = dictService.findDict(job.getDictId());

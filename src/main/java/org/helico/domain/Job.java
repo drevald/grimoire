@@ -87,4 +87,7 @@ public class Job {
     return "job#" + id + "#"+  this.hashCode() + ", progr:" + progress + ", active:" + active + ", dict:" + dictId;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
