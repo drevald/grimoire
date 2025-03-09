@@ -30,8 +30,9 @@ INSERT INTO transition(event, src_status, dest_status, handler_name)
     VALUES ('OK', 'TRANSLATING', 'TRANSLATED', 'dummyHandler');
 INSERT INTO transition(event, src_status, dest_status, handler_name) 
     VALUES ('FAIL', 'TRANSLATING', 'PARSED', 'dummyHandler');
-
-
+INSERT INTO transition(event, src_status, dest_status, handler_name) 
+    VALUES ('STORE', 'PERSISTED', 'STORING', 'storeHandler');
+    				
 INSERT INTO lang(id,"name",encodings) VALUES ('ru', 'Russian', 'Windows-1251,KOI8-R,Cp866,UTF-8');
 INSERT INTO lang(id,"name",encodings) VALUES ('zh', 'Chinese', 'UTF-8');
 INSERT INTO lang(id,"name",encodings) VALUES ('en', 'English', 'ISO-8859-1,UTF-8');

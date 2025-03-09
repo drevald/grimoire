@@ -10,5 +10,5 @@ RUN apt-get -y install gettext dos2unix nano
 COPY startup.sh .
 RUN dos2unix -o ./startup.sh
 RUN chmod u+x ./startup.sh
-COPY --from=build /app/target/ROOT/WEB-INF/lib/postgresql-42.3.8.jar /usr/local/tomcat/lib/
+COPY --from=build /app/target/ROOT/WEB-INF/lib/postgresql-42.7.2.jar /usr/local/tomcat/lib/
 CMD [ "/app/startup.sh" ]
