@@ -2,7 +2,13 @@
 /.idea/
 /logs/
 /target/
+/build/
 .classpath
 .gradle/
 .project
 .settings/
+*.class
+*.jar
+*.war
+!gradle/wrapper/gradle-wrapper.jar
+.vscode/

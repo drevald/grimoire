@@ -1,7 +1,8 @@
 package org.helico.sm.handler;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -23,7 +24,7 @@ import java.nio.file.Paths;
 @Component("storeHandler")
 public class StoreHandler extends AbstractHandler {
 
-    private static final Logger LOG = Logger.getLogger(StoreHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(StoreHandler.class);
 
     @Autowired
     DictService dictService;

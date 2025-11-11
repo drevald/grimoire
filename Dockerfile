@@ -1,14 +1,23 @@
-FROM maven AS build
+# Build stage
+FROM gradle:8.11.1-jdk17 AS build
 WORKDIR /app
 COPY . .
-RUN mvn clean package -DskipTests
-FROM tomcat:9-jre11 AS final
+RUN gradle clean bootJar -x test --no-daemon
+
+# Runtime stage
+FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY --from=build /app/target/ROOT.war /usr/local/tomcat/webapps/
-RUN apt-get update
-RUN apt-get -y install gettext dos2unix nano
-COPY startup.sh .
-RUN dos2unix -o ./startup.sh
-RUN chmod u+x ./startup.sh
-COPY --from=build /app/target/ROOT/WEB-INF/lib/postgresql-42.7.2.jar /usr/local/tomcat/lib/
+COPY --from=build /app/build/libs/grimoire.jar /app/grimoire.jar
+RUN apt-get update && \
+    apt-get -y install gettext dos2unix nano && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy and prepare startup script
+COPY startup.sh ./startup.sh
+RUN dos2unix -o ./startup.sh 2>/dev/null || true && \
+    chmod u+x ./startup.sh
+
+EXPOSE 8080
+
 CMD [ "/app/startup.sh" ]

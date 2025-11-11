@@ -1,14 +1,15 @@
 package org.helico.domain;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "dict")
 public class Dict {
 
-    private static final Logger LOG = Logger.getLogger(Dict.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Dict.class);
 
     public enum Status {
         PERSISTED,

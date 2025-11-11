@@ -1,6 +1,7 @@
 package org.helico.service;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.helico.dao.TranslationDAO;
 import org.helico.dao.TranslatorProviderDAO;
 import org.helico.domain.Translation;
@@ -16,7 +17,7 @@ import java.util.List;
 @Service
 public class TranslationServiceImpl implements TranslationService {
 
-    private static final Logger LOG = Logger.getLogger(TranslationServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TranslationServiceImpl.class);
 
     @Autowired
     private StateMachine stateMachine;

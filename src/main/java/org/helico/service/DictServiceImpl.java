@@ -6,7 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -25,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class DictServiceImpl implements DictService {
 
-    private static final Logger LOG = Logger.getLogger(DictServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DictServiceImpl.class);
 
     private static final int PREVIEW_SIZE = 256;
 
@@ -91,7 +92,7 @@ public class DictServiceImpl implements DictService {
             String pdfText = stripper.getText(document);
             return pdfText.substring(0, PREVIEW_SIZE);
         } catch (Exception e) {
-            LOG.error(e);
+            LOG.error("Error occurred", e);
         }
         return null;
     }
@@ -105,7 +106,7 @@ public class DictServiceImpl implements DictService {
                 return new String(sample, encoding);
             }
         } catch (Exception e) {
-            LOG.error(e);
+            LOG.error("Error occurred", e);
         }
         return null;
     }
@@ -222,7 +223,7 @@ public class DictServiceImpl implements DictService {
 //            return dict;
 //
 //        } catch (Exception e) {
-//            LOG.error(e);
+//            LOG.error("Error occurred", e);
 //        }
 //
 //        return null;
@@ -266,7 +267,7 @@ public class DictServiceImpl implements DictService {
 //            LOG.info(">>>loadPreview ends");
 //            return dict;
 //        } catch (Exception e) {
-//            LOG.error(e, e);
+//            LOG.error("Error occurred", e);
 //        }
 //        return null;
 //    }

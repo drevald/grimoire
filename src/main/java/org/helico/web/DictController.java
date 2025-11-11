@@ -1,6 +1,7 @@
 package org.helico.web;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.helico.domain.*;
 import org.helico.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.Map;
 @Controller
 public class DictController extends AbstractController {
 
-    private static final Logger LOG = Logger.getLogger(DictController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DictController.class);
 
     private ApplicationContext appContext;
 
@@ -85,7 +86,7 @@ public class DictController extends AbstractController {
                 }
                 return "redirect:/dict/preview/" + dictId + "?langId=" + langId;
             } catch (IOException e) {
-                LOG.error(e, e);
+                LOG.error("Error occurred", e);
                 errors.reject("error.reading.file");
                 return "redirect:/dict";
             }

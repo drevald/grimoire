@@ -1,10 +1,10 @@
 package org.helico.dao;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.helico.domain.Translation;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,25 +12,27 @@ import java.util.List;
 @Repository
 public class TranslationDAOImpl implements TranslationDAO {
 
-    private static Logger LOG = Logger.getLogger(TranslationDAOImpl.class);
+    private static Logger LOG = LoggerFactory.getLogger(TranslationDAOImpl.class);
 
-    @Autowired
-    SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public void saveOrUpdate(Translation translation) {
-        Session session = sessionFactory.getCurrentSession();
-        LOG.info(">>>>save translation sess#" + sessionFactory.getCurrentSession().hashCode() + " " + translation.toString());
-        session.saveOrUpdate(translation);
-        session.flush();
-        LOG.info("<<<<saved translation sess#" + sessionFactory.getCurrentSession().hashCode() + " " + translation.toString());
+        LOG.info(">>>>save translation sess#" + entityManager.hashCode() + " " + translation.toString());
+        if (translation.getId() == null) {
+            entityManager.persist(translation);
+        } else {
+            entityManager.merge(translation);
+        }
+        entityManager.flush();
+        LOG.info("<<<<saved translation sess#" + entityManager.hashCode() + " " + translation.toString());
     }
 
     public boolean isTranslated(Long wordId, Long translatorId) {
-        Session session = sessionFactory.getCurrentSession();
-        List result = session.createQuery("from Translation where wordId=?1 and translatorId=?2")
+        List result = entityManager.createQuery("from Translation where wordId=?1 and translatorId=?2")
         .setParameter(1, wordId)
         .setParameter(2, translatorId)
-        .list();
+        .getResultList();
         return result != null && result.size() > 0;
     }
 }

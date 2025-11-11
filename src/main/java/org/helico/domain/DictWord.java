@@ -1,6 +1,6 @@
 package org.helico.domain;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "dict_word")

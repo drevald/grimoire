@@ -7,7 +7,8 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.helico.domain.Job;
 import org.helico.domain.Text;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ import org.helico.domain.Dict;
 @Component("uploadHandler")
 public class UploadHandler extends AbstractHandler {
 
-    private static final Logger LOG = Logger.getLogger(UploadHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UploadHandler.class);
 
     public void process(Object object, Job job) throws Exception {
         jobService.setActive(job.getId(), true);
@@ -33,7 +34,7 @@ public class UploadHandler extends AbstractHandler {
             is.close();
             LOG.info("<<< done dict#" + dictId);
         } catch (Exception e) {
-            LOG.error(e);
+            LOG.error("Error occurred", e);
         }
 
     }

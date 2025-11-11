@@ -1,12 +1,11 @@
 package org.helico.dao;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.helico.domain.Dict;
 import org.helico.domain.Text;
-import org.hibernate.LockMode;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,66 +13,80 @@ import java.util.List;
 @Repository
 public class DictDAOImpl implements DictDAO {
 
-    private static final Logger LOG = Logger.getLogger(DictDAOImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DictDAOImpl.class);
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public synchronized void saveText(Text text) {
-        Session session = sessionFactory.getCurrentSession();
-        LOG.info("save sess#"+sessionFactory.getCurrentSession().hashCode()+" " + text.toString());
-        session.saveOrUpdate(text);
-        session.flush();
+        LOG.info("save sess#"+entityManager.hashCode()+" " + text.toString());
+        if (text.getId() == null) {
+            entityManager.persist(text);
+        } else {
+            entityManager.merge(text);
+        }
+        entityManager.flush();
     }
 
     public synchronized long saveDict(Dict dict) {
-        Session session = sessionFactory.getCurrentSession();
-        LOG.info("save sess#"+sessionFactory.getCurrentSession().hashCode()+" " + dict.toString());
-        session.saveOrUpdate(dict);
-        session.flush();
+        LOG.info("save sess#"+entityManager.hashCode()+" " + dict.toString());
+        if (dict.getId() == null) {
+            entityManager.persist(dict);
+        } else {
+            entityManager.merge(dict);
+        }
+        entityManager.flush();
         return dict.getId();
     }
 
     @SuppressWarnings("unchecked")
     public List<Dict> listDicts() {
-        return sessionFactory.getCurrentSession().createQuery("from Dict").list();
+        return entityManager.createQuery("from Dict").getResultList();
     }
 
     @SuppressWarnings("unchecked")
     public List<Dict> listDicts(Long accountId) {
-        return sessionFactory.getCurrentSession().createQuery("from Dict where accountId=?1").setParameter(1, accountId).list();
+        return entityManager.createQuery("from Dict where accountId=?1").setParameter(1, accountId).getResultList();
     }
 
     public void removeDict(Long id) {
-        Dict dict = (Dict) sessionFactory.getCurrentSession().load(Dict.class, id, LockMode.READ);
+        Dict dict = entityManager.getReference(Dict.class, id);
         if (null != dict) {
             Text text = dict.getText();
             if(text != null) {
-                sessionFactory.getCurrentSession().delete(text);
+                entityManager.remove(text);
             }
-            sessionFactory.getCurrentSession().delete(dict);
+            entityManager.remove(dict);
         }
     }
 
     public synchronized Dict findDict(Long id, Long accountId) {
-    Session session = sessionFactory.getCurrentSession();
-        Dict dict = (Dict)session.createQuery("from Dict where id=?1 and accountId=?2")
-        .setParameter(1,id).setParameter(2,accountId).uniqueResult();
-        LOG.info("get sess#"+sessionFactory.getCurrentSession().hashCode()+" =  " + dict);
+        Dict dict = null;
+        try {
+            dict = (Dict)entityManager.createQuery("from Dict where id=?1 and accountId=?2")
+            .setParameter(1,id).setParameter(2,accountId).getSingleResult();
+        } catch (jakarta.persistence.NoResultException e) {
+            // No result found
+        }
+        LOG.info("get sess#"+entityManager.hashCode()+" =  " + dict);
         return dict;
     }
 
     public synchronized Dict findDict(Long id) {
-    Session session = sessionFactory.getCurrentSession();
-        Dict dict = (Dict)session.createQuery("from Dict where id=?1")
-        .setParameter(1,id).uniqueResult();
-        LOG.info("get sess#"+sessionFactory.getCurrentSession().hashCode()+" =  " + dict);
+        Dict dict = null;
+        try {
+            dict = (Dict)entityManager.createQuery("from Dict where id=?1")
+            .setParameter(1,id).getSingleResult();
+        } catch (jakarta.persistence.NoResultException e) {
+            // No result found
+        }
+        LOG.info("get sess#"+entityManager.hashCode()+" =  " + dict);
         return dict;
     }
 
     @SuppressWarnings("unchecked")
     public List<Dict> findDictByStatus(String status) {
-        return sessionFactory.getCurrentSession().createQuery("from Dict where status=?1").setParameter(1, status).list();
+        return entityManager.createQuery("from Dict where status=?1").setParameter(1, status).getResultList();
     }
 
 }

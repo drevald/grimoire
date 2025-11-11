@@ -2,9 +2,8 @@ package org.helico.dao;
 
 import org.helico.domain.DictWord;
 import org.helico.domain.Word;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -15,15 +14,18 @@ import java.util.Map;
 @Repository
 public class DictWordDAOImpl implements DictWordDAO {
 
-    @Autowired
-    SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public void addWord(Word word, Long dictId) {
 
-        Session session = sessionFactory.getCurrentSession();
-
-        DictWord dictWord = (DictWord)session.createQuery("from DictWord where dictId=?1 and word.id=?2")
-                .setParameter(1, dictId).setParameter(2, word.getId()).uniqueResult();
+        DictWord dictWord = null;
+        try {
+            dictWord = (DictWord)entityManager.createQuery("from DictWord where dictId=?1 and word.id=?2")
+                    .setParameter(1, dictId).setParameter(2, word.getId()).getSingleResult();
+        } catch (jakarta.persistence.NoResultException e) {
+            // No existing DictWord found
+        }
 
         if (dictWord == null) {
             dictWord = new DictWord();
@@ -33,7 +35,11 @@ public class DictWordDAOImpl implements DictWordDAO {
 
         dictWord.setCounter(dictWord.getCounter() + 1);
 
-        session.saveOrUpdate(dictWord);
+        if (dictWord.getId() == null) {
+            entityManager.persist(dictWord);
+        } else {
+            entityManager.merge(dictWord);
+        }
 
     }
 
@@ -43,39 +49,35 @@ public class DictWordDAOImpl implements DictWordDAO {
 
     @SuppressWarnings("unchecked")
     public List<DictWord> getWords(Long dictId, Integer offset, Integer num) {
-        Session session = sessionFactory.getCurrentSession();
-            List<DictWord> words = (List<DictWord>)session
+        List<DictWord> words = (List<DictWord>)entityManager
             .createQuery("from DictWord where dictId=?1 order by counter desc")
                 .setParameter(1, dictId)
             .setFirstResult(offset)
             .setMaxResults(num)
-            .list();
+            .getResultList();
         return words;
     }
 
     public Long countWords(Long dictId) {
-        Session session = sessionFactory.getCurrentSession();
-            Long count = (Long)session
+        Long count = (Long)entityManager
             .createQuery("select count(*) from DictWord where dictId=?1")
                 .setParameter(1, dictId)
-            .uniqueResult();
+            .getSingleResult();
         return count;
     }
 
     public Long totalWords(Long dictId) {
-        Session session = sessionFactory.getCurrentSession();
-        Long count = (Long)session
+        Long count = (Long)entityManager
                 .createQuery("select sum(counter) from DictWord where dictId=?1")
                 .setParameter(1, dictId)
-                .uniqueResult();
+                .getSingleResult();
         return count;
     }
 
     @Override
     public Map<Integer, Integer> getHistogram(Long dictId) {
-        Session session = sessionFactory.getCurrentSession();
         Map<Integer, Integer> result = new HashMap<>();
-        List resultList = session
+        List resultList = entityManager
                 .createNativeQuery("WITH ranked_words AS (\n" +
                         "    SELECT \n" +
                         "        word_id,\n" +

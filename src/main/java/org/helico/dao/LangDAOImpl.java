@@ -3,23 +3,23 @@ package org.helico.dao;
 import java.util.List;
 
 import org.helico.domain.Lang;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class LangDAOImpl implements LangDAO {
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @SuppressWarnings("unchecked")
     public List<Lang> list() {
-        return sessionFactory.getCurrentSession().createQuery("from Lang").list();
+        return entityManager.createQuery("from Lang").getResultList();
     }
 
     public Lang find(String id) {
-        return (Lang)sessionFactory.getCurrentSession().load(Lang.class, id);
+        return entityManager.getReference(Lang.class, id);
     }
 
 

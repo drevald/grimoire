@@ -2,49 +2,54 @@ package org.helico.dao;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.helico.domain.Job;
-import org.hibernate.SessionFactory;
-import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class JobDAOImpl implements JobDAO {
 
-    private static Logger LOG = Logger.getLogger(JobDAOImpl.class);
+    private static Logger LOG = LoggerFactory.getLogger(JobDAOImpl.class);
 
-    @Autowired
-    SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public Job find(Long id) {
     LOG.info(">>>>find job#" + id);
-        Job job = (Job)sessionFactory.getCurrentSession().get(Job.class, id);
+        Job job = entityManager.find(Job.class, id);
     LOG.info("<<<<found job#" + id);
         return job;
     }
 
     public void saveOrUpdate(Job job) {
-        LOG.info(">>>>save job sess#"+sessionFactory.getCurrentSession().hashCode()+" " + job.toString());
-        sessionFactory.getCurrentSession().saveOrUpdate(job);
-        LOG.info("<<<<saved job sess#"+sessionFactory.getCurrentSession().hashCode()+" " + job.toString());
+        LOG.info(">>>>save job sess#"+entityManager.hashCode()+" " + job.toString());
+        if (job.getId() == null) {
+            entityManager.persist(job);
+        } else {
+            entityManager.merge(job);
+        }
+        LOG.info("<<<<saved job sess#"+entityManager.hashCode()+" " + job.toString());
     }
 
     @SuppressWarnings("unchecked")
     public List<Job> findActive(Long dictId) {
-    Session session = sessionFactory.getCurrentSession();
-        List<Job> jobs = (List<Job>)session.createQuery("from Job where dictId=?1 and active=1")
-        .setParameter(1,dictId).list();
+        //List<Job> jobs = (List<Job>)entityManager.createQuery("from Job where dictId=?1 and active=true")
+        List<Job> jobs = (List<Job>)entityManager.createQuery("from Job where dictId=?1")
+        .setParameter(1,dictId).getResultList();
         LOG.info("<<<<get active jobs:" + jobs);
         return jobs;
     }
 
     @SuppressWarnings("unchecked")
     public Job findLastOrActive(Long dictId) {
-    Session session = sessionFactory.getCurrentSession();
-        List<Job> jobs = (List<Job>)session
-        .createQuery("from Job where dictId=?1 order by active desc, id desc")
-        .setParameter(1,dictId).list();
+        List<Job> jobs = (List<Job>)entityManager
+        //.createQuery("from Job where dictId=?1 order by active desc, id desc")
+        //.createQuery("from Job where dictId=?1 order by CASE WHEN active THEN 1 ELSE 0 END desc, id desc")
+        .createQuery("from Job where dictId=?1")
+        .setParameter(1,dictId).getResultList();
     LOG.debug("<<<<get last jobs:" + jobs);
     Job job = (jobs==null || jobs.isEmpty()) ? null : jobs.get(0);
     LOG.debug("<<<<last job:" + job);

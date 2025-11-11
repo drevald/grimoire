@@ -2,7 +2,8 @@ package org.helico.sm.handler;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.helico.domain.*;
 import org.helico.service.DictWordService;
 import org.helico.service.JobService;
@@ -17,7 +18,7 @@ import java.util.List;
 @Component("translateHandler")
 public class TranslateHandler extends AbstractHandler {
 
-    private static final Logger LOG = Logger.getLogger(TranslateHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TranslateHandler.class);
 
     private MessageFormat reqFormat;
 
@@ -79,7 +80,7 @@ public class TranslateHandler extends AbstractHandler {
                 String output = getMethod.getResponseBodyAsString();
                 result = (String) reqFormat.parse(output)[0];
             } else {
-                throw new Exception(getMethod.getResponseBodyAsString());
+                throw new Exception("Code" + getMethod.getStatusCode() + " " + getMethod.getResponseBodyAsString());
             }
         } catch (Exception e) {
             LOG.error("Can not get translation", e);

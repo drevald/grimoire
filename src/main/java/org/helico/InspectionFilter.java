@@ -1,9 +1,10 @@
 package org.helico;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 /**
@@ -11,7 +12,7 @@ import java.security.Principal;
  */
 public class InspectionFilter implements Filter {
 
-    private static final Logger LOG = Logger.getLogger(InspectionFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InspectionFilter.class);
 
     public void    destroy() {
         LOG.debug("Destroying InspectionFilter");
@@ -26,7 +27,7 @@ public class InspectionFilter implements Filter {
                 chain.doFilter(request, response);
 //            }
         } catch (Exception e) {
-             LOG.error(e, e);
+             LOG.error("Error occurred", e);
         }
 //        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        String accountName;

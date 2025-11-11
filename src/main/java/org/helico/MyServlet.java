@@ -1,11 +1,12 @@
 package org.helico;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -14,7 +15,7 @@ import java.io.OutputStream;
  */
 public class MyServlet extends HttpServlet {
 
-    private static final Logger LOG = Logger.getLogger(MyServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MyServlet.class);
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

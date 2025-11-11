@@ -1,6 +1,7 @@
 package org.helico.web;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.helico.domain.Dict;
 import org.helico.domain.Account;
 import org.helico.domain.Translator;
@@ -30,7 +31,7 @@ import java.util.Map;
 @Controller
 public class TextController  extends AbstractController {
 
-    private static final Logger LOG = Logger.getLogger(TextController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TextController.class);
 
     private static final int TEXT_SIZE = 1000;
 
@@ -87,7 +88,7 @@ public class TextController  extends AbstractController {
             if(e.getMessage()!=null) {
                 sb.append(String.format("<br><b>%s</b>", e.getMessage()));
             }
-            LOG.error(e, e);
+            LOG.error("Error occurred", e);
         }
         LOG.trace(String.format("MARKED STRING Dict #%d Offset %d \n ++++++++++ \n %s \n ----------\n"
                 ,dict.getId(), offset, sb.toString()));

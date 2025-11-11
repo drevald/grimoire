@@ -1,14 +1,15 @@
 package org.helico.domain;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "text")
 public class Text {
 
-    private static final Logger LOG = Logger.getLogger(Text.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Text.class);
 
     @Id
     @Column(name = "id")

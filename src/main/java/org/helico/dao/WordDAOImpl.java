@@ -1,11 +1,11 @@
 package org.helico.dao;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.helico.domain.DictWord;
 import org.helico.domain.Word;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,29 +13,36 @@ import java.util.List;
 @Repository
 public class WordDAOImpl implements WordDAO {
 
-    private static final Logger LOG = Logger.getLogger(WordDAOImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WordDAOImpl.class);
 
-    @Autowired
-    SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public synchronized Word store(String value, String langId) {
 
-        Session session = sessionFactory.getCurrentSession();
-
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
-            Word result = (Word)session.createQuery("from Word where value=?1 and langId=?2")
-                    .setParameter(1, value).setParameter(2, langId).uniqueResult();
+        Word result = null;
+        try {
+            result = (Word)entityManager.createQuery("from Word where value=?1 and langId=?2")
+                    .setParameter(1, value).setParameter(2, langId).getSingleResult();
+        } catch (jakarta.persistence.NoResultException e) {
+            // No result found
+        }
 
         if (result==null) {
             Word word = new Word();
             word.setValue(value);
             word.setLangId(langId);
             try {
-                session.saveOrUpdate(word);
+                if (word.getId() == null) {
+                    entityManager.persist(word);
+                } else {
+                    entityManager.merge(word);
+                }
                 return word;
             } catch (Exception e) {
-                session.clear();
-                LOG.warn(e, e);
+                entityManager.clear();
+                LOG.warn("Warning occurred", e);
                 return null;
             }
         } else {
@@ -46,33 +53,45 @@ public class WordDAOImpl implements WordDAO {
 
     public synchronized void batchStore(List<Word> words, Long dictId) {
 
-        Session session = sessionFactory.getCurrentSession();
-
         try {
 
-            session.beginTransaction();
+            entityManager.getTransaction().begin();
 
             for (Word word : words) {
 
                 LOG.debug(">>>>saving value:"+word.getValue()+" lang:"+word.getLangId());
-                    Word storedWord = (Word)session.createQuery("from Word where value=?1 and langId=?2")
-                            .setParameter(1, word.getValue()).setParameter(2, word.getLangId()).uniqueResult();
+                Word storedWord = null;
+                try {
+                    storedWord = (Word)entityManager.createQuery("from Word where value=?1 and langId=?2")
+                            .setParameter(1, word.getValue()).setParameter(2, word.getLangId()).getSingleResult();
+                } catch (jakarta.persistence.NoResultException e) {
+                    // No result found
+                }
 
                 if (storedWord == null) {
                     Word newWord = new Word();
                     newWord.setValue(word.getValue());
                     newWord.setLangId(word.getLangId());
                     try {
-                        session.saveOrUpdate(newWord);
+                        if (newWord.getId() == null) {
+                            entityManager.persist(newWord);
+                        } else {
+                            entityManager.merge(newWord);
+                        }
                         storedWord = newWord;
                     } catch (Exception e) {
-                        session.clear();
-                        LOG.warn(e, e);
+                        entityManager.clear();
+                        LOG.warn("Warning occurred", e);
                     }
                 }
 
-                DictWord dictWord = (DictWord)session.createQuery("from DictWord where dictId=?1 and word.id=?2")
-                    .setParameter(1, dictId).setParameter(2, word.getId()).uniqueResult();
+                DictWord dictWord = null;
+                try {
+                    dictWord = (DictWord)entityManager.createQuery("from DictWord where dictId=?1 and word.id=?2")
+                        .setParameter(1, dictId).setParameter(2, word.getId()).getSingleResult();
+                } catch (jakarta.persistence.NoResultException e) {
+                    // No result found
+                }
 
                 if (dictWord == null) {
                     dictWord = new DictWord();
@@ -82,24 +101,31 @@ public class WordDAOImpl implements WordDAO {
 
                 dictWord.setCounter(dictWord.getCounter() + 1);
 
-                session.saveOrUpdate(dictWord);
+                if (dictWord.getId() == null) {
+                    entityManager.persist(dictWord);
+                } else {
+                    entityManager.merge(dictWord);
+                }
 
             }
-            session.getTransaction().commit();
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
             LOG.error("Batch insert failed", e);
-            session.getTransaction().rollback();
+            entityManager.getTransaction().rollback();
         }
     }
 
 
     public synchronized Word get(String langId, String value) {
 
-        Session session = sessionFactory.getCurrentSession();
-
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
-        Word result = (Word)session.createQuery("from Word where value=?1 and langId=?2")
-                .setParameter(1, value).setParameter(2, langId).uniqueResult();
+        Word result = null;
+        try {
+            result = (Word)entityManager.createQuery("from Word where value=?1 and langId=?2")
+                    .setParameter(1, value).setParameter(2, langId).getSingleResult();
+        } catch (jakarta.persistence.NoResultException e) {
+            // No result found
+        }
         return result;
 
     }

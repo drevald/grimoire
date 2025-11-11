@@ -14,12 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.helico.service.DictService;
 import org.helico.service.TransitionService;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class StateMachineImpl implements StateMachine, ApplicationContextAware {
 
-    private static final Logger LOG = Logger.getLogger(StateMachineImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(StateMachineImpl.class);
 
     private ApplicationContext appContext;
 

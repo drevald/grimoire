@@ -1,11 +1,12 @@
 package org.helico.domain;
 
-import org.apache.log4j.Logger;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
  * Entity which encapsulates specific transition being applied to given dictionary
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 @Table(name = "job")
 public class Job {
 
-    private static final Logger LOG = Logger.getLogger(Job.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Job.class);
 
     @Id
     @Column(name = "id")

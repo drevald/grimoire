@@ -1,7 +1,8 @@
 package org.helico.sm.handler;
 
 import org.apache.commons.io.input.CountingInputStream;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.domain.Text;
@@ -28,7 +29,7 @@ import java.nio.file.Paths;
 @Component("parseHandler")
 public class ParseHandler extends AbstractHandler {
 
-    private static final Logger LOG = Logger.getLogger(ParseHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ParseHandler.class);
 
     private static final Long PROGRESS_GRANULARITY = 100L;
 

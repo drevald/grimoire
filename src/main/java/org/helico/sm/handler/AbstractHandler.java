@@ -1,6 +1,7 @@
 package org.helico.sm.handler;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.service.JobService;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public abstract class AbstractHandler implements Handler {
 
-    private static final Logger LOG = Logger.getLogger(AbstractHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractHandler.class);
 
     private static final String JOB_DONE = "DONE";
 
@@ -39,11 +40,11 @@ public abstract class AbstractHandler implements Handler {
             LOG.info("<<< done dict#" + dict.getId());
             stateMachine.sendEvent(StateMachine.Event.OK, JOB_DONE, dict.getId());
         } catch (Error e) {
-            LOG.error(e, e);
+            LOG.error("Error occurred", e);
             stateMachine.sendEvent(StateMachine.Event.FAIL, e.getMessage(), dict.getId());
             LOG.info("<<< failed dict#" + dict.getId() + " with error " +  e.getMessage());
         } catch (Exception e) {
-            LOG.error(e, e);
+            LOG.error("Error occurred", e);
             stateMachine.sendEvent(StateMachine.Event.FAIL, e.getMessage(), dict.getId());
             LOG.info("<<< failed dict#" + dict.getId() + " with exception " +  e.getMessage());
         } finally {
