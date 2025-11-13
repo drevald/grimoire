@@ -12,3 +12,4 @@
 *.war
 !gradle/wrapper/gradle-wrapper.jar
 .vscode/
+.env

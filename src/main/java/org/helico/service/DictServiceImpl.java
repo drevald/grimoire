@@ -89,12 +89,94 @@ public class DictServiceImpl implements DictService {
         try {
             PDDocument document = Loader.loadPDF(new File(text.getOrigPath()));
             PDFTextStripper stripper = new PDFTextStripper();
+            stripper.setLineSeparator("\n");
+            stripper.setParagraphEnd("\n\n");
             String pdfText = stripper.getText(document);
-            return pdfText.substring(0, PREVIEW_SIZE);
+            pdfText = cleanPdfText(pdfText);
+            return pdfText.substring(0, Math.min(PREVIEW_SIZE, pdfText.length()));
         } catch (Exception e) {
             LOG.error("Error occurred", e);
         }
         return null;
+    }
+
+    /**
+     * Cleans PDF text by merging lines that were split for formatting purposes.
+     * Preserves paragraph breaks but removes unwanted line breaks within sentences.
+     */
+    private String cleanPdfText(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+
+        // Replace tabs with spaces
+        text = text.replaceAll("\t", " ");
+
+        // Replace Windows line endings with Unix
+        text = text.replaceAll("\r\n", "\n");
+
+        String[] lines = text.split("\n");
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i].trim();
+
+            // Skip empty lines (preserve as paragraph breaks)
+            if (line.isEmpty()) {
+                result.append("\n");
+                continue;
+            }
+
+            // Add the current line
+            result.append(line);
+
+            // Check if we should merge with next line
+            if (i < lines.length - 1) {
+                String nextLine = lines[i + 1].trim();
+
+                // Don't merge if next line is empty (paragraph break)
+                if (nextLine.isEmpty()) {
+                    result.append("\n");
+                    continue;
+                }
+
+                // Handle hyphenation: if line ends with hyphen, merge without space
+                if (line.endsWith("-")) {
+                    // Remove the hyphen and merge
+                    result.setLength(result.length() - 1);
+                    continue;
+                }
+
+                // Check if line ends with sentence-ending punctuation
+                char lastChar = line.charAt(line.length() - 1);
+                boolean endsWithPunctuation = lastChar == '.' || lastChar == '!' ||
+                                             lastChar == '?' || lastChar == ':' ||
+                                             lastChar == ';';
+
+                // Check if next line starts with capital letter (might be new sentence)
+                boolean nextStartsWithCapital = !nextLine.isEmpty() &&
+                                               Character.isUpperCase(nextLine.charAt(0));
+
+                // Merge lines if current doesn't end with punctuation
+                // OR if it ends with punctuation but next doesn't start with capital
+                if (!endsWithPunctuation || !nextStartsWithCapital) {
+                    result.append(" ");
+                } else {
+                    result.append("\n");
+                }
+            } else {
+                // Last line
+                result.append("\n");
+            }
+        }
+
+        // Clean up multiple consecutive spaces
+        String cleaned = result.toString().replaceAll(" +", " ");
+
+        // Clean up multiple consecutive newlines (max 2 = paragraph break)
+        cleaned = cleaned.replaceAll("\n{3,}", "\n\n");
+
+        return cleaned;
     }
 
     private String getTextPreview(Text text, String encoding) {
