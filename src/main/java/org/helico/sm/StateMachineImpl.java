@@ -36,6 +36,7 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
     public void sendEvent(Event event, Object data, Long dictId) {
         LOG.debug("processing event..");
         Dict dict = dictService.findDict(dictId);
+        String oldStatus = dict.getStatus();
         Transition transition = transitionService.find(event.toString(), dict.getStatus());
         if (transition != null) {
             LOG.debug("handler found: " +  transition);
@@ -43,10 +44,17 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
             job.setTransId(transition.getId());
             job.setActive(false);
             job.setDictId(dictId);
+            if (event == Event.TRANSLATE && data instanceof Long) {
+                job.setDetails(String.valueOf(data));
+            }
             jobService.save(job);
             Handler handler = (Handler)appContext.getBean(transition.getHandlerName());
-            dict.setStatus(transition.getDestStatus());
+            String newStatus = transition.getDestStatus();
+            LOG.info(">>> dict#{} STATUS CHANGE: {} → {} (event={}, handler={})",
+                dictId, oldStatus, newStatus, event.label, transition.getHandlerName());
+            dict.setStatus(newStatus);
             dictService.saveDict(dict);
+            LOG.info("<<< dict#{} status saved as {}", dictId, newStatus);
             handler.process(data, job.getId());
             LOG.debug("handler called");
         } else {

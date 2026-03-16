@@ -25,12 +25,15 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .defaultSuccessUrl("/dict", true)
-                .failureUrl("/login")
+                .failureUrl("/login?error")
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutSuccessUrl("/login")
                 .permitAll()
+            )
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/admin/providers/api/**")
             );
 
         return http.build();

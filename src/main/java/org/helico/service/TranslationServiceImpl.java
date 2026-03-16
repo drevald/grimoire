@@ -29,6 +29,11 @@ public class TranslationServiceImpl implements TranslationService {
     TranslatorProviderDAO translatorProviderDAO;
 
     @Transactional
+    public String findTranslation(Long wordId, Long translatorId) {
+        return translationDao.findValue(wordId, translatorId);
+    }
+
+    @Transactional
     public boolean isTranslated(Long wordId, Long translationServiceId) {
         boolean result = translationDao.isTranslated(wordId, translationServiceId);
         return result;
@@ -56,6 +61,11 @@ public class TranslationServiceImpl implements TranslationService {
     @Transactional
     public List<Translator> listTranslators(String langId) {
         return translatorProviderDAO.listTranslators(langId);
+    }
+
+    @Transactional
+    public List<Translator> listTranslators(String srcLangId, String destLangId) {
+        return translatorProviderDAO.listTranslators(srcLangId, destLangId);
     }
 
     @Transactional

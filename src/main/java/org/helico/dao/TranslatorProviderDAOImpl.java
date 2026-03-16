@@ -66,4 +66,32 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
+    public List<Translator> listTranslators(String srcLangId, String destLangId) {
+        return (List<Translator>) entityManager.createQuery(
+                "from Translator where srcLangId=?1 and destLangId=?2")
+                .setParameter(1, srcLangId)
+                .setParameter(2, destLangId)
+                .getResultList();
+    }
+
+    public void saveProvider(TranslatorProvider provider) {
+        LOG.info(">>>>save translator provider #" + provider.getId());
+        if (provider.getId() == null) {
+            entityManager.persist(provider);
+        } else {
+            entityManager.merge(provider);
+        }
+        LOG.info("<<<<save translator provider");
+    }
+
+    public void deleteProvider(Long id) {
+        LOG.info(">>>>delete translator provider #" + id);
+        TranslatorProvider provider = entityManager.find(TranslatorProvider.class, id);
+        if (provider != null) {
+            entityManager.remove(provider);
+        }
+        LOG.info("<<<<delete translator provider");
+    }
+
 }

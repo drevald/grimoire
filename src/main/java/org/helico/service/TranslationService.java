@@ -17,6 +17,8 @@ public interface  TranslationService {
 
     public boolean isTranslated(Long wordId, Long translationServiceId);
 
+    public String findTranslation(Long wordId, Long translatorId);
+
     public void storeTranslation(Long wordId, Long translatorId, String values);
 
     public List<TranslatorProvider> listProviders();
@@ -24,5 +26,7 @@ public interface  TranslationService {
     public List<TranslatorProvider> listProviders(String langId);
 
     public List<Translator> listTranslators(String langId);
+
+    public List<Translator> listTranslators(String srcLangId, String destLangId);
 
 }

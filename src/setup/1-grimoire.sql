@@ -111,11 +111,16 @@ CREATE TABLE IF NOT EXISTS job (
 DROP TABLE IF EXISTS translator_provider;
 
 CREATE  TABLE IF NOT EXISTS translator_provider (
-  id bigint NOT NULL ,
+  id bigserial NOT NULL,
   title varchar(32) ,
   host varchar(64) ,
   req_pattern varchar(255) ,
   res_pattern varchar(255) ,
+  request_body varchar(1000),
+  method varchar(10) DEFAULT 'GET',
+  content_type varchar(100) DEFAULT 'application/json',
+  charset varchar(20) DEFAULT 'UTF-8',
+  headers varchar(1000),
   PRIMARY KEY (id));
 
 -- -----------------------------------------------------
@@ -140,6 +145,7 @@ CREATE  TABLE IF NOT EXISTS translator (
   src_lang_id varchar(2) NOT NULL ,
   dest_lang_id varchar(2) NOT NULL,
   PRIMARY KEY(id),
+  CONSTRAINT uq_translator_pair UNIQUE (service_id, src_lang_id, dest_lang_id),
   CONSTRAINT fk_translator_service1 FOREIGN KEY (service_id) REFERENCES translator_provider(id)
     ON DELETE CASCADE
     ON UPDATE CASCADE,

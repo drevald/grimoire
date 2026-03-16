@@ -46,9 +46,7 @@ public class JobDAOImpl implements JobDAO {
     @SuppressWarnings("unchecked")
     public Job findLastOrActive(Long dictId) {
         List<Job> jobs = (List<Job>)entityManager
-        //.createQuery("from Job where dictId=?1 order by active desc, id desc")
-        //.createQuery("from Job where dictId=?1 order by CASE WHEN active THEN 1 ELSE 0 END desc, id desc")
-        .createQuery("from Job where dictId=?1")
+        .createQuery("from Job where dictId=?1 order by active desc, id desc")
         .setParameter(1,dictId).getResultList();
     LOG.debug("<<<<get last jobs:" + jobs);
     Job job = (jobs==null || jobs.isEmpty()) ? null : jobs.get(0);

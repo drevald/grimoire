@@ -31,24 +31,25 @@ public abstract class AbstractHandler implements Handler {
 
     @Async
     public void process(Object object, Long id) {
-        LOG.info(">>> start dict#" + id );
-        Job job = jobService.find(id);
-        Dict dict = dictService.findDict(job.getDictId());
+        LOG.info(">>> start job#" + id);
+        Job job = null;
+        Dict dict = null;
         try {
+            job = jobService.find(id);
+            if (job == null) {
+                LOG.error("Job #{} not found — cannot process", id);
+                return;
+            }
+            dict = dictService.findDict(job.getDictId());
             jobService.setActive(job.getId(), true);
             process(object, job);
-            LOG.info("<<< done dict#" + dict.getId());
-            stateMachine.sendEvent(StateMachine.Event.OK, JOB_DONE, dict.getId());
-        } catch (Error e) {
-            LOG.error("Error occurred", e);
-            stateMachine.sendEvent(StateMachine.Event.FAIL, e.getMessage(), dict.getId());
-            LOG.info("<<< failed dict#" + dict.getId() + " with error " +  e.getMessage());
-        } catch (Exception e) {
-            LOG.error("Error occurred", e);
-            stateMachine.sendEvent(StateMachine.Event.FAIL, e.getMessage(), dict.getId());
-            LOG.info("<<< failed dict#" + dict.getId() + " with exception " +  e.getMessage());
-        } finally {
+            LOG.info("<<< done dict#{}", dict.getId());
             jobService.setActive(job.getId(), false);
+            stateMachine.sendEvent(StateMachine.Event.OK, JOB_DONE, dict.getId());
+        } catch (Throwable e) {
+            LOG.error("Handler failed for job#{} dict#{}", id, dict != null ? dict.getId() : "?", e);
+            if (job != null) jobService.setActive(job.getId(), false);
+            if (dict != null) stateMachine.sendEvent(StateMachine.Event.FAIL, e.getMessage(), dict.getId());
         }
     }
 

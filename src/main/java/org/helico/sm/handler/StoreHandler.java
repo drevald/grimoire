@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.helico.domain.Dict;
 import org.helico.domain.Job;
@@ -116,37 +115,26 @@ public class StoreHandler extends AbstractHandler {
 
     @Override
     protected void process(Object object, Job job) throws Exception {
-        LOG.info("1");
         Dict dict = dictService.findDict(job.getDictId());
-        LOG.info("2");
         Text text = dict.getText();
-        LOG.info("3");
         Reader reader;
 
         if (dict.getText().getOrigPath().toLowerCase().contains(".pdf")) {
-            LOG.info("4");
-            PDDocument document = Loader.loadPDF(new File(text.getOrigPath()));
-            PDPage page = document.getPage(1);
-            PDFTextStripper stripper = new PDFTextStripper();
-            LOG.info("5");
-            stripper.setWordSeparator(" ");
-            stripper.setLineSeparator("\n");
-            stripper.setParagraphEnd("\n\n");
-            String pdfText = stripper.getText(document);
-            pdfText = cleanPdfText(pdfText);
-            LOG.info("6");
-            reader = new StringReader(pdfText);
+            try (PDDocument document = Loader.loadPDF(new File(text.getOrigPath()))) {
+                PDFTextStripper stripper = new PDFTextStripper();
+                stripper.setSortByPosition(true);
+                stripper.setAddMoreFormatting(false);
+                String pdfText = stripper.getText(document);
+                pdfText = cleanPdfText(pdfText);
+                reader = new StringReader(pdfText);
+            }
+
         } else if (dict.getEncoding() == null) {
-            LOG.info("7");
             reader = new FileReader(text.getOrigPath());
-            LOG.info("8");
         } else {
-            LOG.info("9");
             reader = new InputStreamReader(Files.newInputStream(Paths.get(text.getOrigPath())), dict.getEncoding());
-            LOG.info("10");
         }
 
-        LOG.info("11");
         File utfTextFile = new File(text.getUtfPath());
         LOG.info("UTF Text file created = " + utfTextFile.createNewFile());
         Writer writer = new OutputStreamWriter(new FileOutputStream(utfTextFile), StandardCharsets.UTF_8);
@@ -155,8 +143,6 @@ public class StoreHandler extends AbstractHandler {
         IOUtils.closeQuietly(reader);
         IOUtils.closeQuietly(writer);
         LOG.info("UTF Text file size = " + utfTextFile.length());
-
-        stateMachine.sendEvent(StateMachine.Event.OK, null, dict.getId());
 
     }
 

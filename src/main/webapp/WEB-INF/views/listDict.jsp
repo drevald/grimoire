@@ -21,7 +21,7 @@
                     <td>
                     <c:if test="${!empty helper.jobs}">
                         <c:forEach items="${helper.jobs}" var="job">
-                            <c:if test="${job.active}">
+                            <c:if test="${job.active || helper.dict.status == 'PARSING' || helper.dict.status == 'TRANSLATING' || helper.dict.status == 'STORING'}">
                                 ${job.progress}%
                             </c:if>
                             ${fn:substring(job.details, 0, 16)}
@@ -31,7 +31,17 @@
                           EMPTY
                     </c:if>
                     </td>
-                    <td><a href="dict/preview/${helper.dict.id}"><spring:message code="save" /></a></td>
+                    <td>
+                        <c:if test="${helper.dict.status == 'TRANSLATING'}">
+                            <form method="post" action="dict/stop/${helper.dict.id}" style="display:inline">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                <button type="submit" class="btn btn-warning btn-sm"><spring:message code="stop"/></button>
+                            </form>
+                        </c:if>
+                        <c:if test="${helper.dict.status == 'PERSISTED'}">
+                            <a href="dict/preview/${helper.dict.id}"><spring:message code="save" /></a>
+                        </c:if>
+                    </td>
                     <td><a href="dict/delete/${helper.dict.id}"><spring:message code="delete" /></a></td>
                     <td><a href="dict/words/${helper.dict.id}?offset=0"><spring:message code="words" /></a></td>
                     <td><a href="text/view/${helper.dict.id}?offset=0"><spring:message code="text" /></a></td>

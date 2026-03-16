@@ -17,4 +17,10 @@ public interface TranslatorProviderDAO {
 
     public List<Translator> listTranslators(String langId);
 
+    public List<Translator> listTranslators(String srcLangId, String destLangId);
+
+    public void saveProvider(TranslatorProvider provider);
+
+    public void deleteProvider(Long id);
+
 }

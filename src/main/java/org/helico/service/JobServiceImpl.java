@@ -31,7 +31,7 @@ public class JobServiceImpl implements JobService {
 
     @Transactional
     public void save(Job job) {
-    LOG.debug("saving " + job);
+        LOG.debug("saving " + job);
         jobDao.saveOrUpdate(job);
     }
 

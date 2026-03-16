@@ -38,6 +38,6 @@
     </script>
 </head>
 <body>
-<div class="container-fluid fixed-top">
+<div class="container-fluid">
   <div class="row">
         <form:errors />

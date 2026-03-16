@@ -23,4 +23,23 @@ public class TranslatorProviderServiceImpl implements TranslatorProviderService 
         return translatorProdiverDAO.listProviders();
     }
 
+    @Transactional
+    public TranslatorProvider getProvider(Long id) {
+        return translatorProdiverDAO.getProvider(id);
+    }
+
+    @Transactional
+    public void saveProvider(TranslatorProvider provider) {
+        LOG.info(">>>saveProvider start");
+        translatorProdiverDAO.saveProvider(provider);
+        LOG.info("<<<saveProvider end");
+    }
+
+    @Transactional
+    public void deleteProvider(Long id) {
+        LOG.info(">>>deleteProvider start");
+        translatorProdiverDAO.deleteProvider(id);
+        LOG.info("<<<deleteProvider end");
+    }
+
 }

@@ -70,7 +70,10 @@ public class DictServiceImpl implements DictService {
         if (text.getOrigPath().contains(".pdf")) {
             dict.setEncoding(StandardCharsets.UTF_8.name());
             dictDao.saveDict(dict);
-            stateMachine.sendEvent(StateMachine.Event.STORE, is, dict.getId());
+            // NOTE: do NOT call sendEvent here — this method is @Transactional,
+            // so the job INSERT would be uncommitted when the @Async handler thread
+            // starts and tries to find it. The controller calls storeDict() after
+            // this transaction commits.
         }
         return dictId;
     }
@@ -86,18 +89,22 @@ public class DictServiceImpl implements DictService {
     }
 
     private String getPdfPreview(Text text, String encoding) {
-        try {
-            PDDocument document = Loader.loadPDF(new File(text.getOrigPath()));
+        try (PDDocument document = Loader.loadPDF(new File(text.getOrigPath()))) {
+
             PDFTextStripper stripper = new PDFTextStripper();
-            stripper.setLineSeparator("\n");
-            stripper.setParagraphEnd("\n\n");
+            stripper.setSortByPosition(true);
+            stripper.setAddMoreFormatting(false);   // prevents PDFBox from inserting extra breaks
+
             String pdfText = stripper.getText(document);
-            pdfText = cleanPdfText(pdfText);
+
+            pdfText = cleanPdfText(pdfText);  // merge artificial line breaks
+
             return pdfText.substring(0, Math.min(PREVIEW_SIZE, pdfText.length()));
+
         } catch (Exception e) {
             LOG.error("Error occurred", e);
+            return null;
         }
-        return null;
     }
 
     /**
@@ -389,13 +396,21 @@ public class DictServiceImpl implements DictService {
 
     @Transactional
     public void fixStatus() {
-        List<Dict> parsing = dictDao.findDictByStatus(Status.PARSING.name());
-        for (Dict dict : parsing) {
+        // STORING stuck after restart → PERSISTED so user can re-upload/re-store
+        for (Dict dict : dictDao.findDictByStatus(Status.STORING.name())) {
+            LOG.warn("fixStatus: dict#{} was stuck in STORING → resetting to PERSISTED", dict.getId());
+            dict.setStatus(Status.PERSISTED.name());
+            dictDao.saveDict(dict);
+        }
+        // PARSING stuck after restart → STORED so user can re-parse
+        for (Dict dict : dictDao.findDictByStatus(Status.PARSING.name())) {
+            LOG.warn("fixStatus: dict#{} was stuck in PARSING → resetting to STORED", dict.getId());
             dict.setStatus(Status.STORED.name());
             dictDao.saveDict(dict);
         }
-        List<Dict> translating = dictDao.findDictByStatus(Status.TRANSLATING.name());
-        for (Dict dict : translating) {
+        // TRANSLATING stuck after restart → PARSED so user can re-translate
+        for (Dict dict : dictDao.findDictByStatus(Status.TRANSLATING.name())) {
+            LOG.warn("fixStatus: dict#{} was stuck in TRANSLATING → resetting to PARSED", dict.getId());
             dict.setStatus(Status.PARSED.name());
             dictDao.saveDict(dict);
         }

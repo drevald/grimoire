@@ -1,9 +1,8 @@
 plugins {
     id 'java'
+    id 'war'
     id 'org.springframework.boot' version '3.4.1'
     id 'io.spring.dependency-management' version '1.1.7'
-    // Uncomment below for WAR packaging
-    // id 'war'
 }
 
 group = 'org.helico'
@@ -59,9 +58,9 @@ dependencies {
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
-    testImplementation 'org.mockito:mockito-core:5.8.0'
+    // Let Spring Boot manage JUnit versions to avoid conflicts
+    // Use WireMock 2.x for compatibility with Spring Boot 3.x
+    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.35.0'
 
     // Uncomment if deploying as WAR to external Tomcat
     // providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
@@ -71,12 +70,10 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-// Configuration for building executable JAR
 tasks.named('bootJar') {
-    archiveFileName = 'grimoire.jar'
+    enabled = false
 }
 
-// Uncomment for WAR packaging
-// tasks.named('bootWar') {
-//     archiveFileName = 'ROOT.war'
-// }
+tasks.named('bootWar') {
+    archiveFileName = 'grimoire.war'
+}

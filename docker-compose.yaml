@@ -23,11 +23,19 @@ services:
       - LOCAL_STORAGE=/root/GRIM
     ports:
       - "9999:9999"
-      - "8787:8000"      
+      - "8787:8000"
     depends_on:
       - postgres
+    extra_hosts:
+      - "scriptorium.dobby:host-gateway"
     volumes:
       - web_data:/root/GRIM  # Add a volume for LOCAL_STORAGE
+    networks:
+      - default
+      - web
 volumes:
   data:
   web_data:  # Define this new volume
+networks:
+  web:
+    external: true

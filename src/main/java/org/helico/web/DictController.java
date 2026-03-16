@@ -59,6 +59,11 @@ public class DictController extends AbstractController {
             jobs.add(job);
             dictHelper.setJobs(jobs);
             helperList.add(dictHelper);
+            // Log dict status and job state for debugging
+            if (job != null && job.getActive()) {
+                LOG.info("UI: dict#{} status={} job#{} active={} progress={}%",
+                    dict.getId(), dict.getStatus(), job.getId(), job.getActive(), job.getProgress());
+            }
         }
         map.put("helperList", helperList);
         map.put("langs", langService.list());
@@ -82,6 +87,8 @@ public class DictController extends AbstractController {
                         System.getenv("LOCAL_STORAGE"));
                 if(multipartFile.getOriginalFilename() != null
                         && multipartFile.getOriginalFilename().contains(".pdf")) {
+                    // saveOriginal() @Transactional has now committed — safe to start async store
+                    dictService.storeDict(dictService.findDict(dictId));
                     return "redirect:/dict";
                 }
                 return "redirect:/dict/preview/" + dictId + "?langId=" + langId;
@@ -218,12 +225,14 @@ public class DictController extends AbstractController {
             offset = (offset == null) ? size : offset;
             List<DictWord> words = dictWordService.getWords(dictId, offset, size);
             Long wordsNum = dictWordService.countWords(dictId);
-            List<Translator> translators = translationService.listTranslators(dict.getLangId());
+            List<Translator> translators = translationService.listTranslators(dict.getLangId(), account.getNativeLangId());
             List<TranslatorProvider> providers = translationService.listProviders();
             map.put("dict", dictService.findDict(dictId, account.getId()));
+            map.put("nativeLangId", account.getNativeLangId());
             map.put("wordsNum", wordsNum);
             map.put("words", words);
             map.put("translators", translators);
+            map.put("job", jobService.getLastOrActive(dictId));
             map.put("offset", offset);
             map.put("maxOffset", wordsNum - (wordsNum % size));
             map.put("size", size);
@@ -233,6 +242,19 @@ public class DictController extends AbstractController {
         } else {
             return "/dict";
         }
+    }
+
+    @RequestMapping(value = "/dict/stop/{dictId}", method = RequestMethod.POST)
+    public String stopTranslation(@PathVariable("dictId") Long dictId) {
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(dictId, account.getId());
+        if (dict != null) {
+            Job job = jobService.getLastOrActive(dictId);
+            if (job != null && job.getActive()) {
+                jobService.setActive(job.getId(), false);
+            }
+        }
+        return "redirect:/dict";
     }
 
     @RequestMapping(value = "/dict/words/translate", method = RequestMethod.POST)

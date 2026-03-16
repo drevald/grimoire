@@ -8,4 +8,10 @@ public interface TranslatorProviderService {
 
     public List<TranslatorProvider> listProviders();
 
+    public TranslatorProvider getProvider(Long id);
+
+    public void saveProvider(TranslatorProvider provider);
+
+    public void deleteProvider(Long id);
+
 }
