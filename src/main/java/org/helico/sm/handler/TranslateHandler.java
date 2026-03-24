@@ -327,6 +327,19 @@ public class TranslateHandler extends AbstractHandler {
      * @param httpMethod The HTTP method to add headers to
      * @param provider The translator provider containing header configuration
      */
+    /** Replaces ${VAR_NAME} placeholders with environment variable values. */
+    private String resolveEnvVars(String value) {
+        if (value == null || !value.contains("${")) return value;
+        java.util.regex.Matcher m = java.util.regex.Pattern.compile("\\$\\{([^}]+)\\}").matcher(value);
+        StringBuffer sb = new StringBuffer();
+        while (m.find()) {
+            String envVal = System.getenv(m.group(1));
+            m.appendReplacement(sb, envVal != null ? envVal : m.group(0));
+        }
+        m.appendTail(sb);
+        return sb.toString();
+    }
+
     private void addCustomHeaders(org.apache.commons.httpclient.HttpMethod httpMethod, TranslatorProvider provider) {
         String headers = provider.getHeaders();
         if (headers == null || headers.trim().isEmpty()) {
@@ -347,11 +360,11 @@ public class TranslateHandler extends AbstractHandler {
             int colonIndex = headerLine.indexOf(':');
             if (colonIndex > 0) {
                 String headerName = headerLine.substring(0, colonIndex).trim();
-                String headerValue = headerLine.substring(colonIndex + 1).trim();
+                String headerValue = resolveEnvVars(headerLine.substring(colonIndex + 1).trim());
 
                 if (!headerName.isEmpty() && !headerValue.isEmpty()) {
                     httpMethod.addRequestHeader(headerName, headerValue);
-                    LOG.debug("Added custom header: " + headerName + " = " + headerValue);
+                    LOG.debug("Added custom header: " + headerName);
                 }
             }
         }

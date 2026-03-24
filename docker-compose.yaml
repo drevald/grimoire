@@ -21,6 +21,7 @@ services:
       - DATABASE_USER=denis
       - DATABASE_PASSWORD=9rommit
       - LOCAL_STORAGE=/root/GRIM
+      - YANDEX_API_KEY=${YANDEX_API_KEY}
     ports:
       - "9999:9999"
       - "8787:8000"
