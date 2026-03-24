@@ -98,6 +98,14 @@ public class TranslateHandler extends AbstractHandler {
         return null;
     }
 
+    public String translatePhrase(String text, Long translatorId) {
+        Translator translator = transService.getTranslator(translatorId);
+        TranslatorProvider provider = translator.getProvider();
+        MessageFormat req = new MessageFormat(escape(provider.getReqPattern()));
+        MessageFormat res = new MessageFormat(escape(provider.getResPattern()));
+        return fetchTranslation(text, provider, translator.getSrcLangId(), translator.getDestLangId(), req, res);
+    }
+
     public String translateSingleWord(String wordValue, Long translatorId) {
         Translator translator = transService.getTranslator(translatorId);
         TranslatorProvider provider = translator.getProvider();
@@ -203,7 +211,9 @@ public class TranslateHandler extends AbstractHandler {
                 String bodyTemplate = provider.getRequestBody();
                 if (bodyTemplate != null && !bodyTemplate.isEmpty()) {
                     MessageFormat bodyFormat = new MessageFormat(escape(bodyTemplate));
-                    String requestBody = bodyFormat.format(new String[] {encodedText, srcLangId, destLangId});
+                    // POST body needs raw text (JSON-escaped), not URL-encoded
+                    String jsonText = text.replace("\\", "\\\\").replace("\"", "\\\"");
+                    String requestBody = bodyFormat.format(new String[] {jsonText, srcLangId, destLangId});
 
                     // Get content type, default to application/json if not specified
                     String contentType = provider.getContentType();

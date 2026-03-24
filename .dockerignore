@@ -1,0 +1,54 @@
+# Build artifacts
+.gradle/
+build/
+target/
+*.war
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose*
+
+# Documentation
+README.md
+*.md
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+
+# Local gradle config (use container's Java)
+gradle.properties
+
+# Heavy files that must not bloat the build context
+media/
+iswiktionary-latest-pages-articles.xml*
+*.exe
+*.bz2
+*.zip
+nul
+.claude/
+.run/
+apply-patch.bat
+run-local.*
+patch-*.sql

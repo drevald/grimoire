@@ -27,6 +27,7 @@
                         <th>Content-Type</th>
                         <th>Charset</th>
                         <th>Headers</th>
+                        <th>Enabled</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -68,6 +69,16 @@
                                 </c:when>
                                 <c:otherwise>
                                     <small class="text-muted">-</small>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${provider.enabled}">
+                                    <span class="badge bg-success">Yes</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="badge bg-secondary">No</span>
                                 </c:otherwise>
                             </c:choose>
                         </td>

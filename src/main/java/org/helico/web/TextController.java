@@ -127,6 +127,19 @@ public class TextController  extends AbstractController {
         return ResponseEntity.ok("{\"translations\":[],\"definitions\":[]}");
     }
 
+    @RequestMapping(value = "/text/view/{dictId}/translate-phrase", method = RequestMethod.POST,
+                    produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> translatePhrase(
+            @PathVariable("dictId") Long dictId,
+            @RequestParam("text") String text,
+            @RequestParam("translatorId") Long translatorId) {
+        Account account = accountService.findAccount(getCurrentAccount());
+        dictService.findDict(dictId, account.getId()); // auth check
+        String translation = translateHandler.translatePhrase(text, translatorId);
+        String safe = translation != null ? translation.replace("\\", "\\\\").replace("\"", "\\\"") : null;
+        return ResponseEntity.ok(safe != null ? "{\"translation\":\"" + safe + "\"}" : "{\"translation\":null}");
+    }
+
     @RequestMapping(value = "/text/view/{dictId}/translate-ajax", method = RequestMethod.POST,
                     produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> translateWordAjax(
@@ -137,12 +150,9 @@ public class TextController  extends AbstractController {
         Dict dict = dictService.findDict(dictId, account.getId());
         Word word = wordService.getWord(dict.getLangId(), wordValue);
         if (word == null) return ResponseEntity.ok("{\"translation\":null}");
-        String translation = translationService.findTranslation(word.getId(), translatorId);
-        if (translation == null) {
-            translation = translateHandler.translateSingleWord(wordValue, translatorId);
-            if (translation != null) {
-                translationService.storeTranslation(word.getId(), translatorId, translation);
-            }
+        String translation = translateHandler.translateSingleWord(wordValue, translatorId);
+        if (translation != null) {
+            translationService.storeTranslation(word.getId(), translatorId, translation);
         }
         String safe = translation != null ? translation.replace("\\", "\\\\").replace("\"", "\\\"") : null;
         return ResponseEntity.ok(safe != null ? "{\"translation\":\"" + safe + "\"}" : "{\"translation\":null}");

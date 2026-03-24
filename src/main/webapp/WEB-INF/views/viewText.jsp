@@ -24,26 +24,83 @@
         var csrfParam = '${_csrf.parameterName}';
         var csrfToken = '${_csrf.token}';
         var translationCache = {}; // cache[wordIndex][translatorId] = translation string
+        var sentenceHighlightEls = [];
+        var resultOwner = 'word'; // 'word' | 'sentence' — prevents async word callbacks overwriting sentence panel
+
+        function clearSentenceHighlight() {
+            sentenceHighlightEls.forEach(function(el) {
+                var isCurrentWord = el.id !== '' && parseInt(el.id) === currSelectionId;
+                el.style.backgroundColor = isCurrentWord ? 'yellow' : '';
+            });
+            sentenceHighlightEls = [];
+        }
+
+        function highlightSentenceSpans(map, sentence) {
+            clearSentenceHighlight();
+            var normText = map.normText, normToRaw = map.normToRaw, charMap = map.charMap;
+            var s = sentence.trim().replace(/\s+/g, ' ');
+            var idx = normText.indexOf(s);
+            if (idx < 0) idx = normText.toLowerCase().indexOf(s.toLowerCase());
+            if (idx < 0) return;
+            var normEnd = idx + s.length - 1;
+            if (normEnd >= normToRaw.length) normEnd = normToRaw.length - 1;
+            var bookText = document.getElementById('bookText');
+            var seen = [];
+            for (var ni = idx; ni <= normEnd; ni++) {
+                var rp = normToRaw[ni];
+                var entry = charMap[rp];
+                if (!entry) continue;
+                var par = entry.node.parentElement;
+                if (par && par !== bookText && seen.indexOf(par) < 0) {
+                    seen.push(par);
+                    par.style.backgroundColor = '#cce5ff';
+                    sentenceHighlightEls.push(par);
+                }
+            }
+        }
 
         function highlight(i) {
+            clearSentenceHighlight();
+            resultOwner = 'word';
             document.getElementById(currSelectionId).style.backgroundColor = 'white';
             currSelectionId = i;
             document.getElementById(currSelectionId).style.backgroundColor = 'yellow';
-            document.getElementById('result').innerHTML = '<span style="color:#999">' + (words[i] || 'Not translated yet') + '</span>';
+            var wordLabel = wordValues[i] ? '<b style="color:black">' + wordValues[i] + '</b><br>' : '';
+            document.getElementById('result').innerHTML = wordLabel + '<span style="color:#999">' + (words[i] || 'Not translated yet') + '</span>';
             if (wordValues[i]) {
                 fetch('/text/view/${dict.id}/lookup?word=' + encodeURIComponent(wordValues[i]))
                     .then(r => r.json())
-                    .then(data => renderWord(data, wordValues[i]))
-                    .catch(() => {});
+                    .then(data => {
+                        if (i !== currSelectionId || resultOwner !== 'word') return; // stale or sentence panel active
+                        var hasData = (data.translations && data.translations.length > 0) ||
+                                      (data.definitions && data.definitions.length > 0);
+                        if (hasData) {
+                            renderWord(data, wordValues[i]); // Scriptorium has rich data — show it
+                        } else {
+                            // No Scriptorium data: show cached provider result or fetch from provider
+                            var sel = document.querySelector('input[name="translatorId"]:checked');
+                            var cached = sel ? (translationCache[i] || {})[sel.value] : undefined;
+                            if (cached !== undefined) {
+                                showCached(i, sel.value); // already translated this session
+                            } else {
+                                translateSelected(); // fetch from provider and save to DB
+                            }
+                        }
+                    })
+                    .catch(() => { if (i === currSelectionId && resultOwner === 'word') translateSelected(); });
             }
         }
 
         function showCached(wordIndex, translatorId) {
+            if (resultOwner !== 'word') return false;
             var t = (translationCache[wordIndex] || {})[translatorId];
             if (t !== undefined) {
-                document.getElementById('result').innerHTML = t
-                    ? '<b>' + wordValues[wordIndex] + '</b><br>' + t
-                    : '<span style="color:#999">No translation found</span>';
+                var wordLabel = wordValues[wordIndex] ? '<b style="color:black">' + wordValues[wordIndex] + '</b><br>' : '';
+                if (t) {
+                    document.getElementById('result').innerHTML = wordLabel + t;
+                } else {
+                    document.getElementById('result').innerHTML = wordLabel + '<span style="color:#999">' + (words[wordIndex] || 'No translation found') + '</span>';
+                }
                 return true;
             }
             return false;
@@ -59,7 +116,8 @@
 
             if (showCached(wordIndex, translatorId)) return;
 
-            document.getElementById('result').innerHTML = '<span style="color:#999">Translating…</span>';
+            var wordLabel = '<b style="color:black">' + word + '</b><br>';
+            document.getElementById('result').innerHTML = wordLabel + '<span style="color:#999">Translating…</span>';
             fetch('/text/view/${dict.id}/translate-ajax', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -71,15 +129,207 @@
             .then(data => {
                 if (!translationCache[wordIndex]) translationCache[wordIndex] = {};
                 translationCache[wordIndex][translatorId] = data.translation || null;
-                if (wordIndex === currSelectionId) showCached(wordIndex, translatorId);
+                if (wordIndex === currSelectionId) showCached(wordIndex, translatorId); // no-op if sentence panel active
             })
             .catch(() => {
-                document.getElementById('result').innerHTML = '<span style="color:#999">Error</span>';
+                if (wordIndex === currSelectionId && resultOwner === 'word') {
+                    document.getElementById('result').innerHTML = '<b style="color:black">' + word + '</b><br><span style="color:#999">Error</span>';
+                }
             });
         }
 
+        // Build a character map from the DOM: rawText (text nodes + BR→\n, skipping scripts),
+        // normText (whitespace collapsed), and normToRaw (normPos → rawPos) + charMap (rawPos → {node, offset}).
+        function buildDOMTextMap(container) {
+            var charMap = [];
+            var rawText = '';
+            (function walk(el) {
+                for (var ci = 0; ci < el.childNodes.length; ci++) {
+                    var child = el.childNodes[ci];
+                    if (child.nodeName === 'SCRIPT' || child.nodeName === 'STYLE') continue;
+                    if (child.nodeName === 'BR') {
+                        charMap.push(null);
+                        rawText += '\n';
+                    } else if (child.nodeType === 3) {
+                        var content = child.textContent;
+                        for (var j = 0; j < content.length; j++) {
+                            charMap.push({node: child, offset: j});
+                            rawText += content[j];
+                        }
+                    } else if (child.nodeType === 1) {
+                        walk(child);
+                    }
+                }
+            })(container);
+            var normText = '', normToRaw = [], k = 0;
+            while (k < rawText.length) {
+                if (/\s/.test(rawText[k])) {
+                    var runStart = k;
+                    while (k < rawText.length && /\s/.test(rawText[k])) k++;
+                    if (normText.length > 0 && normText[normText.length - 1] !== ' ') {
+                        normToRaw.push(runStart); normText += ' ';
+                    }
+                } else {
+                    normToRaw.push(k); normText += rawText[k]; k++;
+                }
+            }
+            return {normText: normText, normToRaw: normToRaw, charMap: charMap};
+        }
+
+        function isSentenceEnd(text, pos) {
+            var ch = text[pos];
+            if (ch === '!' || ch === '?' || ch === '\u2026') return true;
+            if (ch !== '.') return false;
+            // Ellipsis: .. or ...
+            if (pos > 0 && text[pos-1] === '.') return false;
+            if (pos < text.length-1 && text[pos+1] === '.') return false;
+            // Period ends a sentence only if followed by whitespace + uppercase letter
+            var i = pos + 1;
+            while (i < text.length && text[i] === ' ') i++;
+            if (i >= text.length) return true;
+            return text[i] !== text[i].toLowerCase(); // Unicode-aware uppercase check
+        }
+
+        function sentenceAround(text, pos) {
+            // Walk backward to find start (after previous sentence-ending punctuation)
+            var start = pos;
+            while (start > 0) {
+                if (isSentenceEnd(text, start - 1)) break;
+                start--;
+            }
+            // Skip leading whitespace
+            while (start < pos && /\s/.test(text[start])) start++;
+            // Walk forward to find end (inclusive of sentence-ending punctuation)
+            var end = pos;
+            while (end < text.length) {
+                if (isSentenceEnd(text, end)) { end++; break; }
+                end++;
+            }
+            return text.slice(start, end).trim().replace(/\s+/g, ' ');
+        }
+
+        // Visually select the sentence in the DOM using a pre-computed map from buildDOMTextMap().
+        function selectSentenceInDOM(map, sentence) {
+            var normText = map.normText, normToRaw = map.normToRaw, charMap = map.charMap;
+            var s = sentence.trim().replace(/\s+/g, ' ');
+            var idx = normText.indexOf(s);
+            if (idx < 0) idx = normText.toLowerCase().indexOf(s.toLowerCase());
+            if (idx < 0) return;
+            var normEnd = idx + s.length - 1;
+            if (normEnd >= normToRaw.length) normEnd = normToRaw.length - 1;
+            var rawStart = normToRaw[idx];
+            while (rawStart < charMap.length && charMap[rawStart] === null) rawStart++;
+            if (rawStart >= charMap.length) return;
+            var rawEnd = normToRaw[normEnd];
+            while (rawEnd >= 0 && charMap[rawEnd] === null) rawEnd--;
+            if (rawEnd < 0) return;
+            try {
+                var range = document.createRange();
+                range.setStart(charMap[rawStart].node, charMap[rawStart].offset);
+                range.setEnd(charMap[rawEnd].node, charMap[rawEnd].offset + 1);
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            } catch(err) {}
+        }
+
+        function translatePhrase(phrase) {
+            if (!phrase || phrase.length < 2) return;
+            var selected = document.querySelector('input[name="translatorId"]:checked');
+            if (!selected) return;
+            document.getElementById('result').innerHTML =
+                '<i style="color:#555">' + phrase + '</i><br><span style="color:#999">Translating…</span>';
+            fetch('/text/view/${dict.id}/translate-phrase', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: csrfParam + '=' + encodeURIComponent(csrfToken)
+                    + '&text=' + encodeURIComponent(phrase)
+                    + '&translatorId=' + encodeURIComponent(selected.value)
+            })
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = data.translation
+                    ? '<i style="color:#555">' + phrase + '</i><br><br>' + data.translation
+                    : '<i style="color:#555">' + phrase + '</i><br><span style="color:#999">No translation</span>';
+            })
+            .catch(() => {});
+        }
+
+        function showSentencePanel(sentence) {
+            resultOwner = 'sentence';
+            var escaped = sentence.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            document.getElementById('result').innerHTML =
+                '<i style="color:#333">' + escaped + '</i>' +
+                '<br><br><button class="btn btn-sm btn-primary" onclick="translateCurrentSentence()">Translate</button>';
+            document.getElementById('result')._pendingSentence = sentence;
+        }
+
+        function translateCurrentSentence() {
+            var sentence = document.getElementById('result')._pendingSentence;
+            if (sentence) {
+                resultOwner = 'sentence'; // keep ownership during translation
+                translatePhrase(sentence);
+            }
+        }
+
+        // Double-click: expand to sentence, highlight it in the left panel, show Translate button.
+        document.addEventListener('dblclick', function(e) {
+            if (!e.target.closest('#bookText')) return;
+            setTimeout(function() {
+                var sel = window.getSelection();
+                if (!sel || !sel.rangeCount || !sel.toString().trim()) return;
+
+                var word = sel.toString().trim();
+                var bookText = document.getElementById('bookText');
+
+                // Build text map once — used for both sentence detection and DOM selection.
+                var map = buildDOMTextMap(bookText);
+                var normText = map.normText;
+
+                // Find cursor position in normText by matching the clicked text node.
+                var clickNode = sel.getRangeAt(0).startContainer;
+                var clickOffset = sel.getRangeAt(0).startOffset;
+                var approxPos = 0;
+                for (var ni = 0; ni < map.normToRaw.length; ni++) {
+                    var entry = map.charMap[map.normToRaw[ni]];
+                    if (entry && entry.node === clickNode && entry.offset >= clickOffset) {
+                        approxPos = ni; break;
+                    }
+                }
+
+                // Find closest occurrence of the double-clicked word in normText.
+                var lower = normText.toLowerCase();
+                var lword = word.toLowerCase().replace(/\s+/g, ' ');
+                var bestIdx = -1, bestDiff = Infinity, from = 0;
+                while (from < normText.length) {
+                    var i = lower.indexOf(lword, from);
+                    if (i < 0) break;
+                    var d = Math.abs(i - approxPos);
+                    if (d < bestDiff) { bestDiff = d; bestIdx = i; }
+                    from = i + 1;
+                }
+                if (bestIdx < 0) return;
+
+                var sentence = sentenceAround(normText, bestIdx + Math.floor(word.length / 2));
+                if (sentence && sentence.length > 3) {
+                    highlightSentenceSpans(map, sentence);
+                    showSentencePanel(sentence);
+                }
+            }, 10);
+        });
+
+        // Drag-select: translate selected text (multi-word only)
+        document.addEventListener('mouseup', function(e) {
+            if (!e.target.closest('#bookText')) return;
+            var sel = window.getSelection();
+            if (!sel) return;
+            var text = sel.toString().trim();
+            if (!text || text.indexOf(' ') < 0) return; // single word handled by highlight()
+            translatePhrase(text);
+        });
+
         function renderWord(data, word) {
-            var html = '<h5>' + word + '</h5>';
+            var html = '<h5 style="color:black;font-weight:bold">' + word + '</h5>';
             if (data.translations && data.translations.length > 0) {
                 html += '<b>Translations</b><br>';
                 data.translations.forEach(function(t) {
@@ -127,7 +377,7 @@
 <div class="container" style="height:100%">
     <div class="row">
         <%-- Left: book text --%>
-        <div class="col-6 mb-5">
+        <div class="col-6 mb-5" id="bookText">
             ${text}
         </div>
 

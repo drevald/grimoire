@@ -65,6 +65,9 @@ public class TranslatorProvider {
     @Column(name = "headers", length = 1000)
     private String headers; // Custom HTTP headers (format: "Header-Name: value\nAnother-Header: value")
 
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled = true;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "provider")
     private Set<Translator> translators;
 
@@ -146,6 +149,14 @@ public class TranslatorProvider {
 
     public void setRequestBody(String requestBody) {
         this.requestBody = requestBody;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
 }

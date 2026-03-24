@@ -43,7 +43,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
         LOG.info(">>>>find translator providers for lang #" + langId);
         List<TranslatorProvider> result = new ArrayList<TranslatorProvider>();
         List objResult = entityManager.createQuery(
-                "from TranslatorProvider tp inner join tp.translators as translator where translator.srcLangId=?1")
+                "from TranslatorProvider tp inner join tp.translators as translator where translator.srcLangId=?1 and tp.enabled = true")
                 .setParameter(1, langId)
                 .getResultList();
         for (Object obj : objResult) {
@@ -59,7 +59,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
     public List<Translator> listTranslators(String langId) {
         LOG.info(">>>>find translators for lang #" + langId);
         List<Translator> result = (List<Translator>)entityManager.createQuery(
-                "from Translator where srcLangId=?1")
+                "from Translator where srcLangId=?1 and provider.enabled = true")
                 .setParameter(1, langId)
                 .getResultList();
         LOG.info("<<<<find translators for lang #" + langId);
@@ -69,7 +69,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
     @SuppressWarnings("unchecked")
     public List<Translator> listTranslators(String srcLangId, String destLangId) {
         return (List<Translator>) entityManager.createQuery(
-                "from Translator where srcLangId=?1 and destLangId=?2")
+                "from Translator where srcLangId=?1 and destLangId=?2 and provider.enabled = true")
                 .setParameter(1, srcLangId)
                 .setParameter(2, destLangId)
                 .getResultList();

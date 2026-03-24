@@ -112,6 +112,15 @@
         </div>
 
         <div class="mb-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="enabled" name="enabled"
+                       value="true" ${provider.enabled ? 'checked' : ''}/>
+                <label class="form-check-label" for="enabled">Enabled</label>
+            </div>
+            <div class="form-text">Disabled providers are hidden from the translation panel</div>
+        </div>
+
+        <div class="mb-3">
             <button type="submit" class="btn btn-primary">
                 <c:choose>
                     <c:when test="${isNew}">Create Provider</c:when>
