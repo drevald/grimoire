@@ -23,6 +23,66 @@
 
         var csrfParam = '${_csrf.parameterName}';
         var csrfToken = '${_csrf.token}';
+        var dictLang = '${dict.langId}';
+        var langLocale = {
+            'sv':'sv-SE','pl':'pl-PL','de':'de-DE','fr':'fr-FR','es':'es-ES',
+            'it':'it-IT','ru':'ru-RU','ar':'ar-SA','zh':'zh-CN','ja':'ja-JP',
+            'el':'el-GR','da':'da-DK','fi':'fi-FI','is':'is-IS','la':'la',
+            'nl':'nl-NL','pt':'pt-PT','cs':'cs-CZ','hu':'hu-HU','ro':'ro-RO'
+        };
+
+        function speakWord(word) {
+            if (!word) return;
+            fetch('/text/view/${dict.id}/audio?word=' + encodeURIComponent(word))
+                .then(function(r) {
+                    if (r.ok) {
+                        r.blob().then(function(blob) {
+                            var url = URL.createObjectURL(blob);
+                            var audio = new Audio(url);
+                            audio.play();
+                            audio.onended = function() { URL.revokeObjectURL(url); };
+                        });
+                    } else {
+                        speakWordFallback(word);
+                    }
+                })
+                .catch(function() { speakWordFallback(word); });
+        }
+
+        function speakWordFallback(word) {
+            if (!window.speechSynthesis) return;
+            window.speechSynthesis.cancel();
+            var u = new SpeechSynthesisUtterance(word);
+            u.lang = langLocale[dictLang] || dictLang;
+            window.speechSynthesis.speak(u);
+        }
+
+        function hasTTSVoice() {
+            if (!window.speechSynthesis) return false;
+            var locale = langLocale[dictLang];
+            if (!locale) return false;
+            var lang2 = locale.substring(0, 2).toLowerCase();
+            return speechSynthesis.getVoices().some(function(v) {
+                return v.lang.toLowerCase().startsWith(lang2);
+            });
+        }
+
+        function attachSpeakButton(word) {
+            var escaped = word.replace(/'/g,"\\'");
+            var btnHtml = '<button class="btn btn-link btn-sm p-0" onclick="speakWord(\'' + escaped + '\')" title="Pronounce">🔊</button>';
+            // Show button if server has audio
+            fetch('/text/view/${dict.id}/audio?word=' + encodeURIComponent(word), {method: 'HEAD'})
+                .then(function(r) {
+                    var el = document.getElementById('pronounce-btn');
+                    if (el && r.ok) el.innerHTML = btnHtml;
+                })
+                .catch(function() {});
+            // Also show button if browser TTS has a voice for this language
+            if (hasTTSVoice()) {
+                var el = document.getElementById('pronounce-btn');
+                if (el) el.innerHTML = btnHtml;
+            }
+        }
         var translationCache = {}; // cache[wordIndex][translatorId] = translation string
         var sentenceHighlightEls = [];
         var resultOwner = 'word'; // 'word' | 'sentence' — prevents async word callbacks overwriting sentence panel
@@ -65,8 +125,8 @@
             document.getElementById(currSelectionId).style.backgroundColor = 'white';
             currSelectionId = i;
             document.getElementById(currSelectionId).style.backgroundColor = 'yellow';
-            var wordLabel = wordValues[i] ? '<b style="color:black">' + wordValues[i] + '</b><br>' : '';
-            document.getElementById('result').innerHTML = wordLabel + '<span style="color:#999">' + (words[i] || 'Not translated yet') + '</span>';
+            document.getElementById('result').innerHTML = wordHeader(wordValues[i]) + '<span style="color:#999">' + (words[i] || 'Not translated yet') + '</span>';
+            if (wordValues[i]) attachSpeakButton(wordValues[i]);
             if (wordValues[i]) {
                 fetch('/text/view/${dict.id}/lookup?word=' + encodeURIComponent(wordValues[i]))
                     .then(r => r.json())
@@ -91,11 +151,16 @@
             }
         }
 
+        function wordHeader(word) {
+            if (!word) return '';
+            return '<b style="color:black">' + word + '</b> <span id="pronounce-btn"></span><br>';
+        }
+
         function showCached(wordIndex, translatorId) {
             if (resultOwner !== 'word') return false;
             var t = (translationCache[wordIndex] || {})[translatorId];
             if (t !== undefined) {
-                var wordLabel = wordValues[wordIndex] ? '<b style="color:black">' + wordValues[wordIndex] + '</b><br>' : '';
+                var wordLabel = wordHeader(wordValues[wordIndex]);
                 if (t) {
                     document.getElementById('result').innerHTML = wordLabel + t;
                 } else {
@@ -116,8 +181,7 @@
 
             if (showCached(wordIndex, translatorId)) return;
 
-            var wordLabel = '<b style="color:black">' + word + '</b><br>';
-            document.getElementById('result').innerHTML = wordLabel + '<span style="color:#999">Translating…</span>';
+            document.getElementById('result').innerHTML = wordHeader(word) + '<span style="color:#999">Translating…</span>';
             fetch('/text/view/${dict.id}/translate-ajax', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -133,7 +197,7 @@
             })
             .catch(() => {
                 if (wordIndex === currSelectionId && resultOwner === 'word') {
-                    document.getElementById('result').innerHTML = '<b style="color:black">' + word + '</b><br><span style="color:#999">Error</span>';
+                    document.getElementById('result').innerHTML = wordHeader(word) + '<span style="color:#999">Error</span>';
                 }
             });
         }
@@ -272,64 +336,58 @@
             }
         }
 
-        // Double-click: expand to sentence, highlight it in the left panel, show Translate button.
+        // Double-click: select word and translate
         document.addEventListener('dblclick', function(e) {
             if (!e.target.closest('#bookText')) return;
-            setTimeout(function() {
-                var sel = window.getSelection();
-                if (!sel || !sel.rangeCount || !sel.toString().trim()) return;
-
-                var word = sel.toString().trim();
-                var bookText = document.getElementById('bookText');
-
-                // Build text map once — used for both sentence detection and DOM selection.
-                var map = buildDOMTextMap(bookText);
-                var normText = map.normText;
-
-                // Find cursor position in normText by matching the clicked text node.
-                var clickNode = sel.getRangeAt(0).startContainer;
-                var clickOffset = sel.getRangeAt(0).startOffset;
-                var approxPos = 0;
-                for (var ni = 0; ni < map.normToRaw.length; ni++) {
-                    var entry = map.charMap[map.normToRaw[ni]];
-                    if (entry && entry.node === clickNode && entry.offset >= clickOffset) {
-                        approxPos = ni; break;
-                    }
-                }
-
-                // Find closest occurrence of the double-clicked word in normText.
-                var lower = normText.toLowerCase();
-                var lword = word.toLowerCase().replace(/\s+/g, ' ');
-                var bestIdx = -1, bestDiff = Infinity, from = 0;
-                while (from < normText.length) {
-                    var i = lower.indexOf(lword, from);
-                    if (i < 0) break;
-                    var d = Math.abs(i - approxPos);
-                    if (d < bestDiff) { bestDiff = d; bestIdx = i; }
-                    from = i + 1;
-                }
-                if (bestIdx < 0) return;
-
-                var sentence = sentenceAround(normText, bestIdx + Math.floor(word.length / 2));
-                if (sentence && sentence.length > 3) {
-                    highlightSentenceSpans(map, sentence);
-                    showSentencePanel(sentence);
-                }
-            }, 10);
+            var span = e.target.closest('span[id]');
+            if (span && /^\d+$/.test(span.id)) {
+                highlight(parseInt(span.id));
+            }
         });
 
-        // Drag-select: translate selected text (multi-word only)
-        document.addEventListener('mouseup', function(e) {
+        // Triple-click: highlight sentence and show Translate button
+        document.addEventListener('click', function(e) {
+            if (e.detail !== 3) return;
             if (!e.target.closest('#bookText')) return;
-            var sel = window.getSelection();
-            if (!sel) return;
-            var text = sel.toString().trim();
-            if (!text || text.indexOf(' ') < 0) return; // single word handled by highlight()
-            translatePhrase(text);
+            var bookText = document.getElementById('bookText');
+            var map = buildDOMTextMap(bookText);
+            var approxPos = 0;
+
+            // Find position from the clicked word span's text node
+            var span = e.target.closest('span[id]');
+            if (span && span.firstChild && span.firstChild.nodeType === 3) {
+                var tn = span.firstChild;
+                for (var ni = 0; ni < map.normToRaw.length; ni++) {
+                    var en = map.charMap[map.normToRaw[ni]];
+                    if (en && en.node === tn) {
+                        approxPos = ni + Math.floor((span.textContent.length || 1) / 2);
+                        break;
+                    }
+                }
+            } else {
+                // Fallback: use selection position
+                var sel = window.getSelection();
+                if (sel && sel.rangeCount) {
+                    var cn = sel.getRangeAt(0).startContainer;
+                    var co = sel.getRangeAt(0).startOffset;
+                    for (var ni2 = 0; ni2 < map.normToRaw.length; ni2++) {
+                        var en2 = map.charMap[map.normToRaw[ni2]];
+                        if (en2 && en2.node === cn && en2.offset >= co) {
+                            approxPos = ni2; break;
+                        }
+                    }
+                }
+            }
+
+            var sentence = sentenceAround(map.normText, approxPos);
+            if (sentence && sentence.length > 3) {
+                highlightSentenceSpans(map, sentence);
+                showSentencePanel(sentence);
+            }
         });
 
         function renderWord(data, word) {
-            var html = '<h5 style="color:black;font-weight:bold">' + word + '</h5>';
+            var html = wordHeader(word);
             if (data.translations && data.translations.length > 0) {
                 html += '<b>Translations</b><br>';
                 data.translations.forEach(function(t) {
@@ -347,7 +405,10 @@
                     });
                 }
             }
-            if (html) document.getElementById('result').innerHTML = html;
+            if (html) {
+                document.getElementById('result').innerHTML = html;
+                attachSpeakButton(word);
+            }
         }
 
         function nextWordFast() {

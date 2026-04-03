@@ -40,7 +40,7 @@ public class TextController  extends AbstractController {
     private static final int TEXT_SIZE = 1000;
 
     private static final String HIGHLIGHTED_WORD =
-            "<span id=%d onclick='javascript:highlight(%d);' style='cursor:pointer'>%s</span>";
+            "<span id=%d style='cursor:pointer'>%s</span>";
 
     private ApplicationContext appContext;
 
@@ -79,7 +79,7 @@ public class TextController  extends AbstractController {
                     String wordString = result.getResult();
                     Word word = wordService.getWord(dict.getLangId(), wordString);
                     if (word != null) {
-                        sb.append(String.format(HIGHLIGHTED_WORD, counter, counter, wordString));
+                        sb.append(String.format(HIGHLIGHTED_WORD, counter, wordString));
                         String translation = word.getTranslation() != null ? word.getTranslation().replace("\"", "") : "";
                         sb.append("<script>words[" + counter + "] = \"" + translation + "\";</script>");
                         sb.append("<script>wordValues[" + counter + "] = \"" + wordString.replace("\"", "") + "\";</script>");
@@ -108,6 +108,26 @@ public class TextController  extends AbstractController {
         map.put("size", TEXT_SIZE);
         map.put("translators", translators);
         return "viewText";
+    }
+
+    @RequestMapping(value = "/text/view/{dictId}/audio", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> getWordAudio(
+            @PathVariable("dictId") Long dictId,
+            @RequestParam("word") String word) {
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(dictId, account.getId());
+        for (Translator t : translationService.listTranslators(dict.getLangId())) {
+            if ("Scriptorium".equalsIgnoreCase(t.getProvider().getTitle())) {
+                byte[] audio = translateHandler.fetchAudio(word, t);
+                if (audio != null) {
+                    return ResponseEntity.ok()
+                            .contentType(org.springframework.http.MediaType.parseMediaType("audio/ogg"))
+                            .body(audio);
+                }
+                break;
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @RequestMapping(value = "/text/view/{dictId}/lookup", method = RequestMethod.GET,
@@ -156,6 +176,24 @@ public class TextController  extends AbstractController {
         }
         String safe = translation != null ? translation.replace("\\", "\\\\").replace("\"", "\\\"") : null;
         return ResponseEntity.ok(safe != null ? "{\"translation\":\"" + safe + "\"}" : "{\"translation\":null}");
+    }
+
+    @RequestMapping(value = "/text/edit/{dictId}", method = RequestMethod.GET)
+    public String editText(@PathVariable("dictId") Long dictId, Map<String, Object> map) throws Exception {
+        Account account = accountService.findAccount(getCurrentAccount());
+        Dict dict = dictService.findDict(dictId, account.getId());
+        map.put("dict", dict);
+        map.put("content", textService.getFullText(dictId));
+        return "editText";
+    }
+
+    @RequestMapping(value = "/text/edit/{dictId}/save", method = RequestMethod.POST)
+    public String saveText(@PathVariable("dictId") Long dictId,
+                           @RequestParam("content") String content) throws Exception {
+        Account account = accountService.findAccount(getCurrentAccount());
+        dictService.findDict(dictId, account.getId()); // auth check
+        textService.saveFullText(dictId, content);
+        return "redirect:/text/view/" + dictId + "?offset=0";
     }
 
     @RequestMapping(value = "/text/view/{dictId}/translate", method = RequestMethod.POST)

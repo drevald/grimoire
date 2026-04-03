@@ -19,6 +19,22 @@ public class TranslationDAOImpl implements TranslationDAO {
 
     public void saveOrUpdate(Translation translation) {
         LOG.info(">>>>save translation sess#" + entityManager.hashCode() + " " + translation.toString());
+        if (translation.getId() == null && translation.getWordId() != null) {
+            // Check if a translation already exists for this word (unique constraint on word_id)
+            List<Translation> existing = entityManager
+                .createQuery("from Translation where wordId=?1", Translation.class)
+                .setParameter(1, translation.getWordId())
+                .getResultList();
+            if (!existing.isEmpty()) {
+                Translation t = existing.get(0);
+                t.setValue(translation.getValue());
+                t.setTranslatorId(translation.getTranslatorId());
+                entityManager.merge(t);
+                entityManager.flush();
+                LOG.info("<<<<updated translation sess#" + entityManager.hashCode() + " " + t.toString());
+                return;
+            }
+        }
         if (translation.getId() == null) {
             entityManager.persist(translation);
         } else {
