@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * Created with IntelliJ IDEA.
@@ -48,6 +50,18 @@ public class TextServiceImpl implements TextService {
         LOG.trace(String.format("NOT MARKED STRING Dict #%d Offset %d \n ++++++++++ \n %s \n ----------\n"
                 ,dict.getId(), offset, new String(buffer)));
         return sr;
+    }
+
+    @Transactional
+    public String getFullText(Long id) throws Exception {
+        Dict dict = dictDao.findDict(id);
+        return new String(Files.readAllBytes(Paths.get(dict.getText().getUtfPath())), StandardCharsets.UTF_8);
+    }
+
+    @Transactional
+    public void saveFullText(Long id, String content) throws Exception {
+        Dict dict = dictDao.findDict(id);
+        Files.write(Paths.get(dict.getText().getUtfPath()), content.getBytes(StandardCharsets.UTF_8));
     }
 
 }

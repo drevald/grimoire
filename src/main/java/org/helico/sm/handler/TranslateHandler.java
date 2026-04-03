@@ -327,6 +327,50 @@ public class TranslateHandler extends AbstractHandler {
      * @param httpMethod The HTTP method to add headers to
      * @param provider The translator provider containing header configuration
      */
+    /**
+     * Fetches audio bytes for a word from a Scriptorium-style provider.
+     * Calls /api/v1/entries/{srcLang}/{word} to get the filename, then /api/v1/audio/{filename}.
+     * Returns null if no audio is available.
+     */
+    public byte[] fetchAudio(String wordValue, Translator translator) {
+        String reqPattern = translator.getProvider().getReqPattern();
+        if (reqPattern == null || reqPattern.isEmpty()) return null;
+        // Derive entries base URL from req_pattern: take everything up to /api/... path
+        int apiIdx = reqPattern.indexOf("/api/");
+        if (apiIdx < 0) return null;
+        String baseUrl = reqPattern.substring(0, apiIdx);
+        try {
+            if (httpClient == null) { httpClient = new HttpClient(); initTrustAllSsl(); }
+            String encodedWord = URLEncoder.encode(wordValue, "utf-8");
+            GetMethod entryGet = new GetMethod(baseUrl + "/api/v1/entries/" + translator.getSrcLangId() + "/" + encodedWord);
+            httpClient.executeMethod(entryGet);
+            if (entryGet.getStatusCode() != 200) { entryGet.releaseConnection(); return null; }
+            String body = new String(entryGet.getResponseBody(), java.nio.charset.StandardCharsets.UTF_8);
+            entryGet.releaseConnection();
+            String filename = extractAudioFilename(body);
+            if (filename == null) return null;
+            GetMethod audioGet = new GetMethod(baseUrl + "/api/v1/audio/" + URLEncoder.encode(filename, "utf-8"));
+            httpClient.executeMethod(audioGet);
+            if (audioGet.getStatusCode() != 200) { audioGet.releaseConnection(); return null; }
+            byte[] data = audioGet.getResponseBody();
+            audioGet.releaseConnection();
+            return data;
+        } catch (Exception e) {
+            LOG.warn("fetchAudio failed for '{}': {}", wordValue, e.getMessage());
+        }
+        return null;
+    }
+
+    private String extractAudioFilename(String json) {
+        int idx = json.indexOf("\"audio\":[");
+        if (idx < 0) return null;
+        int filenameIdx = json.indexOf("\"filename\":\"", idx);
+        if (filenameIdx < 0) return null;
+        int start = filenameIdx + 12;
+        int end = json.indexOf("\"", start);
+        return end > start ? json.substring(start, end) : null;
+    }
+
     /** Replaces ${VAR_NAME} placeholders with environment variable values. */
     private String resolveEnvVars(String value) {
         if (value == null || !value.contains("${")) return value;
