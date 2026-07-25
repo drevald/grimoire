@@ -7,6 +7,7 @@ import org.helico.domain.Word;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,7 +19,8 @@ public class WordDAOImpl implements WordDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public synchronized Word store(String value, String langId) {
+    @Transactional
+    public Word store(String value, String langId) {
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
         Word result = null;
@@ -51,11 +53,10 @@ public class WordDAOImpl implements WordDAO {
 
     }
 
-    public synchronized void batchStore(List<Word> words, Long dictId) {
+    @Transactional
+    public void batchStore(List<Word> words, Long dictId) {
 
         try {
-
-            entityManager.getTransaction().begin();
 
             for (Word word : words) {
 
@@ -108,15 +109,14 @@ public class WordDAOImpl implements WordDAO {
                 }
 
             }
-            entityManager.getTransaction().commit();
         } catch (Exception e) {
             LOG.error("Batch insert failed", e);
-            entityManager.getTransaction().rollback();
         }
     }
 
 
-    public synchronized Word get(String langId, String value) {
+    @Transactional(readOnly = true)
+    public Word get(String langId, String value) {
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
         Word result = null;

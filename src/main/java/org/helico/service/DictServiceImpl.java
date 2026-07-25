@@ -200,14 +200,12 @@ public class DictServiceImpl implements DictService {
         return null;
     }
 
-    @Transactional
     public void saveDict(Dict dict) {
         LOG.info(">>>saveDict start");
         dictDao.saveDict(dict);
         LOG.info("<<<saveDict end");
     }
 
-    @Transactional
     public void saveText(Text text) {
         LOG.info(">>>saveDict start");
         dictDao.saveText(text);
@@ -220,14 +218,12 @@ public class DictServiceImpl implements DictService {
         LOG.info("<<<storeDict end");
     }
 
-    @Transactional
     public List<Dict> listDicts() {
         List<Dict> result = dictDao.listDicts();
         LOG.info("Number of results is " + result.size());
         return result;
     }
 
-    @Transactional
     public List<Dict> listDicts(Long accountId) {
 
         List<Dict> result = dictDao.listDicts(accountId);
@@ -252,7 +248,6 @@ public class DictServiceImpl implements DictService {
         dictDao.removeDict(id);
     }
 
-    @Transactional
     public Dict findDict(Long id, Long accountId) {
         LOG.info(">>>findDict start");
         Dict dict = dictDao.findDict(id, accountId);
@@ -260,7 +255,6 @@ public class DictServiceImpl implements DictService {
         return dict;
     }
 
-    @Transactional
     public Dict findDict(Long id) {
         LOG.info(">>>findDict start");
         Dict dict = dictDao.findDict(id);
@@ -268,7 +262,6 @@ public class DictServiceImpl implements DictService {
         return dict;
     }
 
-    @Transactional
     public void loadFile() {
 
     }
@@ -361,7 +354,6 @@ public class DictServiceImpl implements DictService {
 //        return null;
 //    }
 
-    @Transactional
     public Dict createDict(Long accountId, String name) {
         LOG.info(">>>createDict start");
         Dict dict = new Dict();

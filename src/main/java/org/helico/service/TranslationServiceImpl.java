@@ -10,7 +10,6 @@ import org.helico.domain.TranslatorProvider;
 import org.helico.sm.StateMachine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,18 +27,15 @@ public class TranslationServiceImpl implements TranslationService {
     @Autowired
     TranslatorProviderDAO translatorProviderDAO;
 
-    @Transactional
     public String findTranslation(Long wordId, Long translatorId) {
         return translationDao.findValue(wordId, translatorId);
     }
 
-    @Transactional
     public boolean isTranslated(Long wordId, Long translationServiceId) {
         boolean result = translationDao.isTranslated(wordId, translationServiceId);
         return result;
     }
 
-    @Transactional
     public void storeTranslation(Long wordId, Long translatorId, String value) {
         Translation translation = new Translation();
         translation.setTranslatorId(translatorId);
@@ -48,32 +44,26 @@ public class TranslationServiceImpl implements TranslationService {
         translationDao.saveOrUpdate(translation);
     }
 
-    @Transactional
     public List<TranslatorProvider> listProviders() {
         return translatorProviderDAO.listProviders();
     }
 
-    @Transactional
     public List<TranslatorProvider> listProviders(String langId) {
         return translatorProviderDAO.listProviders(langId);
     }
 
-    @Transactional
     public List<Translator> listTranslators(String langId) {
         return translatorProviderDAO.listTranslators(langId);
     }
 
-    @Transactional
     public List<Translator> listTranslators(String srcLangId, String destLangId) {
         return translatorProviderDAO.listTranslators(srcLangId, destLangId);
     }
 
-    @Transactional
     public TranslatorProvider getProvider(Long transProvId) {
         return translatorProviderDAO.getProvider(transProvId);
     }
 
-    @Transactional
     public Translator getTranslator(Long transId) {
         return translatorProviderDAO.getTranslator(transId);
     }

@@ -25,7 +25,6 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private LangDAO langDao;
 
-    @Transactional
     public void addAccount(Account account) {
         LOG.info("Starting counter from thread #" +  Thread.currentThread().toString());
         LOG.info("Count finished from thread #" +  Thread.currentThread().toString());
@@ -33,25 +32,21 @@ public class AccountServiceImpl implements AccountService {
         LOG.info("Business method done in thread #" +  Thread.currentThread().toString());
     }
 
-    @Transactional
     public List<Account> listAccounts() {
         List<Account> result = accountDao.listAccounts();
         LOG.info("Number of results is " + result.size());
         return result;
     }
 
-    @Transactional
     public void removeAccount(Long id) {
         accountDao.removeAccount(id);
     }
 
-    @Transactional
     public Account findAccount(String name) {
         Account account = accountDao.findAccount(name);
         return account;
     }
 
-    @Transactional
     public Long registerAccount(String accountname, String password) {
         Account account = new Account(accountname, password);
         Long accountId = accountDao.addAccount(account);

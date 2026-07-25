@@ -5,6 +5,7 @@ import org.helico.domain.Word;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class DictWordDAOImpl implements DictWordDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional
     public void addWord(Word word, Long dictId) {
 
         DictWord dictWord = null;
@@ -43,11 +45,13 @@ public class DictWordDAOImpl implements DictWordDAO {
 
     }
 
+    @Transactional(readOnly = true)
     public List<DictWord> getWords(Long dictId) {
         return getWords(dictId, 0, 32);
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
     public List<DictWord> getWords(Long dictId, Integer offset, Integer num) {
         List<DictWord> words = (List<DictWord>)entityManager
             .createQuery("from DictWord where dictId=?1 order by counter desc")
@@ -58,6 +62,7 @@ public class DictWordDAOImpl implements DictWordDAO {
         return words;
     }
 
+    @Transactional(readOnly = true)
     public Long countWords(Long dictId) {
         Long count = (Long)entityManager
             .createQuery("select count(*) from DictWord where dictId=?1")
@@ -66,6 +71,7 @@ public class DictWordDAOImpl implements DictWordDAO {
         return count;
     }
 
+    @Transactional(readOnly = true)
     public Long totalWords(Long dictId) {
         Long count = (Long)entityManager
                 .createQuery("select sum(counter) from DictWord where dictId=?1")
@@ -75,6 +81,7 @@ public class DictWordDAOImpl implements DictWordDAO {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Map<Integer, Integer> getHistogram(Long dictId) {
         Map<Integer, Integer> result = new HashMap<>();
         List resultList = entityManager

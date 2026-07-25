@@ -7,6 +7,7 @@ import org.helico.domain.Translator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional(readOnly = true)
     public Translator getTranslator(Long id) {
         LOG.info(">>>>find translator#" + id);
         Translator translator = entityManager.find(Translator.class, id);
@@ -26,6 +28,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
         return translator;
     }
 
+    @Transactional(readOnly = true)
     public TranslatorProvider getProvider(Long id) {
         LOG.info(">>>>find translator provider#" + id);
         TranslatorProvider provider = entityManager.find(TranslatorProvider.class, id);
@@ -34,11 +37,13 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
     public List<TranslatorProvider> listProviders() {
         return entityManager.createQuery("from TranslatorProvider").getResultList();
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
     public List<TranslatorProvider> listProviders(String langId) {
         LOG.info(">>>>find translator providers for lang #" + langId);
         List<TranslatorProvider> result = new ArrayList<TranslatorProvider>();
@@ -56,6 +61,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
     public List<Translator> listTranslators(String langId) {
         LOG.info(">>>>find translators for lang #" + langId);
         List<Translator> result = (List<Translator>)entityManager.createQuery(
@@ -67,6 +73,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
     public List<Translator> listTranslators(String srcLangId, String destLangId) {
         return (List<Translator>) entityManager.createQuery(
                 "from Translator where srcLangId=?1 and destLangId=?2 and provider.enabled = true")
@@ -75,6 +82,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
                 .getResultList();
     }
 
+    @Transactional
     public void saveProvider(TranslatorProvider provider) {
         LOG.info(">>>>save translator provider #" + provider.getId());
         if (provider.getId() == null) {
@@ -85,6 +93,7 @@ public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
         LOG.info("<<<<save translator provider");
     }
 
+    @Transactional
     public void deleteProvider(Long id) {
         LOG.info(">>>>delete translator provider #" + id);
         TranslatorProvider provider = entityManager.find(TranslatorProvider.class, id);

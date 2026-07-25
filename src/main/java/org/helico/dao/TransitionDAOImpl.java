@@ -4,6 +4,7 @@ import org.helico.domain.Transition;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class TransitionDAOImpl implements TransitionDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-
+    @Transactional(readOnly = true)
     public String getHandlerName(String event, String status) {
         Transition trans = null;
         try {
@@ -25,6 +26,7 @@ public class TransitionDAOImpl implements TransitionDAO {
         return (trans == null ? null : trans.getHandlerName());
     }
 
+    @Transactional(readOnly = true)
     public Transition find(String event, String status) {
         Transition trans = null;
         try {
@@ -37,6 +39,7 @@ public class TransitionDAOImpl implements TransitionDAO {
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
     public List<Transition> list() {
         return entityManager.createQuery("from Transition").getResultList();
     }

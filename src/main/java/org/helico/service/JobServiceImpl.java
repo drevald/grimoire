@@ -18,7 +18,6 @@ public class JobServiceImpl implements JobService {
     @Autowired
     JobDAO jobDao;
 
-    @Transactional
     public Job createJob(Long transId, Long dictId) {
     Job job = new Job();
     job.setTransId(transId);
@@ -29,7 +28,6 @@ public class JobServiceImpl implements JobService {
     return job;
     }
 
-    @Transactional
     public void save(Job job) {
         LOG.debug("saving " + job);
         jobDao.saveOrUpdate(job);
@@ -58,17 +56,14 @@ public class JobServiceImpl implements JobService {
         jobDao.saveOrUpdate(job);
     }
 
-    @Transactional
     public Job find(Long id) {
         return jobDao.find(id);
     }
 
-    @Transactional
     public List<Job> getActiveJobs(Long dictId) {
     return jobDao.findActive(dictId);
     }
 
-    @Transactional
     public Job getLastOrActive(Long dictId) {
     return jobDao.findLastOrActive(dictId);
     }

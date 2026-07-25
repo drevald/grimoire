@@ -13,3 +13,5 @@
 !gradle/wrapper/gradle-wrapper.jar
 .vscode/
 .env
+/.claude/
+/.run/

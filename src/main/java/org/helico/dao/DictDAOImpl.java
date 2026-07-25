@@ -7,6 +7,7 @@ import org.helico.domain.Text;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,7 +19,8 @@ public class DictDAOImpl implements DictDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public synchronized void saveText(Text text) {
+    @Transactional
+    public void saveText(Text text) {
         LOG.info("save sess#"+entityManager.hashCode()+" " + text.toString());
         if (text.getId() == null) {
             entityManager.persist(text);
@@ -28,7 +30,8 @@ public class DictDAOImpl implements DictDAO {
         entityManager.flush();
     }
 
-    public synchronized long saveDict(Dict dict) {
+    @Transactional
+    public long saveDict(Dict dict) {
         LOG.info("save sess#"+entityManager.hashCode()+" " + dict.toString());
         if (dict.getId() == null) {
             entityManager.persist(dict);
@@ -40,15 +43,18 @@ public class DictDAOImpl implements DictDAO {
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
     public List<Dict> listDicts() {
         return entityManager.createQuery("from Dict").getResultList();
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
     public List<Dict> listDicts(Long accountId) {
         return entityManager.createQuery("from Dict where accountId=?1").setParameter(1, accountId).getResultList();
     }
 
+    @Transactional
     public void removeDict(Long id) {
         Dict dict = entityManager.getReference(Dict.class, id);
         if (null != dict) {
@@ -60,7 +66,8 @@ public class DictDAOImpl implements DictDAO {
         }
     }
 
-    public synchronized Dict findDict(Long id, Long accountId) {
+    @Transactional(readOnly = true)
+    public Dict findDict(Long id, Long accountId) {
         Dict dict = null;
         try {
             dict = (Dict)entityManager.createQuery("from Dict where id=?1 and accountId=?2")
@@ -72,7 +79,8 @@ public class DictDAOImpl implements DictDAO {
         return dict;
     }
 
-    public synchronized Dict findDict(Long id) {
+    @Transactional(readOnly = true)
+    public Dict findDict(Long id) {
         Dict dict = null;
         try {
             dict = (Dict)entityManager.createQuery("from Dict where id=?1")
@@ -85,6 +93,7 @@ public class DictDAOImpl implements DictDAO {
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
     public List<Dict> findDictByStatus(String status) {
         return entityManager.createQuery("from Dict where status=?1").setParameter(1, status).getResultList();
     }
