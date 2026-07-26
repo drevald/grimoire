@@ -1,7 +1,7 @@
 package org.helico.service;
 
 import java.util.List;
-import org.helico.dao.JobDAO;
+import org.helico.dao.JobDao;
 import org.helico.domain.Job;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class JobServiceImpl implements JobService {
     private static final Logger LOG = LoggerFactory.getLogger(JobServiceImpl.class);
 
     @Autowired
-    JobDAO jobDao;
+    JobDao jobDao;
 
     public Job createJob(Long transId, Long dictId) {
     Job job = new Job();

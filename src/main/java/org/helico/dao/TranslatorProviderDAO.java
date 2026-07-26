@@ -5,7 +5,7 @@ import org.helico.domain.TranslatorProvider;
 
 import java.util.List;
 
-public interface TranslatorProviderDAO {
+public interface TranslatorProviderDao {
 
     public Translator getTranslator(Long id);
 

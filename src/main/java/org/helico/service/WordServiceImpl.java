@@ -1,7 +1,7 @@
 package org.helico.service;
 
-import org.helico.dao.DictWordDAO;
-import org.helico.dao.WordDAO;
+import org.helico.dao.DictWordDao;
+import org.helico.dao.WordDao;
 import org.helico.domain.DictWord;
 import org.helico.domain.Word;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,32 +14,32 @@ import java.util.List;
 public class WordServiceImpl implements WordService {
 
     @Autowired
-    WordDAO wordDAO;
+    WordDao wordDao;
 
     @Autowired
-    DictWordDAO dictWordDAO;
+    DictWordDao dictWordDao;
 
     @Transactional
     public void store(String word, String langId, Long dictId) {
 
-        Word newWord = wordDAO.store(word, langId);
+        Word newWord = wordDao.store(word, langId);
 
         if(newWord != null) {
-            dictWordDAO.addWord(newWord, dictId);
+            dictWordDao.addWord(newWord, dictId);
         }
 
     }
 
     public void batchStore(List<Word> words, Long dictId) {
-        wordDAO.batchStore(words, dictId);
+        wordDao.batchStore(words, dictId);
     }
 
     public List<DictWord> getWords(Long dictId) {
-        return dictWordDAO.getWords(dictId);
+        return dictWordDao.getWords(dictId);
     }
 
     public Word getWord(String langId, String word) {
-        return wordDAO.get(langId, word);
+        return wordDao.get(langId, word);
     }
 
 }

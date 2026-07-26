@@ -2,7 +2,7 @@ package org.helico.integration;
 
 import org.helico.domain.Translator;
 import org.helico.domain.TranslatorProvider;
-import org.helico.dao.TranslatorProviderDAO;
+import org.helico.dao.TranslatorProviderDao;
 import org.helico.sm.handler.TranslateHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RealTranslationProviderTest {
 
     @Autowired
-    private TranslatorProviderDAO translatorProviderDAO;
+    private TranslatorProviderDao translatorProviderDao;
 
     @Autowired
     private TranslateHandler translateHandler;
@@ -45,7 +45,7 @@ public class RealTranslationProviderTest {
     @Transactional(readOnly = true)
     public void testRealProviders_Dog_To_Sobaka() throws Exception {
         // Given: Get all en->ru translators from database
-        List<Translator> translators = translatorProviderDAO.listTranslators("en");
+        List<Translator> translators = translatorProviderDao.listTranslators("en");
 
         assertNotNull(translators, "Translators list should not be null");
         assertFalse(translators.isEmpty(), "At least one translator should be configured in the database");
@@ -129,7 +129,7 @@ public class RealTranslationProviderTest {
     @Transactional(readOnly = true)
     public void testListAllProviders() {
         // Given: Get all providers from database
-        List<TranslatorProvider> providers = translatorProviderDAO.listProviders();
+        List<TranslatorProvider> providers = translatorProviderDao.listProviders();
 
         System.out.println("\n=== All Translation Providers ===");
         System.out.println("Total providers: " + providers.size());
@@ -161,7 +161,7 @@ public class RealTranslationProviderTest {
     @Transactional(readOnly = true)
     public void testListEnToRuTranslators() {
         // Given: Get all en->ru translators
-        List<Translator> translators = translatorProviderDAO.listTranslators("en");
+        List<Translator> translators = translatorProviderDao.listTranslators("en");
 
         List<Translator> enToRuTranslators = translators.stream()
             .filter(t -> "ru".equals(t.getDestLangId()))

@@ -1,5 +1,6 @@
 package org.helico.sm.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -238,7 +239,7 @@ public class TranslateHandler extends AbstractHandler {
                 if (postMethod.getStatusCode() == 200) {
                     String output = compactJson(postMethod.getResponseBodyAsString());
                     LOG.debug("POST response: " + output);
-                    result = (String) resFormat.parse(output)[0];
+                    result = unescapeJson((String) resFormat.parse(output)[0]);
                 } else {
                     throw new Exception("Code " + postMethod.getStatusCode() + " " + postMethod.getResponseBodyAsString());
                 }
@@ -257,7 +258,7 @@ public class TranslateHandler extends AbstractHandler {
                     if (status == 200) {
                         String output = compactJson(new String(getMethod.getResponseBody(), java.nio.charset.StandardCharsets.UTF_8));
                         LOG.debug("GET response: " + output);
-                        result = (String) resFormat.parse(output)[0];
+                        result = unescapeJson((String) resFormat.parse(output)[0]);
                         getMethod.releaseConnection();
                         break;
                     } else if (status >= 300 && status < 400) {
@@ -369,6 +370,18 @@ public class TranslateHandler extends AbstractHandler {
         int start = filenameIdx + 12;
         int end = json.indexOf("\"", start);
         return end > start ? json.substring(start, end) : null;
+    }
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    private String unescapeJson(String s) {
+        if (s == null) return null;
+        try {
+            return OBJECT_MAPPER.readValue("\"" + s + "\"", String.class);
+        } catch (Exception e) {
+            LOG.warn("Failed to JSON-unescape value, returning raw: {}", e.getMessage());
+            return s;
+        }
     }
 
     /** Replaces ${VAR_NAME} placeholders with environment variable values. */

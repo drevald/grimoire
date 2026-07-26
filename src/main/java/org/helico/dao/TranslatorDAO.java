@@ -1,7 +1,7 @@
 package org.helico.dao;
 
 
-public interface TranslatorDAO {
+public interface TranslatorDao {
 
 
 }

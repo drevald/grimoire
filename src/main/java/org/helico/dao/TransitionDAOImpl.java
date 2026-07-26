@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public class TransitionDAOImpl implements TransitionDAO {
+public class TransitionDaoImpl implements TransitionDao {
 
     @PersistenceContext
     private EntityManager entityManager;

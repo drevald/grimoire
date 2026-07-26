@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.helico.dao.DictDAO;
+import org.helico.dao.DictDao;
 import org.helico.domain.Dict;
 import org.helico.domain.Dict.Status;
 import org.helico.domain.Text;
@@ -31,7 +31,7 @@ public class DictServiceImpl implements DictService {
     private static final int PREVIEW_SIZE = 256;
 
     @Autowired
-    private DictDAO dictDao;
+    private DictDao dictDao;
 
     @Autowired
     private StateMachine stateMachine;

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class AccountDAOImpl implements AccountDAO {
+public class AccountDaoImpl implements AccountDao {
 
     @PersistenceContext
     private EntityManager entityManager;

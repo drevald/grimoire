@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public class WordDAOImpl implements WordDAO {
+public class WordDaoImpl implements WordDao {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WordDAOImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WordDaoImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;

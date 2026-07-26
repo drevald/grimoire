@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Manages Job entity
  */
-public interface JobDAO {
+public interface JobDao {
 
     public Job find(Long id);
 

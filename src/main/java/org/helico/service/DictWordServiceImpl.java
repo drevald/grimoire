@@ -1,7 +1,7 @@
 package org.helico.service;
 
-import org.helico.dao.DictWordDAO;
-import org.helico.dao.WordDAO;
+import org.helico.dao.DictWordDao;
+import org.helico.dao.WordDao;
 import org.helico.domain.DictWord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +13,10 @@ import java.util.Map;
 public class DictWordServiceImpl implements DictWordService {
 
     @Autowired
-    WordDAO wordDAO;
+    WordDao wordDao;
 
     @Autowired
-    DictWordDAO dictWordDao;
+    DictWordDao dictWordDao;
 
     public List<DictWord> getWords(Long dictId) {
         return dictWordDao.getWords(dictId);

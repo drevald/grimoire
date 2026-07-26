@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class LangDAOImpl implements LangDAO {
+public class LangDaoImpl implements LangDao {
 
     @PersistenceContext
     private EntityManager entityManager;

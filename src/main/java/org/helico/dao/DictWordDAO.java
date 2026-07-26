@@ -12,7 +12,7 @@ import org.helico.domain.Word;
  * Time: 7:31 AM
  * To change this template use File | Settings | File Templates.
  */
-public interface DictWordDAO {
+public interface DictWordDao {
 
     public void addWord(Word word, Long dictId);
 

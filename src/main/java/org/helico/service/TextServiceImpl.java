@@ -2,7 +2,7 @@ package org.helico.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.helico.dao.DictDAO;
+import org.helico.dao.DictDao;
 import org.helico.domain.Dict;
 import org.helico.domain.Text;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,11 @@ public class TextServiceImpl implements TextService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TextServiceImpl.class);
 
-    @Autowired
-    private DictDAO dictDao;
+    private final DictDao dictDao;
+
+    public TextServiceImpl(DictDao dictDao) {
+        this.dictDao = dictDao;
+    }
 
     public Reader getTextReader(Long id) throws Exception {
         Dict dict = dictDao.findDict(id);

@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class JobDAOImpl implements JobDAO {
+public class JobDaoImpl implements JobDao {
 
-    private static Logger LOG = LoggerFactory.getLogger(JobDAOImpl.class);
+    private static Logger LOG = LoggerFactory.getLogger(JobDaoImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;

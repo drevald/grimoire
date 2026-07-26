@@ -2,7 +2,7 @@ package org.helico.dao;
 
 import org.helico.domain.Translation;
 
-public interface TranslationDAO {
+public interface TranslationDao {
 
     public boolean isTranslated(Long wordId, Long translationServiceId);
 

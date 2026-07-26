@@ -4,7 +4,7 @@ import org.helico.domain.Word;
 
 import java.util.List;
 
-public interface WordDAO {
+public interface WordDao {
 
     public Word store(String word, String langId);
 

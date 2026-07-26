@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class TranslatorProviderDAOImpl implements TranslatorProviderDAO {
+public class TranslatorProviderDaoImpl implements TranslatorProviderDao {
 
-    private static Logger LOG = LoggerFactory.getLogger(TranslatorProviderDAOImpl.class);
+    private static Logger LOG = LoggerFactory.getLogger(TranslatorProviderDaoImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.helico.domain.Account;
 
-public interface AccountDAO {
+public interface AccountDao {
 
     public long addAccount(Account account);
 

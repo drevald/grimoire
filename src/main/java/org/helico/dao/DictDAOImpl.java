@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public class DictDAOImpl implements DictDAO {
+public class DictDaoImpl implements DictDao {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DictDAOImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DictDaoImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;
