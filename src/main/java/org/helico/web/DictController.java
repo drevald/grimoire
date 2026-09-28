@@ -9,10 +9,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +24,7 @@ public class DictController extends AbstractController {
 
     private ApplicationContext appContext;
 
-    @Autowired
+    @Autowired  //review - вроде как уже лишнее - можно и без аннотации?
     private DictService dictService;
 
     @Autowired
@@ -78,6 +76,7 @@ public class DictController extends AbstractController {
                                    Errors errors) {
         Account account = accountService.findAccount(getCurrentAccount());
         if (!multipartFile.isEmpty()) {
+            //review слишком много логики и лучше try with resources
             try {
                 long dictId = dictService.saveOriginal(
                         account.getId(),
@@ -167,7 +166,8 @@ public class DictController extends AbstractController {
         Account account = accountService.findAccount(getCurrentAccount());
         Dict dict = dictService.findDict(dictId, account.getId());
         String[] encodings = langService.getEncodings(dict.getLangId());
-        Map<String, String> previewMap = new HashMap<>();
+        Map<String, String> previewMap = new HashMap<>(); //review - я так понял что сюда могут лезть одновременно много потоков и это будет небезопасно
+        // безопаснее сделать имьютабл как map.of
         for (String encoding : encodings) {
             String previewString  = dictService.getPreview(dictId, encoding);
             previewMap.put(encoding, previewString);
@@ -183,8 +183,11 @@ public class DictController extends AbstractController {
 
     @RequestMapping("/dict/histogram/{dictId}")
     public String viewHistogram(@PathVariable("dictId") Long dictId, Map<String, Object> map) {
-        Account account = accountService.findAccount(getCurrentAccount());
+        Account account = accountService.findAccount(getCurrentAccount()); // account - проверять в фильтре
         Dict dict = dictService.findDict(dictId, account.getId());
+        if (dict == null) {
+            throw new RuntimeException("Not yours");
+        }
         Map<Integer, Integer> histogram = dictWordService.getHistogram(dictId);
         Long total = dictWordService.totalWords(dictId);
         map.put("dict", dict);

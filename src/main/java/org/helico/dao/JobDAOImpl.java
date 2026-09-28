@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.helico.aop.Logged;
 import org.helico.domain.Job;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -17,11 +18,9 @@ public class JobDAOImpl implements JobDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Logged
     public Job find(Long id) {
-    LOG.info(">>>>find job#" + id);
-        Job job = entityManager.find(Job.class, id);
-    LOG.info("<<<<found job#" + id);
-        return job;
+        return entityManager.find(Job.class, id);
     }
 
     public void saveOrUpdate(Job job) {

@@ -1,7 +1,6 @@
 package org.helico.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.helico.aop.Logged;
 import org.helico.dao.TranslatorProviderDAO;
 import org.helico.domain.TranslatorProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import java.util.List;
 
 @Service
 public class TranslatorProviderServiceImpl implements TranslatorProviderService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(TranslatorProviderServiceImpl.class);
 
     @Autowired
     private TranslatorProviderDAO translatorProdiverDAO;
@@ -28,18 +25,16 @@ public class TranslatorProviderServiceImpl implements TranslatorProviderService 
         return translatorProdiverDAO.getProvider(id);
     }
 
+    @Logged
     @Transactional
     public void saveProvider(TranslatorProvider provider) {
-        LOG.info(">>>saveProvider start");
         translatorProdiverDAO.saveProvider(provider);
-        LOG.info("<<<saveProvider end");
     }
 
+    @Logged
     @Transactional
     public void deleteProvider(Long id) {
-        LOG.info(">>>deleteProvider start");
         translatorProdiverDAO.deleteProvider(id);
-        LOG.info("<<<deleteProvider end");
     }
 
 }

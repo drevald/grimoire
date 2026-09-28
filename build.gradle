@@ -65,6 +65,7 @@ dependencies {
 
     // Uncomment if deploying as WAR to external Tomcat
     // providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 // Sources contain Cyrillic; on Windows JDK 17 javac defaults to cp1251
