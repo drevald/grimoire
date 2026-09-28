@@ -61,8 +61,8 @@ public class TranslationIntegrationTest {
         provider.setTitle("Test GET Provider");
         provider.setMethod("GET");
         provider.setHost("http://localhost:8089");
-        provider.setReqPattern("{0}"); // Response parser - extract first element
-        provider.setResPattern("http://localhost:8089/translate?text={0}&from={1}&to={2}"); // URL template
+        provider.setReqPattern("http://localhost:8089/translate?text={0}&from={1}&to={2}"); // URL template
+        provider.setResPattern("{0}"); // Response parser
 
         // When: We call the translation method directly
         String translation = callFetchTranslation("dog", provider, "en", "ru");
@@ -96,8 +96,9 @@ public class TranslationIntegrationTest {
         provider.setTitle("Test POST JSON Provider");
         provider.setMethod("POST");
         provider.setHost("http://localhost:8089/translate");
-        provider.setReqPattern("{0}"); // Response parser
-        provider.setResPattern("{\"text\":\"{0}\",\"source\":\"{1}\",\"target\":\"{2}\"}"); // Request body template
+        provider.setReqPattern("http://localhost:8089/translate"); // URL
+        provider.setRequestBody("{\"text\":\"{0}\",\"source\":\"{1}\",\"target\":\"{2}\"}"); // Request body template
+        provider.setResPattern("{0}"); // Response parser
         provider.setContentType("application/json");
         provider.setCharset("UTF-8");
 
@@ -132,8 +133,9 @@ public class TranslationIntegrationTest {
         provider.setTitle("Test POST Form Provider");
         provider.setMethod("POST");
         provider.setHost("http://localhost:8089/translate");
-        provider.setReqPattern("{0}");
-        provider.setResPattern("text={0}&from={1}&to={2}");
+        provider.setReqPattern("http://localhost:8089/translate");
+        provider.setRequestBody("text={0}&from={1}&to={2}");
+        provider.setResPattern("{0}");
         provider.setContentType("application/x-www-form-urlencoded");
         provider.setCharset("UTF-8");
 
@@ -162,8 +164,8 @@ public class TranslationIntegrationTest {
 
         TranslatorProvider provider = new TranslatorProvider();
         provider.setMethod("GET");
-        provider.setReqPattern("{0}");
-        provider.setResPattern("http://localhost:8089/translate?text={0}&from={1}&to={2}");
+        provider.setReqPattern("http://localhost:8089/translate?text={0}&from={1}&to={2}");
+        provider.setResPattern("{0}");
 
         // When: We translate multiple words
         String dog = callFetchTranslation("dog", provider, "en", "ru");
@@ -187,8 +189,8 @@ public class TranslationIntegrationTest {
 
         TranslatorProvider provider = new TranslatorProvider();
         provider.setMethod("GET");
-        provider.setReqPattern("{0}");
-        provider.setResPattern("http://localhost:8089/translate?text={0}&from={1}&to={2}");
+        provider.setReqPattern("http://localhost:8089/translate?text={0}&from={1}&to={2}");
+        provider.setResPattern("{0}");
 
         // When: We try to translate
         String translation = callFetchTranslation("dog", provider, "en", "ru");
@@ -202,9 +204,14 @@ public class TranslationIntegrationTest {
      */
     private String callFetchTranslation(String text, TranslatorProvider provider,
                                         String srcLang, String destLang) throws Exception {
+        Method escape = TranslateHandler.class.getDeclaredMethod("escape", String.class);
+        escape.setAccessible(true);
+        MessageFormat req = new MessageFormat((String) escape.invoke(translateHandler, provider.getReqPattern()));
+        MessageFormat res = new MessageFormat((String) escape.invoke(translateHandler, provider.getResPattern()));
         Method method = TranslateHandler.class.getDeclaredMethod(
-            "fetchTranslation", String.class, TranslatorProvider.class, String.class, String.class);
+            "fetchTranslation", String.class, TranslatorProvider.class, String.class, String.class,
+            MessageFormat.class, MessageFormat.class);
         method.setAccessible(true);
-        return (String) method.invoke(translateHandler, text, provider, srcLang, destLang);
+        return (String) method.invoke(translateHandler, text, provider, srcLang, destLang, req, res);
     }
 }
