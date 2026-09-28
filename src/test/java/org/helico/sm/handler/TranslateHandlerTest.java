@@ -83,44 +83,6 @@ public class TranslateHandlerTest {
     }
 
     @Test
-    public void testTranslateEnglishToRussian_DogToSobaka() throws Exception {
-        // Given: A word "dog" that should translate to "собака"
-        Word word = new Word();
-        word.setId(1L);
-        word.setValue("dog");
-        word.setLangId("en");
-
-        DictWord dictWord = new DictWord();
-        dictWord.setWord(word);
-
-        List<DictWord> dictWords = Arrays.asList(dictWord);
-
-        // Mock the service calls
-        when(transService.getTranslator(1L)).thenReturn(mockTranslator);
-        when(dictService.findDict(1L)).thenReturn(mockDict);
-        when(dictWordService.countWords(1L)).thenReturn(1L);
-        when(dictWordService.getWords(eq(1L), eq(0), anyInt())).thenReturn(dictWords);
-        when(transService.isTranslated(eq(1L), eq(1L))).thenReturn(false);
-
-        // Note: We can't easily mock the HTTP request in the handler
-        // This test verifies the flow, but actual translation would need
-        // a real API or a mock HTTP server
-
-        // When: Process is called (this will attempt real HTTP call and likely fail)
-        // For a real test, we'd need to inject HttpClient or use a mock server
-
-        // Then: Verify the interactions happen in correct order
-        // This is a structure test, not an end-to-end test
-
-        // For now, just verify the setup is correct
-        assertNotNull(mockTranslator.getProvider());
-        assertEquals("GET", mockTranslator.getProvider().getMethod());
-        assertEquals("dog", word.getValue());
-        assertEquals("en", mockTranslator.getSrcLangId());
-        assertEquals("ru", mockTranslator.getDestLangId());
-    }
-
-    @Test
     public void testProviderConfiguration_GET() {
         // Given: GET provider configuration
         // NOTE: req_pattern = URL, res_pattern = response parser
