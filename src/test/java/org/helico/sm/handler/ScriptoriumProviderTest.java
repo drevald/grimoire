@@ -149,6 +149,7 @@ public class ScriptoriumProviderTest {
         when(transService.getTranslator(99L)).thenReturn(translator);
         when(dictService.findDict(1L)).thenReturn(dict);
         when(dictWordService.countWords(1L)).thenReturn(1L);
+        when(jobService.find(1L)).thenReturn(job); // cancellation check in process()
         when(dictWordService.getWords(eq(1L), eq(0), anyInt())).thenReturn(List.of(dictWord(word)));
         when(transService.isTranslated(eq(10L), eq(1L))).thenReturn(false);
 
@@ -171,6 +172,7 @@ public class ScriptoriumProviderTest {
         when(transService.getTranslator(99L)).thenReturn(translator);
         when(dictService.findDict(1L)).thenReturn(dict);
         when(dictWordService.countWords(1L)).thenReturn(1L);
+        when(jobService.find(1L)).thenReturn(job); // cancellation check in process()
         when(dictWordService.getWords(eq(1L), eq(0), anyInt())).thenReturn(List.of(dictWord(word)));
         when(transService.isTranslated(eq(10L), eq(1L))).thenReturn(true);
 
@@ -195,6 +197,7 @@ public class ScriptoriumProviderTest {
         when(transService.getTranslator(99L)).thenReturn(translator);
         when(dictService.findDict(1L)).thenReturn(dict);
         when(dictWordService.countWords(1L)).thenReturn(1L);
+        when(jobService.find(1L)).thenReturn(job); // cancellation check in process()
         when(dictWordService.getWords(eq(1L), eq(0), anyInt())).thenReturn(List.of(dictWord(word)));
         when(transService.isTranslated(anyLong(), anyLong())).thenReturn(false);
 
@@ -249,6 +252,7 @@ public class ScriptoriumProviderTest {
         Job j = new Job();
         j.setId(id);
         j.setDictId(dictId);
+        j.setActive(true);
         return j;
     }
 

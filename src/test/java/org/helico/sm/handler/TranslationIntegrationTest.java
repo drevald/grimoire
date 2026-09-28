@@ -202,9 +202,14 @@ public class TranslationIntegrationTest {
      */
     private String callFetchTranslation(String text, TranslatorProvider provider,
                                         String srcLang, String destLang) throws Exception {
+        Method escape = TranslateHandler.class.getDeclaredMethod("escape", String.class);
+        escape.setAccessible(true);
+        MessageFormat req = new MessageFormat((String) escape.invoke(translateHandler, provider.getReqPattern()));
+        MessageFormat res = new MessageFormat((String) escape.invoke(translateHandler, provider.getResPattern()));
         Method method = TranslateHandler.class.getDeclaredMethod(
-            "fetchTranslation", String.class, TranslatorProvider.class, String.class, String.class);
+            "fetchTranslation", String.class, TranslatorProvider.class, String.class, String.class,
+            MessageFormat.class, MessageFormat.class);
         method.setAccessible(true);
-        return (String) method.invoke(translateHandler, text, provider, srcLang, destLang);
+        return (String) method.invoke(translateHandler, text, provider, srcLang, destLang, req, res);
     }
 }

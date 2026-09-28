@@ -96,6 +96,9 @@ public class TranslateHandlerProgressTest {
         mockJob = new Job();
         mockJob.setId(1L);
         mockJob.setDictId(1L);
+        mockJob.setActive(true);
+        // process() re-reads the job before each batch to check for cancellation
+        lenient().when(jobService.find(1L)).thenReturn(mockJob);
     }
 
     /**

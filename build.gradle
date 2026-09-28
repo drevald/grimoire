@@ -59,8 +59,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     // Let Spring Boot manage JUnit versions to avoid conflicts
-    // Use WireMock 2.x for compatibility with Spring Boot 3.x
-    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.35.0'
+    // WireMock 3 standalone: shaded Jetty, no clash with Boot 3 dependency management
+    // (wiremock-jre8 2.x needs Jetty 9, Boot 3.4 forces Jetty 12 -> NoClassDefFoundError)
+    testImplementation 'org.wiremock:wiremock-standalone:3.9.1'
 
     // Uncomment if deploying as WAR to external Tomcat
     // providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
