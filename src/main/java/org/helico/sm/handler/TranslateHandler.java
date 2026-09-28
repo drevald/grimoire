@@ -150,7 +150,7 @@ public class TranslateHandler extends AbstractHandler {
                 }
             }
             offset += WORDS_PORTION;
-            jobService.setProgress(job.getId(), (int) ((offset * 100) / wordsNum));
+            jobService.setProgress(job.getId(), (int) ((Math.min(offset, wordsNum) * 100) / wordsNum));
         }
     }
 
@@ -236,7 +236,8 @@ public class TranslateHandler extends AbstractHandler {
                 httpClient.executeMethod(postMethod);
 
                 if (postMethod.getStatusCode() == 200) {
-                    String output = compactJson(postMethod.getResponseBodyAsString());
+                    // commons-httpclient 3 falls back to ISO-8859-1 when the response has no charset
+                    String output = compactJson(new String(postMethod.getResponseBody(), java.nio.charset.StandardCharsets.UTF_8));
                     LOG.debug("POST response: " + output);
                     result = (String) resFormat.parse(output)[0];
                 } else {

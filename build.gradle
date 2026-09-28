@@ -67,6 +67,11 @@ dependencies {
     // providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
+// Sources contain Cyrillic; on Windows JDK 17 javac defaults to cp1251
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

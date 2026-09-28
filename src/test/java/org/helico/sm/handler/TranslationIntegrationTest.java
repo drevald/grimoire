@@ -61,8 +61,8 @@ public class TranslationIntegrationTest {
         provider.setTitle("Test GET Provider");
         provider.setMethod("GET");
         provider.setHost("http://localhost:8089");
-        provider.setReqPattern("{0}"); // Response parser - extract first element
-        provider.setResPattern("http://localhost:8089/translate?text={0}&from={1}&to={2}"); // URL template
+        provider.setReqPattern("http://localhost:8089/translate?text={0}&from={1}&to={2}"); // URL template
+        provider.setResPattern("{0}"); // Response parser
 
         // When: We call the translation method directly
         String translation = callFetchTranslation("dog", provider, "en", "ru");
@@ -96,8 +96,9 @@ public class TranslationIntegrationTest {
         provider.setTitle("Test POST JSON Provider");
         provider.setMethod("POST");
         provider.setHost("http://localhost:8089/translate");
-        provider.setReqPattern("{0}"); // Response parser
-        provider.setResPattern("{\"text\":\"{0}\",\"source\":\"{1}\",\"target\":\"{2}\"}"); // Request body template
+        provider.setReqPattern("http://localhost:8089/translate"); // URL
+        provider.setRequestBody("{\"text\":\"{0}\",\"source\":\"{1}\",\"target\":\"{2}\"}"); // Request body template
+        provider.setResPattern("{0}"); // Response parser
         provider.setContentType("application/json");
         provider.setCharset("UTF-8");
 
@@ -132,8 +133,9 @@ public class TranslationIntegrationTest {
         provider.setTitle("Test POST Form Provider");
         provider.setMethod("POST");
         provider.setHost("http://localhost:8089/translate");
-        provider.setReqPattern("{0}");
-        provider.setResPattern("text={0}&from={1}&to={2}");
+        provider.setReqPattern("http://localhost:8089/translate");
+        provider.setRequestBody("text={0}&from={1}&to={2}");
+        provider.setResPattern("{0}");
         provider.setContentType("application/x-www-form-urlencoded");
         provider.setCharset("UTF-8");
 
@@ -162,8 +164,8 @@ public class TranslationIntegrationTest {
 
         TranslatorProvider provider = new TranslatorProvider();
         provider.setMethod("GET");
-        provider.setReqPattern("{0}");
-        provider.setResPattern("http://localhost:8089/translate?text={0}&from={1}&to={2}");
+        provider.setReqPattern("http://localhost:8089/translate?text={0}&from={1}&to={2}");
+        provider.setResPattern("{0}");
 
         // When: We translate multiple words
         String dog = callFetchTranslation("dog", provider, "en", "ru");
@@ -187,8 +189,8 @@ public class TranslationIntegrationTest {
 
         TranslatorProvider provider = new TranslatorProvider();
         provider.setMethod("GET");
-        provider.setReqPattern("{0}");
-        provider.setResPattern("http://localhost:8089/translate?text={0}&from={1}&to={2}");
+        provider.setReqPattern("http://localhost:8089/translate?text={0}&from={1}&to={2}");
+        provider.setResPattern("{0}");
 
         // When: We try to translate
         String translation = callFetchTranslation("dog", provider, "en", "ru");
