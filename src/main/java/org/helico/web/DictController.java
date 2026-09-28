@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.helico.domain.*;
 import org.helico.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -22,25 +20,26 @@ public class DictController extends AbstractController {
 
     private static final Logger LOG = LoggerFactory.getLogger(DictController.class);
 
-    private ApplicationContext appContext;
+    private final DictService dictService;
+    private final LangService langService;
+    private final AccountService accountService;
+    private final JobService jobService;
+    private final DictWordService dictWordService;
+    private final TranslationService translationService;
 
-    @Autowired  //review - вроде как уже лишнее - можно и без аннотации?
-    private DictService dictService;
-
-    @Autowired
-    private LangService langService;
-
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private JobService jobService;
-
-    @Autowired
-    private DictWordService dictWordService;
-
-    @Autowired
-    private TranslationService translationService;
+    DictController(DictService dictService,
+                   LangService langService,
+                   AccountService accountService,
+                   JobService jobService,
+                   DictWordService dictWordService,
+                   TranslationService translationService) {
+        this.dictService = dictService;
+        this.langService = langService;
+        this.accountService = accountService;
+        this.jobService = jobService;
+        this.dictWordService = dictWordService;
+        this.translationService = translationService;
+    }
 
     @RequestMapping("/dict")
     public String listDicts(Map<String, Object> map) {
@@ -51,13 +50,11 @@ public class DictController extends AbstractController {
         for (Dict dict : dicts) {
             DictHelper dictHelper = new DictHelper();
             dictHelper.setDict(dict);
-            //List<Job> jobs = jobService.getActiveJobs(dict.getId());
             Job job = jobService.getLastOrActive(dict.getId());
             List<Job> jobs = new ArrayList<Job>();
             jobs.add(job);
             dictHelper.setJobs(jobs);
             helperList.add(dictHelper);
-            // Log dict status and job state for debugging
             if (job != null && job.getActive()) {
                 LOG.info("UI: dict#{} status={} job#{} active={} progress={}%",
                     dict.getId(), dict.getStatus(), job.getId(), job.getActive(), job.getProgress());
@@ -86,7 +83,6 @@ public class DictController extends AbstractController {
                         System.getenv("LOCAL_STORAGE"));
                 if(multipartFile.getOriginalFilename() != null
                         && multipartFile.getOriginalFilename().contains(".pdf")) {
-                    // saveOriginal() @Transactional has now committed — safe to start async store
                     dictService.storeDict(dictService.findDict(dictId));
                     return "redirect:/dict";
                 }
@@ -185,9 +181,6 @@ public class DictController extends AbstractController {
     public String viewHistogram(@PathVariable("dictId") Long dictId, Map<String, Object> map) {
         Account account = accountService.findAccount(getCurrentAccount()); // account - проверять в фильтре
         Dict dict = dictService.findDict(dictId, account.getId());
-        if (dict == null) {
-            throw new RuntimeException("Not yours");
-        }
         Map<Integer, Integer> histogram = dictWordService.getHistogram(dictId);
         Long total = dictWordService.totalWords(dictId);
         map.put("dict", dict);
@@ -199,20 +192,14 @@ public class DictController extends AbstractController {
     @RequestMapping("/dict/delete/{dictId}")
     public String deleteAccount(@PathVariable("dictId") Long dictId) {
         Account account = accountService.findAccount(getCurrentAccount());
-        Dict dict = dictService.findDict(dictId, account.getId());
-        if (dict != null) {
-            dictService.removeDict(dictId);
-        }
+        dictService.removeDict(dictId);
         return "redirect:/dict";
     }
 
     @RequestMapping("/dict/view/generate")
     public String parseDict(@RequestParam("dictId") Long id) {
         Account account = accountService.findAccount(getCurrentAccount());
-        Dict dict = dictService.findDict(id, account.getId());
-        if (dict != null) {
-            dictService.parseText(id);
-        }
+        dictService.parseText(id);
         return "redirect:/dict/view/" + id;
     }
 
@@ -223,39 +210,31 @@ public class DictController extends AbstractController {
             Map<String, Object> map) {
         Account account = accountService.findAccount(getCurrentAccount());
         Dict dict = dictService.findDict(dictId, account.getId());
-        if (dict != null) {
-            Integer size = 12;
-            offset = (offset == null) ? size : offset;
-            List<DictWord> words = dictWordService.getWords(dictId, offset, size);
-            Long wordsNum = dictWordService.countWords(dictId);
-            List<Translator> translators = translationService.listTranslators(dict.getLangId(), account.getNativeLangId());
-            List<TranslatorProvider> providers = translationService.listProviders();
-            map.put("dict", dictService.findDict(dictId, account.getId()));
-            map.put("nativeLangId", account.getNativeLangId());
-            map.put("wordsNum", wordsNum);
-            map.put("words", words);
-            map.put("translators", translators);
-            map.put("job", jobService.getLastOrActive(dictId));
-            map.put("offset", offset);
-            map.put("maxOffset", wordsNum - (wordsNum % size));
-            map.put("size", size);
-            map.put("currPage", 1 + (int) (offset / size));
-            map.put("totalPage", 1 + (int) (wordsNum / size));
-            return "viewWords";
-        } else {
-            return "/dict";
-        }
+        Integer size = 12;
+        offset = (offset == null) ? size : offset;
+        List<DictWord> words = dictWordService.getWords(dictId, offset, size);
+        Long wordsNum = dictWordService.countWords(dictId);
+        List<Translator> translators = translationService.listTranslators(dict.getLangId(), account.getNativeLangId());
+        map.put("dict", dictService.findDict(dictId, account.getId()));
+        map.put("nativeLangId", account.getNativeLangId());
+        map.put("wordsNum", wordsNum);
+        map.put("words", words);
+        map.put("translators", translators);
+        map.put("job", jobService.getLastOrActive(dictId));
+        map.put("offset", offset);
+        map.put("maxOffset", wordsNum - (wordsNum % size));
+        map.put("size", size);
+        map.put("currPage", 1 + (int) (offset / size));
+        map.put("totalPage", 1 + (int) (wordsNum / size));
+        return "viewWords";
     }
 
     @RequestMapping(value = "/dict/stop/{dictId}", method = RequestMethod.POST)
     public String stopTranslation(@PathVariable("dictId") Long dictId) {
         Account account = accountService.findAccount(getCurrentAccount());
-        Dict dict = dictService.findDict(dictId, account.getId());
-        if (dict != null) {
-            Job job = jobService.getLastOrActive(dictId);
-            if (job != null && job.getActive()) {
-                jobService.setActive(job.getId(), false);
-            }
+        Job job = jobService.getLastOrActive(dictId);
+        if (job != null && job.getActive()) {
+            jobService.setActive(job.getId(), false);
         }
         return "redirect:/dict";
     }
@@ -264,10 +243,7 @@ public class DictController extends AbstractController {
     public String translateDict(@RequestParam("dictId") Long dictId,
                                 @RequestParam("translatorId") Long translatorId) {
         Account account = accountService.findAccount(getCurrentAccount());
-        Dict dict = dictService.findDict(dictId, account.getId());
-        if (dict != null) {
-            translationService.translateText(dictId, translatorId);
-        }
+        translationService.translateText(dictId, translatorId);
         return "redirect:/dict";
     }
 
@@ -277,11 +253,6 @@ public class DictController extends AbstractController {
         map.put("currAccount", currAccount);
         map.put("langs", currAccount.getAccountLangs());
         return "uploadDict";
-    }
-
-    public void setApplicationContext(ApplicationContext appContext) {
-        LOG.debug("setting application context: " + appContext);
-        this.appContext = appContext;
     }
 
 }
