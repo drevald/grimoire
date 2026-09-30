@@ -8,7 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class LangDAOImpl implements LangDAO {
+public class LangDaoImpl implements LangDao {
 
     @PersistenceContext
     private EntityManager entityManager;

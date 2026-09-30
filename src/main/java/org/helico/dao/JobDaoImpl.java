@@ -1,26 +1,30 @@
 package org.helico.dao;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.helico.aop.Logged;
 import org.helico.domain.Job;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class JobDAOImpl implements JobDAO {
+public class JobDaoImpl implements JobDao {
 
-    private static Logger LOG = LoggerFactory.getLogger(JobDAOImpl.class);
+    private static Logger LOG = LoggerFactory.getLogger(JobDaoImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Logged
     public Job find(Long id) {
-        return entityManager.find(Job.class, id);
+    LOG.info(">>>>find job#" + id);
+        Job job = entityManager.find(Job.class, id);
+    LOG.info("<<<<found job#" + id);
+        return job;
     }
 
     public void saveOrUpdate(Job job) {
@@ -51,6 +55,19 @@ public class JobDAOImpl implements JobDAO {
     Job job = (jobs==null || jobs.isEmpty()) ? null : jobs.get(0);
     LOG.debug("<<<<last job:" + job);
     return job;
+    }
+
+    @Override
+    public Map<Long, Job> findLastOrActiveByDictIds(Collection<Long> dictIds) {
+        if (dictIds.isEmpty()) {
+            return Map.of();
+        }
+        List<Job> jobs = entityManager
+                .createQuery("from Job where dictId in :dicts order by active desc, id desc", Job.class)
+                .setParameter("dicts", dictIds)
+                .getResultList();
+        return jobs.stream()
+                .collect(Collectors.toMap(Job::getDictId, job -> job, (first, second) -> first));
     }
 
 }

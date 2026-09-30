@@ -1,5 +1,6 @@
 package org.helico.web;
 
+import org.helico.sm.StateMachine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.helico.domain.*;
@@ -8,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,40 +29,29 @@ public class DictController extends AbstractController {
     private final JobService jobService;
     private final DictWordService dictWordService;
     private final TranslationService translationService;
+    private final StateMachine stateMachine;
 
     DictController(DictService dictService,
                    LangService langService,
                    AccountService accountService,
                    JobService jobService,
                    DictWordService dictWordService,
-                   TranslationService translationService) {
+                   TranslationService translationService,
+                   StateMachine stateMachine) {
         this.dictService = dictService;
         this.langService = langService;
         this.accountService = accountService;
         this.jobService = jobService;
         this.dictWordService = dictWordService;
         this.translationService = translationService;
+        this.stateMachine = stateMachine;
     }
 
     @RequestMapping("/dict")
     public String listDicts(Map<String, Object> map) {
         Account currAccount = accountService.findAccount(getCurrentAccount());
         map.put("currAccount", currAccount);
-        List<DictHelper> helperList = new ArrayList<DictHelper>();
-        List<Dict> dicts = dictService.listDicts(currAccount.getId());
-        for (Dict dict : dicts) {
-            DictHelper dictHelper = new DictHelper();
-            dictHelper.setDict(dict);
-            Job job = jobService.getLastOrActive(dict.getId());
-            List<Job> jobs = new ArrayList<Job>();
-            jobs.add(job);
-            dictHelper.setJobs(jobs);
-            helperList.add(dictHelper);
-            if (job != null && job.getActive()) {
-                LOG.info("UI: dict#{} status={} job#{} active={} progress={}%",
-                    dict.getId(), dict.getStatus(), job.getId(), job.getActive(), job.getProgress());
-            }
-        }
+        List<DictWithLastJob> helperList = dictService.listDictsWithLastJob(currAccount.getId());
         map.put("helperList", helperList);
         map.put("langs", langService.list());
         return "listDict";
@@ -68,32 +60,28 @@ public class DictController extends AbstractController {
     @RequestMapping(value = "/dict/upload", method = RequestMethod.POST)
     public String handleFormUpload(@RequestParam("file") MultipartFile multipartFile,
                                    @RequestParam("langId") String langId,
-                                   Map<String, Object> map,
-                                   @ModelAttribute("dict") Dict dict,
-                                   Errors errors) {
+                                   RedirectAttributes redirect) {
+        if (multipartFile.isEmpty()) {
+            redirect.addFlashAttribute("error", "error.file.notfound");
+            return "redirect:/dict";
+        }
         Account account = accountService.findAccount(getCurrentAccount());
-        if (!multipartFile.isEmpty()) {
-            //review слишком много логики и лучше try with resources
-            try {
-                long dictId = dictService.saveOriginal(
-                        account.getId(),
-                        langId,
-                        multipartFile.getInputStream(),
-                        multipartFile.getOriginalFilename(),
-                        System.getenv("LOCAL_STORAGE"));
-                if(multipartFile.getOriginalFilename() != null
-                        && multipartFile.getOriginalFilename().contains(".pdf")) {
-                    dictService.storeDict(dictService.findDict(dictId));
-                    return "redirect:/dict";
-                }
-                return "redirect:/dict/preview/" + dictId + "?langId=" + langId;
-            } catch (IOException e) {
-                LOG.error("Error occurred", e);
-                errors.reject("error.reading.file");
+        String fileName = multipartFile.getOriginalFilename();
+        try (InputStream is = multipartFile.getInputStream()){
+            long dictId = dictService.saveOriginal(
+                    account.getId(),
+                    langId,
+                    is,
+                    fileName,
+                    System.getenv("LOCAL_STORAGE"));
+            if(fileName != null && fileName.toLowerCase().endsWith(".pdf")) {
+                stateMachine.sendEvent(StateMachine.Event.STORE, null, dictId);
                 return "redirect:/dict";
             }
-        } else {
-            errors.reject("error.file.notfound");
+            return "redirect:/dict/preview/" + dictId + "?langId=" + langId;
+        } catch (IOException e) {
+            LOG.error("Error occurred", e);
+            redirect.addFlashAttribute("error", "error.reading.file");
             return "redirect:/dict";
         }
     }
@@ -128,7 +116,7 @@ public class DictController extends AbstractController {
         dict.setLangId(langId);
         dictService.saveDict(dict);
         LOG.info("Dict#" + id + " encoding=" + encoding + " dict.getEncoding=" + dict.getEncoding());
-        dictService.storeDict(dict);
+        stateMachine.sendEvent(StateMachine.Event.STORE, null, dict.getId());
         return "redirect:/dict";
     }
 
@@ -199,7 +187,7 @@ public class DictController extends AbstractController {
     @RequestMapping("/dict/view/generate")
     public String parseDict(@RequestParam("dictId") Long id) {
         Account account = accountService.findAccount(getCurrentAccount());
-        dictService.parseText(id);
+        stateMachine.sendEvent(StateMachine.Event.PARSE, null, id);
         return "redirect:/dict/view/" + id;
     }
 

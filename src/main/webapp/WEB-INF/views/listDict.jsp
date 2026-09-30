@@ -19,17 +19,15 @@
                     <td width="100%">${helper.dict.name}</td>
                     <td>${helper.dict.status}</td>
                     <td>
-                    <c:if test="${!empty helper.jobs}">
-                        <c:forEach items="${helper.jobs}" var="job">
-                            <c:if test="${job.active || helper.dict.status == 'PARSING' || helper.dict.status == 'TRANSLATING' || helper.dict.status == 'STORING'}">
-                                ${job.progress}%
+                        <c:if test="${!empty helper.lastJob}">
+                            <c:if test="${helper.lastJob.active || helper.dict.status == 'PARSING' || helper.dict.status == 'TRANSLATING' || helper.dict.status == 'STORING'}">
+                                ${helper.lastJob.progress}%
                             </c:if>
-                            ${fn:substring(job.details, 0, 16)}
-                        </c:forEach>
-                    </c:if>
-                    <c:if test="${empty helper.jobs}">
-                          EMPTY
-                    </c:if>
+                            ${fn:substring(helper.lastJob.details, 0, 16)}
+                        </c:if>
+                        <c:if test="${empty helper.lastJob}">
+                            EMPTY
+                        </c:if>
                     </td>
                     <td>
                         <c:if test="${helper.dict.status == 'TRANSLATING'}">

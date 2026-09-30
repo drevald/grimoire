@@ -150,6 +150,22 @@ public class Dict {
     return "dict#" + id + "#"+  this.hashCode() + ", prev:" + preview + ", utf:" + utfText + ", data:" + origDoc + ", status:" + status +", enc:"+encoding+", lang:"+langId;
     }
 
+    public static Dict newUpload(Long accountId, String langId, String name) {
+        Dict dict = new Dict();
+        dict.setStatus(Status.PERSISTED);
+        dict.setAccountId(accountId);
+        dict.setLangId(langId);
+        dict.setName(getBaseName(name).toUpperCase());
+        return dict;
+    }
+
+    private static String getBaseName(String name) {
+        if (name.isEmpty() || name.isBlank()) {
+            return "UNTITLED";
+        }
+        int idx = name.lastIndexOf(".");
+        return idx > 0 ? name.substring(0, idx) : name;
+    }
 
 }
 

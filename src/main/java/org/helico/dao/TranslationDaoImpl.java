@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class TranslationDAOImpl implements TranslationDAO {
+public class TranslationDaoImpl implements TranslationDao {
 
-    private static Logger LOG = LoggerFactory.getLogger(TranslationDAOImpl.class);
+    private static Logger LOG = LoggerFactory.getLogger(TranslationDaoImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;

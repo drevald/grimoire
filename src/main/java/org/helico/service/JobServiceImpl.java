@@ -1,7 +1,7 @@
 package org.helico.service;
 
 import java.util.List;
-import org.helico.dao.JobDAO;
+import org.helico.dao.JobDao;
 import org.helico.domain.Job;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +15,10 @@ public class JobServiceImpl implements JobService {
 
     private static final Logger LOG = LoggerFactory.getLogger(JobServiceImpl.class);
 
-    @Autowired
-    JobDAO jobDao;
+    private final JobDao jobDao;
 
-    @Transactional
-    public Job createJob(Long transId, Long dictId) {
-    Job job = new Job();
-    job.setTransId(transId);
-        job.setActive(false);
-    job.setProgress(0);
-        job.setDictId(dictId);
-        jobDao.saveOrUpdate(job);
-    return job;
+    JobServiceImpl(JobDao jobDao) {
+        this.jobDao = jobDao;
     }
 
     @Transactional
@@ -38,9 +30,7 @@ public class JobServiceImpl implements JobService {
     @Transactional
     public synchronized void setProgress(Long id, Integer progress) {
         Job job = jobDao.find(id);
-    LOG.debug(">>>setting progress for job"+job+":"+progress);
         job.setProgress(progress);
-    LOG.debug(">>>setting progress for job"+job+":"+progress);
         jobDao.saveOrUpdate(job);
     }
 
@@ -61,11 +51,6 @@ public class JobServiceImpl implements JobService {
     @Transactional
     public Job find(Long id) {
         return jobDao.find(id);
-    }
-
-    @Transactional
-    public List<Job> getActiveJobs(Long dictId) {
-    return jobDao.findActive(dictId);
     }
 
     @Transactional

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * written by ${name}
  */
-public interface DictDAO {
+public interface DictDao {
 
     public long saveDict(Dict dict);
 

@@ -15,8 +15,6 @@ public interface AccountService {
 
     public Account findAccount(String name);
 
-    public Long registerAccount(String accountname, String password);
-
     public Long registerAccount(String accountname, String password, String bativeLangId, Set<String> accountLangIds);
 
     public Long updateAccount(Long id, String accountname, String password, String bativeLangId, Set<String> accountLangIds);

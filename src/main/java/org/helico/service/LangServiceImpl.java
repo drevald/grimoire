@@ -1,6 +1,6 @@
 package org.helico.service;
 
-import org.helico.dao.LangDAO;
+import org.helico.dao.LangDao;
 import org.helico.domain.Lang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +12,11 @@ public class LangServiceImpl implements LangService {
 
     private static final String ENC_SEPARATOR = ",";
 
-    @Autowired
-    LangDAO langDao;
+    private final LangDao langDao;
+
+    LangServiceImpl(LangDao langDao) {
+        this.langDao = langDao;
+    }
 
     @Transactional
     public List<Lang> list() {

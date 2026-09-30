@@ -4,7 +4,7 @@ import org.helico.domain.Transition;
 
 import java.util.List;
 
-public interface TransitionDAO {
+public interface TransitionDao {
 
     public String getHandlerName(String event, String status);
 

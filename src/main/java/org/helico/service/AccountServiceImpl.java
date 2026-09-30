@@ -2,8 +2,8 @@ package org.helico.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.helico.dao.LangDAO;
-import org.helico.dao.AccountDAO;
+import org.helico.dao.LangDao;
+import org.helico.dao.AccountDao;
 import org.helico.domain.Lang;
 import org.helico.domain.Account;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,14 @@ public class AccountServiceImpl implements AccountService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AccountServiceImpl.class);
 
-    @Autowired
-    private AccountDAO accountDao;
+    private final AccountDao accountDao;
 
-    @Autowired
-    private LangDAO langDao;
+    private final LangDao langDao;
+
+    AccountServiceImpl(AccountDao accountDao, LangDao langDao) {
+        this.accountDao = accountDao;
+        this.langDao = langDao;
+    }
 
     @Transactional
     public void addAccount(Account account) {

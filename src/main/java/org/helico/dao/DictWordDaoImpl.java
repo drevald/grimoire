@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class DictWordDAOImpl implements DictWordDAO {
+public class DictWordDaoImpl implements DictWordDao {
 
     @PersistenceContext
     private EntityManager entityManager;

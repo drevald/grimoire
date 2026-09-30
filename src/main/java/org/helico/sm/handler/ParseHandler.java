@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Reads UTF-8 encoded text and detects words. By words it understands continuous
@@ -33,14 +35,15 @@ public class ParseHandler extends AbstractHandler {
 
     private static final Long PROGRESS_GRANULARITY = 100L;
 
-    @Autowired
-    WordService wordService;
+    private final WordService wordService;
+    private final JobService jobService;
+    private final DictService dictService;
 
-    @Autowired
-    JobService jobService;
-
-    @Autowired
-    DictService dictService;
+    ParseHandler (WordService wordService, JobService jobService, DictService dictService) {
+        this.wordService = wordService;
+        this.jobService = jobService;
+        this.dictService = dictService;
+    }
 
     public void process(Object data, Job job) throws Exception {
         Dict dict = dictService.findDict(job.getDictId());
@@ -79,5 +82,6 @@ public class ParseHandler extends AbstractHandler {
         reader.close();
 
     }
+
 
 }

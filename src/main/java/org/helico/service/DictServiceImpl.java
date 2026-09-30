@@ -5,14 +5,17 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.io.IOUtils;
+import org.helico.dao.JobDao;
+import org.helico.domain.Job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.helico.aop.Logged;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.helico.dao.DictDAO;
+import org.helico.dao.DictDao;
 import org.helico.domain.Dict;
 import org.helico.domain.Dict.Status;
 import org.helico.domain.Text;
@@ -31,26 +34,24 @@ public class DictServiceImpl implements DictService {
 
     private static final int PREVIEW_SIZE = 256;
 
-    @Autowired
-    private DictDAO dictDao;
+    private final DictDao dictDao;
+    private final JobDao jobDao;
 
-    @Autowired
-    private StateMachine stateMachine;
+    DictServiceImpl(DictDao dictDao, JobDao jobDao) {
+        this.dictDao = dictDao;
+        this.jobDao = jobDao;
+    }
 
-    @Logged
     @Transactional
     public long saveOriginal(Long accountId, String langId, InputStream is, String name, String storage){
+        LOG.info(">>>saveOriginal start");
         LOG.info("System.getenv(\"LOCAL_STORAGE\")=" + System.getenv("LOCAL_STORAGE"));
         LOG.info("System.getenv(\"LOCAL_STORAGE\")=" + System.getenv("LOCAL_STORAGE"));
         if (System.getenv("LOCAL_STORAGE") != null) {
             LOG.info("new File(System.getenv(\"LOCAL_STORAGE\")).exists() = "
                     + new File(System.getenv("LOCAL_STORAGE")).exists());
         }
-        Dict dict = new Dict();
-        dict.setStatus(Status.PERSISTED);
-        dict.setAccountId(accountId);
-        dict.setLangId(langId);
-        dict.setName(name.substring(0, name.indexOf(".")).toUpperCase());
+        Dict dict = Dict.newUpload(accountId, langId, name);
         Text text = new Text();
         long stamp = System.currentTimeMillis();
         text.setOrigPath(storage + "/" + name + "." + stamp);
@@ -201,34 +202,16 @@ public class DictServiceImpl implements DictService {
         return null;
     }
 
-    @Logged
     @Transactional
     public void saveDict(Dict dict) {
+        LOG.info(">>>saveDict start");
         dictDao.saveDict(dict);
-    }
-
-    @Logged
-    @Transactional
-    public void saveText(Text text) {
-        dictDao.saveText(text);
-    }
-
-    @Logged
-    public void storeDict(Dict dict) {
-        stateMachine.sendEvent(StateMachine.Event.STORE, null, dict.getId());
+        LOG.info("<<<saveDict end");
     }
 
     @Transactional
     public List<Dict> listDicts() {
         List<Dict> result = dictDao.listDicts();
-        LOG.info("Number of results is " + result.size());
-        return result;
-    }
-
-    @Transactional
-    public List<Dict> listDicts(Long accountId) {
-
-        List<Dict> result = dictDao.listDicts(accountId);
         LOG.info("Number of results is " + result.size());
         return result;
     }
@@ -250,36 +233,19 @@ public class DictServiceImpl implements DictService {
         dictDao.removeDict(id);
     }
 
-    @Logged
     @Transactional
     public Dict findDict(Long id, Long accountId) {
+        LOG.info(">>>findDict start");
         Dict dict = dictDao.findDict(id, accountId);
-        if (dict == null) {
-            throw new DictNotFoundException(id);
-        }
+        LOG.info("<<<findDict end");
         return dict;
     }
 
-    @Logged
     @Transactional
     public Dict findDict(Long id) {
-        return dictDao.findDict(id);
-    }
-
-    @Transactional
-    public void loadFile() {
-
-    }
-
-    @Logged
-    @Transactional
-    public Dict createDict(Long accountId, String name) {
-        Dict dict = new Dict();
-        dict.setAccountId(accountId);
-        dict.setName(name);
-        LOG.debug("Status persisted = " + Status.PERSISTED);
-        dict.setStatus("PERSISTED");
-        dictDao.saveDict(dict);
+        LOG.info(">>>findDict start");
+        Dict dict = dictDao.findDict(id);
+        LOG.info("<<<findDict end");
         return dict;
     }
 
@@ -289,18 +255,6 @@ public class DictServiceImpl implements DictService {
         dict.setStatus(status.name());
         LOG.info("setStatus(" + dict + ")");
         dictDao.saveDict(dict);
-    }
-
-    @Transactional
-    public void setPreview(Long id, byte[] data) {
-        Dict dict = dictDao.findDict(id);
-        dict.setPreview(data);
-        LOG.info("setPreview(" + dict + ")");
-        dictDao.saveDict(dict);
-    }
-
-    public void parseText(Long dictId) {
-        stateMachine.sendEvent(StateMachine.Event.PARSE, null, dictId);
     }
 
     @Transactional
@@ -323,6 +277,16 @@ public class DictServiceImpl implements DictService {
             dict.setStatus(Status.PARSED.name());
             dictDao.saveDict(dict);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DictWithLastJob> listDictsWithLastJob(Long accountId) {
+        List<Dict> dicts = dictDao.listDicts(accountId);
+        Map<Long, Job> lastJobs = jobDao.findLastOrActiveByDictIds(dicts.stream().map(Dict::getId).toList());
+        return dicts.stream()
+                .map(dict -> new DictWithLastJob(dict, lastJobs.get(dict.getId())))
+                .toList();
     }
 
 }

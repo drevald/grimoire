@@ -12,12 +12,10 @@ import java.io.Reader;
  */
 public interface TextService {
 
-    public Reader getTextReader(Long id)  throws Exception;
+    Reader getTextReader(Long id, int offset, int len) throws Exception;
 
-    public Reader getTextReader(Long id, int offset, int len) throws Exception;
+    String getFullText(Long id) throws Exception;
 
-    public String getFullText(Long id) throws Exception;
-
-    public void saveFullText(Long id, String content) throws Exception;
+    void saveFullText(Long id, String content) throws Exception;
 
 }

@@ -1,7 +1,8 @@
 package org.helico.service;
 
-import org.helico.aop.Logged;
-import org.helico.dao.TranslatorProviderDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.helico.dao.TranslatorProviderDao;
 import org.helico.domain.TranslatorProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,29 +13,33 @@ import java.util.List;
 @Service
 public class TranslatorProviderServiceImpl implements TranslatorProviderService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(TranslatorProviderServiceImpl.class);
+
     @Autowired
-    private TranslatorProviderDAO translatorProdiverDAO;
+    private TranslatorProviderDao translatorProdiverDao;
 
     @Transactional
     public List<TranslatorProvider> listProviders() {
-        return translatorProdiverDAO.listProviders();
+        return translatorProdiverDao.listProviders();
     }
 
     @Transactional
     public TranslatorProvider getProvider(Long id) {
-        return translatorProdiverDAO.getProvider(id);
+        return translatorProdiverDao.getProvider(id);
     }
 
-    @Logged
     @Transactional
     public void saveProvider(TranslatorProvider provider) {
-        translatorProdiverDAO.saveProvider(provider);
+        LOG.info(">>>saveProvider start");
+        translatorProdiverDao.saveProvider(provider);
+        LOG.info("<<<saveProvider end");
     }
 
-    @Logged
     @Transactional
     public void deleteProvider(Long id) {
-        translatorProdiverDAO.deleteProvider(id);
+        LOG.info(">>>deleteProvider start");
+        translatorProdiverDao.deleteProvider(id);
+        LOG.info("<<<deleteProvider end");
     }
 
 }

@@ -8,7 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AccountDAOImpl implements AccountDAO {
+public class AccountDaoImpl implements AccountDao {
 
     @PersistenceContext
     private EntityManager entityManager;

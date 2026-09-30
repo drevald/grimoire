@@ -7,21 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.helico.dao.TransitionDAO;
+import org.helico.dao.TransitionDao;
 
 import java.util.List;
 
 @Service
 public class TransitionServiceImpl implements TransitionService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TransitionServiceImpl.class);
+    private final TransitionDao transitionDao;
 
-    @Autowired
-    TransitionDAO transitionDao;
-
-    @Transactional
-    public String getHandlerName(String event, String status) {
-        return transitionDao.getHandlerName(event, status);
+    TransitionServiceImpl(TransitionDao transitionDao) {
+        this.transitionDao = transitionDao;
     }
 
     @Transactional
