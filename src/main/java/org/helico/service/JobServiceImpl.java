@@ -28,7 +28,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Transactional
-    public synchronized void setProgress(Long id, Integer progress) {
+    public void setProgress(Long id, Integer progress) {
         Job job = jobDao.find(id);
         job.setProgress(progress);
         jobDao.saveOrUpdate(job);

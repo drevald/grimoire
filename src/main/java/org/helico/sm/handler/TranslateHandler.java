@@ -25,6 +25,12 @@ import java.security.cert.X509Certificate;
 import java.text.MessageFormat;
 import java.util.List;
 
+
+//2. TranslateHandler, поле httpClient и метод fetchTranslation. Категории: потокобезопасность в синглтоне, безопасность.
+//        Посмотри, как и когда создаётся httpClient, и сколько потоков могут выполнять этот код одновременно (обработчик @Async).
+//        А потом посмотри, что делает initTrustAllSsl(), и подумай, чем это опасно.
+
+
 @Component("translateHandler")
 public class TranslateHandler extends AbstractHandler {
 

@@ -18,7 +18,7 @@ public class DictDaoImpl implements DictDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public synchronized void saveText(Text text) {
+    public void saveText(Text text) {
         LOG.info("save sess#"+entityManager.hashCode()+" " + text.toString());
         if (text.getId() == null) {
             entityManager.persist(text);
@@ -28,7 +28,7 @@ public class DictDaoImpl implements DictDao {
         entityManager.flush();
     }
 
-    public synchronized long saveDict(Dict dict) {
+    public long saveDict(Dict dict) {
         LOG.info("save sess#"+entityManager.hashCode()+" " + dict.toString());
         if (dict.getId() == null) {
             entityManager.persist(dict);
@@ -60,7 +60,7 @@ public class DictDaoImpl implements DictDao {
         }
     }
 
-    public synchronized Dict findDict(Long id, Long accountId) {
+    public Dict findDict(Long id, Long accountId) {
         Dict dict = null;
         try {
             dict = (Dict)entityManager.createQuery("from Dict where id=?1 and accountId=?2")
@@ -72,7 +72,7 @@ public class DictDaoImpl implements DictDao {
         return dict;
     }
 
-    public synchronized Dict findDict(Long id) {
+    public Dict findDict(Long id) {
         Dict dict = null;
         try {
             dict = (Dict)entityManager.createQuery("from Dict where id=?1")

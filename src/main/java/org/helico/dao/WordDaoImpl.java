@@ -18,7 +18,7 @@ public class WordDaoImpl implements WordDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public synchronized Word store(String value, String langId) {
+    public Word store(String value, String langId) {
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
         Word result = null;
@@ -51,7 +51,7 @@ public class WordDaoImpl implements WordDao {
 
     }
 
-    public synchronized void batchStore(List<Word> words, Long dictId) {
+    public void batchStore(List<Word> words, Long dictId) {
 
         try {
 
@@ -116,7 +116,7 @@ public class WordDaoImpl implements WordDao {
     }
 
 
-    public synchronized Word get(String langId, String value) {
+    public Word get(String langId, String value) {
 
         LOG.debug(">>>>saving value:"+value+" lang:"+langId);
         Word result = null;
