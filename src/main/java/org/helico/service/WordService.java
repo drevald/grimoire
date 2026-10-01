@@ -7,9 +7,7 @@ import java.util.List;
 
 public interface WordService {
 
-    public void store(String word, String langId, Long dictId);
-
-    public List<DictWord> getWords(Long dictId);
+    public void store(String word, String langId, Long dictId, int count);
 
     public Word getWord(String langId, String word);
 

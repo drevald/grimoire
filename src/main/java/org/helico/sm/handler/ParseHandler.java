@@ -55,6 +55,7 @@ public class ParseHandler extends AbstractHandler {
         CountingInputStream is = new CountingInputStream(
                 Files.newInputStream(Paths.get(text.getUtfPath())));
 
+        Map<String, Integer> countWords = new HashMap<>();
         WordReader reader = new WordReader(is);
         while (reader.ready()) {
             WordReaderResult result = reader.readWord();
@@ -63,22 +64,19 @@ public class ParseHandler extends AbstractHandler {
                 if (word.length() > 32) {
                     LOG.warn("The word \"" + word + "\" is too long.");
                 } else {
-                    wordService.store(result.getResult().toLowerCase(), dict.getLangId(), dict.getId());
+                    countWords.merge(word.toLowerCase(), 1, Integer::sum);
                 }
             }
-            if (reader.getCounter() % PROGRESS_GRANULARITY == 0) {
-                LOG.debug("is.getByteCount()=" + is.getByteCount() + " total=" + textLength);
-                LOG.debug("!!! percentage = " + (int) ((is.getByteCount() * 100) / textLength));
-                jobService.setProgress(job.getId(), (int) ((is.getByteCount() * 100) / textLength));
-            }
+
         }
 
-        LOG.debug("is.getByteCount()=" + is.getByteCount() + " total=" + textLength);
-        LOG.debug("!!! percentage = " + (int) ((is.getByteCount() * 100) / textLength));
+        countWords.entrySet().stream().forEach(
+                x -> {
+                    wordService.store(x.getKey(), dict.getLangId(), dict.getId(), x.getValue());
+                }
+        );
+
         jobService.setProgress(job.getId(), (int) ((is.getByteCount() * 100) / textLength));
-
-        LOG.debug("rawUtfBytes.size=" + textLength);
-
         reader.close();
 
     }

@@ -14,6 +14,8 @@ import org.helico.domain.Word;
  */
 public interface DictWordDao {
 
+    public void addWord(Word word, Long dictId, int count);
+
     public void addWord(Word word, Long dictId);
 
     public List<DictWord> getWords(Long dictId);

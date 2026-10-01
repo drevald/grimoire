@@ -18,29 +18,26 @@ public class DictWordDaoImpl implements DictWordDao {
     private EntityManager entityManager;
 
     public void addWord(Word word, Long dictId) {
+        addWord(word, dictId, 1);
+    }
 
-        DictWord dictWord = null;
-        try {
-            dictWord = (DictWord)entityManager.createQuery("from DictWord where dictId=?1 and word.id=?2")
-                    .setParameter(1, dictId).setParameter(2, word.getId()).getSingleResult();
-        } catch (jakarta.persistence.NoResultException e) {
-            // No existing DictWord found
-        }
-
-        if (dictWord == null) {
-            dictWord = new DictWord();
-            dictWord.setDictId(dictId);
-            dictWord.setWord(word);
-        }
-
-        dictWord.setCounter(dictWord.getCounter() + 1);
-
-        if (dictWord.getId() == null) {
-            entityManager.persist(dictWord);
-        } else {
-            entityManager.merge(dictWord);
-        }
-
+    public void addWord(Word word, Long dictId, int count) {
+    DictWord dictWord = entityManager
+            .createQuery("from DictWord  where dictId = :dictId and word.id = :wordId", DictWord.class)
+            .setParameter("dictId", dictId)
+            .setParameter("wordId", word.getId())
+            .getResultList()
+            .stream()
+            .findFirst()
+            .orElseGet(() -> {
+                        DictWord newDictWord = new DictWord();
+                        newDictWord.setDictId(dictId);
+                        newDictWord.setWord(word);
+                        entityManager.persist(newDictWord);
+                        return newDictWord;
+                    }
+            );
+        dictWord.setCounter(dictWord.getCounter() + count);
     }
 
     public List<DictWord> getWords(Long dictId) {

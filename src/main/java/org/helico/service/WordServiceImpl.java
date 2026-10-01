@@ -20,24 +20,11 @@ public class WordServiceImpl implements WordService {
     DictWordDao dictWordDao;
 
     @Transactional
-    public void store(String word, String langId, Long dictId) {
-
+    public void store(String word, String langId, Long dictId, int count) {
         Word newWord = wordDao.store(word, langId);
-
         if(newWord != null) {
-            dictWordDao.addWord(newWord, dictId);
+            dictWordDao.addWord(newWord, dictId, count);
         }
-
-    }
-
-    @Transactional
-    public void batchStore(List<Word> words, Long dictId) {
-        wordDao.batchStore(words, dictId);
-    }
-
-    @Transactional
-    public List<DictWord> getWords(Long dictId) {
-        return dictWordDao.getWords(dictId);
     }
 
     @Transactional
