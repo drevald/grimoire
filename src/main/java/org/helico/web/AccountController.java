@@ -51,11 +51,6 @@ public class AccountController  extends AbstractController  {
         return "account";
     }
 
-//    @RequestMapping("/")
-//    public String home() {
-//        return "redirect:/index";
-//    }
-
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addaccount(@ModelAttribute("account") Account account,
             BindingResult result) {

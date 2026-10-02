@@ -7,6 +7,9 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 
 import org.apache.commons.io.IOUtils;
+import org.helico.service.DictService;
+import org.helico.service.JobService;
+import org.helico.sm.StateMachine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.helico.domain.Job;
@@ -19,6 +22,10 @@ import org.helico.domain.Dict;
 public class UploadHandler extends AbstractHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(UploadHandler.class);
+
+    UploadHandler(StateMachine stateMachine, JobService jobService, DictService dictService) {
+        super(stateMachine, jobService, dictService);
+    }
 
     public void process(Object object, Job job) throws Exception {
         jobService.setActive(job.getId(), true);

@@ -6,6 +6,7 @@ import org.helico.domain.Text;
 import org.helico.service.DictService;
 import org.helico.service.JobService;
 import org.helico.service.WordService;
+import org.helico.sm.StateMachine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,10 +28,12 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ParseHandlerTest {
 
-    @Mock    WordService wordService;
-    @Mock    JobService jobService;
-    @Mock    DictService dictService;
-    @InjectMocks    ParseHandler handler;
+    @Mock StateMachine stateMachine;
+    @Mock WordService wordService;
+    @Mock JobService jobService;
+    @Mock DictService dictService;
+
+    ParseHandler handler;
 
     @TempDir
     Path tempDir;
@@ -39,6 +42,7 @@ class ParseHandlerTest {
 
     @BeforeEach
     void setUp() {
+        handler = new ParseHandler(stateMachine, wordService, jobService, dictService);
         job.setId(1L);
         job.setDictId(10L);
     }

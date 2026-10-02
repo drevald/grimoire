@@ -1,6 +1,7 @@
 package org.helico.sm.handler;
 
 import org.apache.commons.io.input.CountingInputStream;
+import org.helico.sm.StateMachine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.helico.domain.Dict;
@@ -18,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,53 +35,47 @@ public class ParseHandler extends AbstractHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ParseHandler.class);
 
-    private static final Long PROGRESS_GRANULARITY = 100L;
+    final WordService wordService;
 
-    private final WordService wordService;
-    private final JobService jobService;
-    private final DictService dictService;
-
-    ParseHandler (WordService wordService, JobService jobService, DictService dictService) {
+    ParseHandler (StateMachine stateMachine, WordService wordService, JobService jobService, DictService dictService) {
+        super(stateMachine, jobService, dictService);
         this.wordService = wordService;
-        this.jobService = jobService;
-        this.dictService = dictService;
     }
 
     public void process(Object data, Job job) throws Exception {
+
         Dict dict = dictService.findDict(job.getDictId());
         Text text = dict.getText();
         LOG.debug("dict=" + dict);
 
-        File utfFile = new File(text.getUtfPath());
-        long textLength = utfFile.length();
-        CountingInputStream is = new CountingInputStream(
-                Files.newInputStream(Paths.get(text.getUtfPath())));
-
-        Map<String, Integer> countWords = new HashMap<>();
-        WordReader reader = new WordReader(is);
-        while (reader.ready()) {
-            WordReaderResult result = reader.readWord();
-            if (result != null && result.isWord()) {
-                String word = result.getResult();
-                if (word.length() > 32) {
-                    LOG.warn("The word \"" + word + "\" is too long.");
-                } else {
-                    countWords.merge(word.toLowerCase(), 1, Integer::sum);
+        Map<String, Integer> wordsCount = new HashMap<>();
+        Path path = Path.of(text.getUtfPath());
+        try (WordReader reader = new WordReader(Files.newBufferedReader(path))) {
+            while (reader.ready()) {
+                WordReaderResult result = reader.readWord();
+                if (result != null && result.isWord()) {
+                    String word = result.getResult();
+                    if (word.length() > 32) {
+                        LOG.warn("The word \"" + word + "\" is too long.");
+                    } else {
+                        wordsCount.merge(word.toLowerCase(), 1, Integer::sum);
+                    }
                 }
             }
-
         }
 
-        countWords.entrySet().stream().forEach(
-                x -> {
-                    wordService.store(x.getKey(), dict.getLangId(), dict.getId(), x.getValue());
-                }
-        );
-
-        jobService.setProgress(job.getId(), (int) ((is.getByteCount() * 100) / textLength));
-        reader.close();
+        int total = wordsCount.size();
+        int done = 0;
+        int lastPercent = -1;
+        for (Map.Entry<String, Integer> entry : wordsCount.entrySet()) {
+            wordService.store(entry.getKey(), dict.getLangId(), dict.getId(), entry.getValue());
+            int percent = (100 * done++) / total;
+            if (percent != lastPercent) {
+                lastPercent = percent;
+                jobService.setProgress(job.getId(), lastPercent);
+            }
+        }
+        jobService.setProgress(job.getId(), 100);
 
     }
-
-
 }

@@ -6,6 +6,8 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
+import org.helico.service.DictService;
+import org.helico.sm.StateMachine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.helico.domain.*;
@@ -38,16 +40,20 @@ public class TranslateHandler extends AbstractHandler {
 
     private static final int WORDS_PORTION = 32;
 
-    @Autowired
-    DictWordService dictWordService;
-
-    @Autowired
-    JobService jobService;
-
-    @Autowired
-    TranslationService transService;
+    private final DictWordService dictWordService;
+    private final TranslationService transService;
 
     HttpClient httpClient;
+
+    TranslateHandler(StateMachine stateMachine,
+                     DictService dictService,
+                     DictWordService dictWordService,
+                     JobService jobService,
+                     TranslationService translationService) {
+        super(stateMachine, jobService, dictService);
+        this.dictWordService = dictWordService;
+        this.transService = translationService;
+    }
 
     private String escape(String pattern) {
         String result = pattern;

@@ -34,7 +34,6 @@ public class StoreHandlerTest {
 
     @Mock DictService dictService;
     @Mock StateMachine stateMachine;
-    @Mock JobService jobService;
 
     @InjectMocks StoreHandler storeHandler;
 
@@ -66,7 +65,7 @@ public class StoreHandlerTest {
     @Test
     @DisplayName("Plain text file is copied as UTF-8 to the utfPath")
     void testPlainTextFile_copiedToUtfFile() throws Exception {
-        String content = "Hello world this is a test";
+        String content = "Привет всем. Идет тестирование";
         Path origFile = tempDir.resolve("book.txt");
         Path utfFile  = tempDir.resolve("book.utf.txt");
         Files.writeString(origFile, content, StandardCharsets.UTF_8);
@@ -84,7 +83,7 @@ public class StoreHandlerTest {
     @Test
     @DisplayName("Plain text file with Windows-1251 encoding is re-encoded to UTF-8")
     void testPlainTextFile_windows1251_reEncodedToUtf8() throws Exception {
-        String content = "Hello world test";
+        String content = "Привет мир";
         Path origFile = tempDir.resolve("book.txt");
         Path utfFile  = tempDir.resolve("book.utf.txt");
         Files.write(origFile, content.getBytes(Charset.forName("Windows-1251")));
@@ -241,4 +240,5 @@ public class StoreHandlerTest {
         assertTrue(new File(utfFile.toString()).length() > 0,
                 "UTF file must not be empty after processing");
     }
+
 }

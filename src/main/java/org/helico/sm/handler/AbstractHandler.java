@@ -20,14 +20,15 @@ public abstract class AbstractHandler implements Handler {
 
     private static final String JOB_DONE = "DONE";
 
-    @Autowired
-    private StateMachine stateMachine;
+    protected final StateMachine stateMachine;
+    protected final JobService jobService;
+    protected final DictService dictService;
 
-    @Autowired
-    JobService jobService;
-
-    @Autowired
-    DictService dictService;
+    AbstractHandler(StateMachine stateMachine, JobService jobService, DictService dictService) {
+        this.stateMachine = stateMachine;
+        this.jobService = jobService;
+        this.dictService = dictService;
+    }
 
     @Async
     public void process(Object object, Long id) {

@@ -3,6 +3,11 @@ package org.helico.sm.handler;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.helico.domain.TranslatorProvider;
+import org.helico.service.DictService;
+import org.helico.service.DictWordService;
+import org.helico.service.JobService;
+import org.helico.service.TranslationService;
+import org.helico.sm.StateMachine;
 import org.junit.jupiter.api.*;
 
 import java.lang.reflect.Method;
@@ -10,6 +15,7 @@ import java.text.MessageFormat;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * Integration test for translation functionality.
@@ -40,7 +46,12 @@ public class TranslationIntegrationTest {
     @BeforeEach
     public void setup() {
         wireMockServer.resetAll();
-        translateHandler = new TranslateHandler();
+        translateHandler = new TranslateHandler(
+                mock(StateMachine.class),
+                mock(DictService.class),
+                mock(DictWordService.class),
+                mock(JobService.class),
+                mock(TranslationService.class));
     }
 
     @Test
