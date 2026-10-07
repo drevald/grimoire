@@ -13,13 +13,13 @@ public class LifecycleLogger implements BeanPostProcessor {
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        LOG.info("BEFORE " + bean.getClass().getName() + " name " + beanName);
+//        LOG.info("BEFORE " + bean.getClass().getName() + " name " + beanName);
         return BeanPostProcessor.super.postProcessBeforeInitialization(bean, beanName);
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        LOG.info("AFTER " + bean.getClass().getSimpleName() + " name " + beanName);
+//        LOG.info("AFTER " + bean.getClass().getName() + " name " + beanName);
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
     }
 

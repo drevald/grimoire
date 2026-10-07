@@ -20,8 +20,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/favicon.ico", "/error404.jsp").permitAll()
-                .anyRequest().hasRole("USER")
+                    .requestMatchers("/favicon.ico", "/error404.jsp", "/actuator/**").permitAll()
+                    .anyRequest().hasRole("USER")
             )
             .formLogin(form -> form
                 .defaultSuccessUrl("/dict", true)
@@ -33,8 +33,10 @@ public class SecurityConfig {
                 .permitAll()
             )
             .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/admin/providers/api/**")
+                .ignoringRequestMatchers("/admin/providers/api/**", "/actuator/**")
             );
+
+                  // рядом с favicon.ico и error404.jsp
 
         return http.build();
     }

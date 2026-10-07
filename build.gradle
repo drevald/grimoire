@@ -3,6 +3,8 @@ plugins {
     id 'war'
     id 'org.springframework.boot' version '3.4.1'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.gorylenko.gradle-git-properties' version '2.4.2'
+
 }
 
 group = 'org.helico'
@@ -66,6 +68,8 @@ dependencies {
     // Uncomment if deploying as WAR to external Tomcat
     // providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 // Sources contain Cyrillic; on Windows JDK 17 javac defaults to cp1251
