@@ -1,5 +1,6 @@
 package org.helico.dao;
 
+import org.helico.service.DictNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.helico.domain.Dict;
@@ -61,15 +62,14 @@ public class DictDaoImpl implements DictDao {
     }
 
     public Dict findDict(Long id, Long accountId) {
-        Dict dict = null;
-        try {
-            dict = (Dict)entityManager.createQuery("from Dict where id=?1 and accountId=?2")
-            .setParameter(1,id).setParameter(2,accountId).getSingleResult();
-        } catch (jakarta.persistence.NoResultException e) {
-            // No result found
-        }
-        LOG.info("get sess#"+entityManager.hashCode()+" =  " + dict);
-        return dict;
+        return entityManager
+                .createQuery("from Dict where id= :id and accountId= :accountId", Dict.class)
+                .setParameter("id",id)
+                .setParameter("accountId",accountId)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new DictNotFoundException(id));
     }
 
     public Dict findDict(Long id) {

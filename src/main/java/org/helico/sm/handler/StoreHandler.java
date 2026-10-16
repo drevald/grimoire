@@ -12,7 +12,6 @@ import org.helico.domain.Text;
 import org.helico.service.DictService;
 import org.helico.service.JobService;
 import org.helico.sm.StateMachine;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -63,8 +62,7 @@ public class StoreHandler extends AbstractHandler {
     }
 
     @Override
-    protected void process(Object object, Job job) throws Exception {
-        Dict dict = dictService.findDict(job.getDictId());
+    protected void doProcess(Object object, Job job, Dict dict) throws Exception {
         Text text = dict.getText();
         Reader reader;
 

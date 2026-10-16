@@ -2,13 +2,13 @@ package org.helico.service;
 
 import org.helico.dao.DictWordDao;
 import org.helico.dao.WordDao;
-import org.helico.domain.DictWord;
 import org.helico.domain.Word;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class WordServiceImpl implements WordService {
@@ -21,15 +21,19 @@ public class WordServiceImpl implements WordService {
 
     @Transactional
     public void store(String word, String langId, Long dictId, int count) {
-        Word newWord = wordDao.store(word, langId);
+        Word newWord = wordDao.store(langId, word);
         if(newWord != null) {
             dictWordDao.addWord(newWord, dictId, count);
         }
     }
 
-    @Transactional
+    @Override
     public Word getWord(String langId, String word) {
         return wordDao.get(langId, word);
     }
 
+    @Override
+    public Map<String, Word> getWords(String langId, Set<String> words) {
+        return wordDao.getWords(langId, words);
+    }
 }

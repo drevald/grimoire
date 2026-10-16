@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -183,7 +182,7 @@ public class TranslateHandlerProgressTest {
         }
 
         // When: Process the translation job
-        translateHandler.process(1L, mockJob);
+        translateHandler.doProcess(1L, mockJob, );
 
         // Then: Verify all words were processed
         ArgumentCaptor<Long> wordIdCaptor = ArgumentCaptor.forClass(Long.class);
@@ -252,7 +251,7 @@ public class TranslateHandlerProgressTest {
         when(dictWordService.getWords(eq(1L), eq(0), eq(32))).thenReturn(allWords);
 
         // When: Process the translation job
-        translateHandler.process(1L, mockJob);
+        translateHandler.doProcess(1L, mockJob, );
 
         // Then: Verify all 32 words were processed
         verify(transService, times(32)).storeTranslation(anyLong(), anyLong(), anyString());
@@ -298,7 +297,7 @@ public class TranslateHandlerProgressTest {
                 .thenReturn(allWords.subList(64, 65));
 
         // When: Process the translation job
-        translateHandler.process(1L, mockJob);
+        translateHandler.doProcess(1L, mockJob, );
 
         // Then: Verify all 65 words were processed
         verify(transService, times(65)).storeTranslation(anyLong(), anyLong(), anyString());
@@ -351,7 +350,7 @@ public class TranslateHandlerProgressTest {
         });
 
         // When: Process the translation job
-        translateHandler.process(1L, mockJob);
+        translateHandler.doProcess(1L, mockJob, );
 
         // Then: Verify only 25 new translations were stored (50 - 25 already translated)
         verify(transService, times(25)).storeTranslation(anyLong(), anyLong(), anyString());
@@ -393,7 +392,7 @@ public class TranslateHandlerProgressTest {
         when(transService.isTranslated(anyLong(), anyLong())).thenReturn(false);
 
         // When: Process the translation job
-        translateHandler.process(1L, mockJob);
+        translateHandler.doProcess(1L, mockJob, );
 
         // Then: Verify POST was called 5 times
         verify(postRequestedFor(urlPathEqualTo("/translate"))

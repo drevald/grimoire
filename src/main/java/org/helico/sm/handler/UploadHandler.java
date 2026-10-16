@@ -1,7 +1,6 @@
 package org.helico.sm.handler;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -27,11 +26,9 @@ public class UploadHandler extends AbstractHandler {
         super(stateMachine, jobService, dictService);
     }
 
-    public void process(Object object, Job job) throws Exception {
+    public void doProcess(Object object, Job job, Dict dict) throws Exception {
         jobService.setActive(job.getId(), true);
         InputStream is = (InputStream)object;
-        Long dictId = job.getDictId();
-        Dict dict = dictService.findDict(dictId);
         Text text = dict.getText();
         try (OutputStream os = Files.newOutputStream(new File(text.getOrigPath()).toPath())) {
             IOUtils.copy(is, os);
@@ -39,7 +36,7 @@ public class UploadHandler extends AbstractHandler {
             dictService.saveDict(dict);
             os.close();
             is.close();
-            LOG.info("<<< done dict#" + dictId);
+            LOG.info("<<< done dict#" + dict.getId());
         } catch (Exception e) {
             LOG.error("Error occurred", e);
         }

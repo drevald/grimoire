@@ -1,6 +1,5 @@
 package org.helico.sm.handler;
 
-import org.apache.commons.io.input.CountingInputStream;
 import org.helico.sm.StateMachine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,15 +11,10 @@ import org.helico.service.JobService;
 import org.helico.service.WordService;
 import org.helico.util.WordReader;
 import org.helico.util.WordReaderResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,9 +36,8 @@ public class ParseHandler extends AbstractHandler {
         this.wordService = wordService;
     }
 
-    public void process(Object data, Job job) throws Exception {
+    public void doProcess(Object data, Job job, Dict dict) throws Exception {
 
-        Dict dict = dictService.findDict(job.getDictId());
         Text text = dict.getText();
         LOG.debug("dict=" + dict);
 

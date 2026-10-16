@@ -13,7 +13,7 @@ public class DummyHandler implements Handler {
     JobService jobService;
 
 
-    public void process(Object data, Long id) {
+    public void process(Object data, Long id, Long dictId) {
     jobService.setDetails(id, (String)data);
         return;
     }

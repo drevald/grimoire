@@ -235,9 +235,7 @@ public class DictServiceImpl implements DictService {
 
     @Transactional
     public Dict findDict(Long id, Long accountId) {
-        LOG.info(">>>findDict start");
         Dict dict = dictDao.findDict(id, accountId);
-        LOG.info("<<<findDict end");
         return dict;
     }
 

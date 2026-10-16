@@ -2,12 +2,15 @@ package org.helico.dao;
 
 import org.helico.domain.Word;
 
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface WordDao {
 
-    public Word store(String word, String langId);
+    Word store(String langId, String word);
 
-    public Word get(String langId, String word);
+    Word get(String langId, String word);
+
+    Map<String, Word> getWords(String langId, Set<String> words);
 
 }

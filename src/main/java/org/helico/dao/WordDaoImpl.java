@@ -5,7 +5,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Repository
 public class WordDaoImpl implements WordDao {
@@ -38,4 +42,14 @@ public class WordDaoImpl implements WordDao {
                 .findFirst();
     }
 
+    @Override
+    public Map<String, Word> getWords(String langId, Set<String> words) {
+        return entityManager
+                .createQuery("from Word where langId = :langId and value in :words", Word.class)
+                .setParameter("langId", langId)
+                .setParameter("words", words)
+                .getResultList()
+                .stream()
+                .collect(Collectors.toMap(Word::getValue, Function.identity(), (x, y) -> x));
+    }
 }

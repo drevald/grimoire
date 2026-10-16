@@ -19,10 +19,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.Reader;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Created with IntelliJ IDEA.
@@ -42,72 +48,86 @@ public class TextController  extends AbstractController {
     private static final String HIGHLIGHTED_WORD =
             "<span id=%d style='cursor:pointer'>%s</span>";
 
-    private ApplicationContext appContext;
+    private final DictService dictService;
+    private final AccountService accountService;
+    private final TextService textService;
+    private final WordService wordService;
+    private final TranslationService translationService;
+    private final TranslateHandler translateHandler;
 
-    @Autowired
-    private DictService dictService;
+    TextController(DictService dictService,
+                   AccountService accountService,
+                   TextService textService,
+                   WordService wordService,
+                   TranslationService translationService,
+                   TranslateHandler translateHandler) {
+        this.dictService  = dictService;
+        this.accountService = accountService;
+        this.textService = textService;
+        this.wordService = wordService;
+        this.translationService = translationService;
+        this.translateHandler = translateHandler;
+    }
 
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private TextService textService;
-
-    @Autowired
-    private WordService wordService;
-
-    @Autowired
-    private TranslationService translationService;
-
-    @Autowired
-    private TranslateHandler translateHandler;
 
     @RequestMapping("/text/view/{textId}")
     public String viewDict(
             @PathVariable("textId") Long dictId, Map<String, Object> map,
-            @RequestParam("offset") int offset) {
+            @RequestParam("offset") int offset,
+            RedirectAttributes ra) {
         Account account = accountService.findAccount(getCurrentAccount());
-        Dict dict = dictService.findDict(dictId, account.getId());
-        StringBuilder sb = new StringBuilder();
-        try {
-            Reader reader = textService.getTextReader(dictId, offset, TEXT_SIZE);
-            WordReader wordReader = new WordReader(reader);
-            int counter = 0;
-            while (wordReader.ready()) {
-                WordReaderResult result = wordReader.readWord();
-                if (result!=null && result.isWord()) {
-                    String wordString = result.getResult();
-                    Word word = wordService.getWord(dict.getLangId(), wordString);
-                    if (word != null) {
-                        sb.append(String.format(HIGHLIGHTED_WORD, counter, wordString));
-                        String translation = word.getTranslation() != null ? word.getTranslation().replace("\"", "") : "";
-                        sb.append("<script>words[" + counter + "] = \"" + translation + "\";</script>");
-                        sb.append("<script>wordValues[" + counter + "] = \"" + wordString.replace("\"", "") + "\";</script>");
-                        counter++;
-                    } else {
-                        sb.append("<i>" + wordString + "</i> ");
-                    }
-                } else if (result != null) {
-                    sb.append(result.getResult().replaceAll("\n", "<br>"));
-                } else {
+        Long accountId = account.getId();
+        Dict dict = dictService.findDict(dictId, accountId);
+        try (Reader reader = textService.getTextReader(dictId, offset, TEXT_SIZE);) {
 
-                }
-            }
+            WordReader wordReader = new WordReader(reader);
+
+            List<WordReaderResult> allWords = wordReader.words().collect(Collectors.toList());
+
+            Set<String> words = allWords.stream()
+                    .filter(w -> w.isWord())
+                    .map(w -> w.getResult())
+                    .collect(toSet());
+
+            Map<String, Word> knownWords = wordService.getWords(dict.getLangId(), words);
+
+//            while (wordReader.ready()) {
+//                WordReaderResult result = wordReader.readWord();
+//                if (result!=null && result.isWord()) {
+//                    String wordString = result.getResult();
+//                    Word word = wordService.getWord(dict.getLangId(), wordString);
+//                    if (word != null) {
+//                        sb.append(String.format(HIGHLIGHTED_WORD, counter, wordString));
+//                        String translation = word.getTranslation() != null ? word.getTranslation().replace("\"", "") : "";
+//                        sb.append("<script>words[" + counter + "] = \"" + translation + "\";</script>");
+//                        sb.append("<script>wordValues[" + counter + "] = \"" + wordString.replace("\"", "") + "\";</script>");
+//                        counter++;
+//                    } else {
+//                        sb.append("<i>" + wordString + "</i> ");
+//                    }
+//                } else if (result != null) {
+//                    sb.append(result.getResult().replaceAll("\n", "<br>"));
+//                } else {
+//
+//                }
+//            }
+
+            List<Translator> translators = translationService.listTranslators(dict.getLangId(), account.getNativeLangId());
+            map.put("tokens", allWords);
+            map.put("knownWords", knownWords);
+            map.put("dict", dict);
+            map.put("offset", offset);
+            map.put("size", TEXT_SIZE);
+            map.put("translators", translators);
+            return "viewText";
+
         } catch (Exception e) {
-            if(e.getMessage()!=null) {
-                sb.append(String.format("<br><b>%s</b>", e.getMessage()));
-            }
-            LOG.error("Error occurred", e);
+            LOG.error("Text of dict {} is unreadable", dictId, e);
+            ra.addFlashAttribute("error",
+                    "Текст словаря «" + dict.getName() + "» недоступен. Удалите словарь или загрузите файл заново.");
+            return "redirect:/dict";
         }
-        LOG.trace(String.format("MARKED STRING Dict #%d Offset %d \n ++++++++++ \n %s \n ----------\n"
-                ,dict.getId(), offset, sb.toString()));
-        List<Translator> translators = translationService.listTranslators(dict.getLangId(), account.getNativeLangId());
-        map.put("text", sb.toString());
-        map.put("dict", dict);
-        map.put("offset", offset);
-        map.put("size", TEXT_SIZE);
-        map.put("translators", translators);
-        return "viewText";
+
     }
 
     @RequestMapping(value = "/text/view/{dictId}/audio", method = RequestMethod.GET)

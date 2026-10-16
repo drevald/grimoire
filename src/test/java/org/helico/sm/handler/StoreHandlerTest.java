@@ -9,7 +9,6 @@ import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.domain.Text;
 import org.helico.service.DictService;
-import org.helico.service.JobService;
 import org.helico.sm.StateMachine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -74,7 +73,7 @@ public class StoreHandlerTest {
         mockText.setUtfPath(utfFile.toString());
         mockDict.setEncoding(null);
 
-        storeHandler.process(null, mockJob);
+        storeHandler.doProcess(null, mockJob, );
 
         assertTrue(Files.exists(utfFile), "UTF file must be created");
         assertEquals(content, Files.readString(utfFile, StandardCharsets.UTF_8));
@@ -92,7 +91,7 @@ public class StoreHandlerTest {
         mockText.setUtfPath(utfFile.toString());
         mockDict.setEncoding("Windows-1251");
 
-        storeHandler.process(null, mockJob);
+        storeHandler.doProcess(null, mockJob, );
 
         assertTrue(Files.exists(utfFile));
         assertEquals(content, Files.readString(utfFile, StandardCharsets.UTF_8));
@@ -128,7 +127,7 @@ public class StoreHandlerTest {
         mockText.setOrigPath(origFile.toString());
         mockText.setUtfPath(utfFile.toString());
 
-        storeHandler.process(null, mockJob);
+        storeHandler.doProcess(null, mockJob, );
 
         assertTrue(Files.exists(utfFile));
         String extracted = Files.readString(utfFile, StandardCharsets.UTF_8);
@@ -159,7 +158,7 @@ public class StoreHandlerTest {
         mockText.setOrigPath(origFile.toString());
         mockText.setUtfPath(utfFile.toString());
 
-        storeHandler.process(null, mockJob);
+        storeHandler.doProcess(null, mockJob, );
 
         assertTrue(Files.exists(utfFile));
         assertTrue(Files.readString(utfFile, StandardCharsets.UTF_8).contains("OnlyPageContent"));
@@ -181,7 +180,7 @@ public class StoreHandlerTest {
         mockText.setUtfPath(utfFile.toString());
         mockDict.setEncoding(null);
 
-        storeHandler.process(null, mockJob);
+        storeHandler.doProcess(null, mockJob, );
 
         verifyNoInteractions(stateMachine);
     }
@@ -216,7 +215,7 @@ public class StoreHandlerTest {
         mockText.setOrigPath(origFile.toString());
         mockText.setUtfPath(utfFile.toString());
 
-        storeHandler.process(null, mockJob);
+        storeHandler.doProcess(null, mockJob, );
 
         String extracted = Files.readString(utfFile, StandardCharsets.UTF_8);
         assertTrue(extracted.contains("automobile"),
@@ -235,7 +234,7 @@ public class StoreHandlerTest {
         mockText.setUtfPath(utfFile.toString());
         mockDict.setEncoding(null);
 
-        storeHandler.process(null, mockJob);
+        storeHandler.doProcess(null, mockJob, );
 
         assertTrue(new File(utfFile.toString()).length() > 0,
                 "UTF file must not be empty after processing");

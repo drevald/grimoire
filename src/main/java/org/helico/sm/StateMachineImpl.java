@@ -4,6 +4,7 @@ import org.helico.domain.Dict;
 import org.helico.domain.Job;
 import org.helico.domain.Transition;
 import org.helico.service.JobService;
+import org.helico.service.TranslationService;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -24,14 +25,18 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
 
     private ApplicationContext appContext;
 
-    @Autowired
-    private TransitionService transitionService;
+    private final TransitionService transitionService;
+    private final DictService dictService;
+    private final JobService jobService;
 
-    @Autowired
-    private DictService dictService;
-
-    @Autowired
-    private JobService jobService;
+    StateMachineImpl(
+            TransitionService transitionService,
+            DictService dictService,
+            JobService jobService) {
+        this.transitionService = transitionService;
+        this.dictService = dictService;
+        this.jobService = jobService;
+    }
 
     public void sendEvent(Event event, Object data, Long dictId) {
         LOG.debug("processing event..");
@@ -55,7 +60,7 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
             dict.setStatus(newStatus);
             dictService.saveDict(dict);
             LOG.info("<<< dict#{} status saved as {}", dictId, newStatus);
-            handler.process(data, job.getId());
+            handler.process(data, job.getId(), dictId);
             LOG.debug("handler called");
         } else {
             LOG.warn("handler for event = " + event.label + " and status = " + dict.getStatus() + " is not found");
@@ -65,13 +70,6 @@ public class StateMachineImpl implements StateMachine, ApplicationContextAware {
     public void setApplicationContext(ApplicationContext appContext) {
         LOG.debug("setting application context: " + appContext);
         this.appContext = appContext;
-    }
-
-    public void onApplicationEvent(ApplicationEvent applicationEvent) {
-        LOG.info("Event received: " + applicationEvent);
-        if (applicationEvent instanceof ContextRefreshedEvent) {
-            dictService.fixStatus();
-        }
     }
 
 }

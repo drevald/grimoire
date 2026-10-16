@@ -1,9 +1,12 @@
 package org.helico.util;
 
+import org.helico.domain.Word;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -107,6 +110,16 @@ public class WordReader extends Reader {
 
     public int getCounter() {
         return counter;
+    }
+
+    public Stream<WordReaderResult> words() {
+        return Stream.generate(() -> {
+            try {
+                return readWord();
+            } catch (Exception e) {
+                throw new UncheckedIOException(new IOException());
+            }
+        }).takeWhile(Objects::nonNull);
     }
 
 }

@@ -5,8 +5,15 @@
 
     <script>
         var currSelectionId = 0;
-        var words = [];
-        var wordValues = [];
+        var words = [];        // words[N]      = перевод слова с id=N (из data-tr)
+        var wordValues = [];   // wordValues[N] = само слово с id=N (из data-value)
+
+        // Экранирование для вставки чужих строк в innerHTML
+        function esc(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
 
         document.onkeydown = show;
         function show(event) {
@@ -67,22 +74,27 @@
             });
         }
 
+        // Кнопка озвучки создаётся через DOM, без склейки HTML и onclick-строки
+        function showSpeakButton(word) {
+            var el = document.getElementById('pronounce-btn');
+            if (!el || el.firstChild) return;
+            var btn = document.createElement('button');
+            btn.className = 'btn btn-link btn-sm p-0';
+            btn.title = 'Pronounce';
+            btn.textContent = '🔊';
+            btn.addEventListener('click', function() { speakWord(word); });
+            el.appendChild(btn);
+        }
+
         function attachSpeakButton(word) {
-            var escaped = word.replace(/'/g,"\\'");
-            var btnHtml = '<button class="btn btn-link btn-sm p-0" onclick="speakWord(\'' + escaped + '\')" title="Pronounce">🔊</button>';
             // Show button if server has audio
             fetch('/text/view/${dict.id}/audio?word=' + encodeURIComponent(word), {method: 'HEAD'})
-                .then(function(r) {
-                    var el = document.getElementById('pronounce-btn');
-                    if (el && r.ok) el.innerHTML = btnHtml;
-                })
+                .then(function(r) { if (r.ok) showSpeakButton(word); })
                 .catch(function() {});
             // Also show button if browser TTS has a voice for this language
-            if (hasTTSVoice()) {
-                var el = document.getElementById('pronounce-btn');
-                if (el) el.innerHTML = btnHtml;
-            }
+            if (hasTTSVoice()) showSpeakButton(word);
         }
+
         var translationCache = {}; // cache[wordIndex][translatorId] = translation string
         var sentenceHighlightEls = [];
         var resultOwner = 'word'; // 'word' | 'sentence' — prevents async word callbacks overwriting sentence panel
@@ -120,12 +132,16 @@
         }
 
         function highlight(i) {
+            var target = document.getElementById(i);
+            if (!target) return;                              // на странице нет такого слова
             clearSentenceHighlight();
             resultOwner = 'word';
-            document.getElementById(currSelectionId).style.backgroundColor = 'white';
+            var prev = document.getElementById(currSelectionId);
+            if (prev) prev.style.backgroundColor = 'white';
             currSelectionId = i;
-            document.getElementById(currSelectionId).style.backgroundColor = 'yellow';
-            document.getElementById('result').innerHTML = wordHeader(wordValues[i]) + '<span style="color:#999">' + (words[i] || 'Not translated yet') + '</span>';
+            target.style.backgroundColor = 'yellow';
+            document.getElementById('result').innerHTML = wordHeader(wordValues[i]) +
+                '<span style="color:#999">' + esc(words[i] || 'Not translated yet') + '</span>';
             if (wordValues[i]) attachSpeakButton(wordValues[i]);
             if (wordValues[i]) {
                 fetch('/text/view/${dict.id}/lookup?word=' + encodeURIComponent(wordValues[i]))
@@ -153,7 +169,7 @@
 
         function wordHeader(word) {
             if (!word) return '';
-            return '<b style="color:black">' + word + '</b> <span id="pronounce-btn"></span><br>';
+            return '<b style="color:black">' + esc(word) + '</b> <span id="pronounce-btn"></span><br>';
         }
 
         function showCached(wordIndex, translatorId) {
@@ -162,9 +178,10 @@
             if (t !== undefined) {
                 var wordLabel = wordHeader(wordValues[wordIndex]);
                 if (t) {
-                    document.getElementById('result').innerHTML = wordLabel + t;
+                    document.getElementById('result').innerHTML = wordLabel + esc(t);
                 } else {
-                    document.getElementById('result').innerHTML = wordLabel + '<span style="color:#999">' + (words[wordIndex] || 'No translation found') + '</span>';
+                    document.getElementById('result').innerHTML = wordLabel +
+                        '<span style="color:#999">' + esc(words[wordIndex] || 'No translation found') + '</span>';
                 }
                 return true;
             }
@@ -242,7 +259,7 @@
 
         function isSentenceEnd(text, pos) {
             var ch = text[pos];
-            if (ch === '!' || ch === '?' || ch === '\u2026') return true;
+            if (ch === '!' || ch === '?' || ch === '…') return true;
             if (ch !== '.') return false;
             // Ellipsis: .. or ...
             if (pos > 0 && text[pos-1] === '.') return false;
@@ -302,7 +319,7 @@
             var selected = document.querySelector('input[name="translatorId"]:checked');
             if (!selected) return;
             document.getElementById('result').innerHTML =
-                '<i style="color:#555">' + phrase + '</i><br><span style="color:#999">Translating…</span>';
+                '<i style="color:#555">' + esc(phrase) + '</i><br><span style="color:#999">Translating…</span>';
             fetch('/text/view/${dict.id}/translate-phrase', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -313,17 +330,16 @@
             .then(r => r.json())
             .then(data => {
                 document.getElementById('result').innerHTML = data.translation
-                    ? '<i style="color:#555">' + phrase + '</i><br><br>' + data.translation
-                    : '<i style="color:#555">' + phrase + '</i><br><span style="color:#999">No translation</span>';
+                    ? '<i style="color:#555">' + esc(phrase) + '</i><br><br>' + esc(data.translation)
+                    : '<i style="color:#555">' + esc(phrase) + '</i><br><span style="color:#999">No translation</span>';
             })
             .catch(() => {});
         }
 
         function showSentencePanel(sentence) {
             resultOwner = 'sentence';
-            var escaped = sentence.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
             document.getElementById('result').innerHTML =
-                '<i style="color:#333">' + escaped + '</i>' +
+                '<i style="color:#333">' + esc(sentence) + '</i>' +
                 '<br><br><button class="btn btn-sm btn-primary" onclick="translateCurrentSentence()">Translate</button>';
             document.getElementById('result')._pendingSentence = sentence;
         }
@@ -391,8 +407,8 @@
             if (data.translations && data.translations.length > 0) {
                 html += '<b>Translations</b><br>';
                 data.translations.forEach(function(t) {
-                    html += '<span>' + t.word + '</span>';
-                    if (t.pos) html += ' <small style="color:#888">(' + t.pos + ')</small>';
+                    html += '<span>' + esc(t.word) + '</span>';
+                    if (t.pos) html += ' <small style="color:#888">(' + esc(t.pos) + ')</small>';
                     html += '<br>';
                 });
             }
@@ -401,7 +417,7 @@
                 if (examples.length > 0) {
                     html += '<br><b>Examples</b><br>';
                     examples.forEach(function(d) {
-                        html += '<i style="color:#555">' + d.example + '</i><br>';
+                        html += '<i style="color:#555">' + esc(d.example) + '</i><br>';
                     });
                 }
             }
@@ -431,16 +447,21 @@
         function prevPage() {
             if (${offset} >= ${size}) self.location = "${dict.id}?offset=${offset-size}";
         }
-    </script>
 
-<body>
+        // После загрузки DOM: заполнить массивы из data-атрибутов и выделить первое слово
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('#bookText span[id]').forEach(function(s) {
+                wordValues[+s.id] = s.dataset.value;
+                words[+s.id] = s.dataset.tr;
+            });
+            highlight(0);
+        });
+    </script>
 
 <div class="container" style="height:100%">
     <div class="row">
         <%-- Left: book text --%>
-        <div class="col-6 mb-5" id="bookText">
-            ${text}
-        </div>
+        <div class="col-6 mb-5" id="bookText" style="white-space: pre-wrap"><c:set var="n" value="0"/><c:forEach var="t" items="${tokens}"><c:set var="known" value="${t.word ? knownWords[fn:toLowerCase(t.result)] : null}"/><c:choose><c:when test="${not empty known}"><span id="${n}" style="cursor:pointer" data-value="${fn:escapeXml(t.result)}" data-tr="${fn:escapeXml(known.translation)}"><c:out value="${t.result}"/></span><c:set var="n" value="${n + 1}"/></c:when><c:when test="${t.word}"><i><c:out value="${t.result}"/></i></c:when><c:otherwise><c:out value="${t.result}"/></c:otherwise></c:choose></c:forEach></div>
 
         <%-- Right: translation panel --%>
         <div class="col-6 text-left d-flex flex-column mb-5">
@@ -453,15 +474,13 @@
                     <label style="margin-right:12px;cursor:pointer">
                         <input type="radio" name="translatorId" value="${translator.id}"
                                onchange="translateSelected()" ${s.first ? 'checked' : ''}/>
-                        &nbsp;${translator.provider.title}
+                        &nbsp;<c:out value="${translator.provider.title}"/>
                     </label>
                 </c:forEach>
             </div>
         </div>
     </div>
 </div>
-
-<script>highlight(0);</script>
 
 </div>
 

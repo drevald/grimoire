@@ -9,7 +9,6 @@ import org.helico.service.DictService;
 import org.helico.sm.Handler;
 
 import org.helico.sm.StateMachine;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +30,7 @@ public abstract class AbstractHandler implements Handler {
     }
 
     @Async
-    public void process(Object object, Long id) {
+    public void process(Object object, Long id, Long dictId) {
         LOG.info(">>> start job#" + id);
         Job job = null;
         Dict dict = null;
@@ -43,7 +42,7 @@ public abstract class AbstractHandler implements Handler {
             }
             dict = dictService.findDict(job.getDictId());
             jobService.setActive(job.getId(), true);
-            process(object, job);
+            doProcess(object, job, dict);
             LOG.info("<<< done dict#{}", dict.getId());
             jobService.setActive(job.getId(), false);
             stateMachine.sendEvent(StateMachine.Event.OK, JOB_DONE, dict.getId());
@@ -54,6 +53,6 @@ public abstract class AbstractHandler implements Handler {
         }
     }
 
-    protected abstract void process(Object object, Job job) throws Exception;
+    protected abstract void doProcess(Object object, Job job, Dict dict) throws Exception;
 
 }

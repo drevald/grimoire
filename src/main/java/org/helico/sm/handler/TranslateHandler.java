@@ -1,5 +1,6 @@
 package org.helico.sm.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -14,12 +15,12 @@ import org.helico.domain.*;
 import org.helico.service.DictWordService;
 import org.helico.service.JobService;
 import org.helico.service.TranslationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URLEncoder;
@@ -127,10 +128,9 @@ public class TranslateHandler extends AbstractHandler {
         return cleanTranslation(result);
     }
 
-    public void process(Object data, Job job) throws Exception {
+    public void doProcess(Object data, Job job, Dict dict) throws Exception {
         Translator translator = transService.getTranslator((Long) data);
         TranslatorProvider provider = translator.getProvider();
-        Dict dict = dictService.findDict(job.getDictId());
         LOG.debug("dict={}", dict);
 
         jobService.setProgress(job.getId(), 0);
@@ -252,6 +252,7 @@ public class TranslateHandler extends AbstractHandler {
                     String output = compactJson(new String(postMethod.getResponseBody(), java.nio.charset.StandardCharsets.UTF_8));
                     LOG.debug("POST response: " + output);
                     result = (String) resFormat.parse(output)[0];
+                    result = jsonUnescape(result);
                 } else {
                     throw new Exception("Code " + postMethod.getStatusCode() + " " + postMethod.getResponseBodyAsString());
                 }
@@ -271,6 +272,7 @@ public class TranslateHandler extends AbstractHandler {
                         String output = compactJson(new String(getMethod.getResponseBody(), java.nio.charset.StandardCharsets.UTF_8));
                         LOG.debug("GET response: " + output);
                         result = (String) resFormat.parse(output)[0];
+                        result = jsonUnescape(result);
                         getMethod.releaseConnection();
                         break;
                     } else if (status >= 300 && status < 400) {
@@ -425,6 +427,13 @@ public class TranslateHandler extends AbstractHandler {
                 }
             }
         }
+    }
+
+    private static final ObjectMapper JSON = new ObjectMapper();   // потокобезопасен, создаётся один раз
+
+    private static String jsonUnescape(String raw) throws IOException {
+        // "\u0414\u043e" → JSON-строка "\"\\u0414\\u043e\"" → парсер возвращает «До»
+        return JSON.readValue("\"" + raw + "\"", String.class);
     }
 
 }

@@ -153,7 +153,7 @@ public class ScriptoriumProviderTest {
         when(dictWordService.getWords(eq(1L), eq(0), anyInt())).thenReturn(List.of(dictWord(word)));
         when(transService.isTranslated(eq(10L), eq(1L))).thenReturn(false);
 
-        handler.process(99L, job);
+        handler.doProcess(99L, job, );
 
         verify(transService).storeTranslation(eq(10L), eq(1L), eq("not"));
         assertEquals("/api/v1/translate/sv/inte/en", lastRequestPath.get(),
@@ -176,7 +176,7 @@ public class ScriptoriumProviderTest {
         when(dictWordService.getWords(eq(1L), eq(0), anyInt())).thenReturn(List.of(dictWord(word)));
         when(transService.isTranslated(eq(10L), eq(1L))).thenReturn(true);
 
-        handler.process(99L, job);
+        handler.doProcess(99L, job, );
 
         verify(transService, never()).storeTranslation(anyLong(), anyLong(), anyString());
         assertEquals("", lastRequestPath.get(), "No HTTP request should be made for already-translated words");
@@ -201,7 +201,7 @@ public class ScriptoriumProviderTest {
         when(dictWordService.getWords(eq(1L), eq(0), anyInt())).thenReturn(List.of(dictWord(word)));
         when(transService.isTranslated(anyLong(), anyLong())).thenReturn(false);
 
-        handler.process(99L, job);
+        handler.doProcess(99L, job, );
 
         verify(transService, never()).storeTranslation(anyLong(), anyLong(), anyString());
     }

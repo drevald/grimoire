@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -68,7 +67,7 @@ class ParseHandlerTest {
             stored.merge(inv.getArgument(0), ((Number) inv.getArgument(3)).intValue(), Integer::sum);
             return null;
         }).when(wordService).store(anyString(), anyString(), anyLong(), anyInt());
-        handler.process(null, job);
+        handler.doProcess(null, job, );
         return stored;
     }
 }
